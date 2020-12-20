@@ -1,0 +1,6 @@
+framework module Pods_Artisan_Example {
+  umbrella header "Pods-Artisan_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}
