@@ -11,6 +11,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
+- Swift 5.0 or higher
+- iOS 10.0 or higher
+
 ## Installation
 
 Artisan is available through [CocoaPods](https://cocoapods.org). To install
@@ -22,7 +25,7 @@ pod 'Artisan'
 
 ## Author
 
-24823437, nayanda1@outlook.com
+Nayanda Haberty, nayanda1@outlook.com
 
 ## License
 
