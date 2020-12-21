@@ -10,7 +10,7 @@ import UIKit
 
 public protocol FragmentCell: Fragment {
     var layoutPhase: CellLayoutingPhase { get }
-    var layoutBehaviour: CellPlanningBehavior { get }
+    var planningBehavior: CellPlanningBehavior { get }
     
     func planningOption(on phase: CellLayoutingPhase) -> PlanningOption
 }
@@ -29,20 +29,20 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
     
     private(set) var layouted: Bool = false
     
-    open var layoutBehaviour: CellPlanningBehavior { .planOnce }
+    open var planningBehavior: CellPlanningBehavior { .planOnce }
     
     open func planContent(_ plan: InsertablePlan) { }
     
     open func moleculeWillLayout() {}
     
-    open func fragmentDidLayout() {}
+    open func fragmentDidPlanContent() {}
     
     @discardableResult
     open func layoutContentIfNeeded() -> Bool {
         defer {
             layouted = true
         }
-        switch layoutBehaviour {
+        switch planningBehavior {
         case .planOn(let phase):
             if layoutPhase != .firstLoad && phase != layoutPhase {
                 return false
@@ -60,7 +60,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         contentView.planContent(planningOption(on: layoutPhase)) { content in
             planContent(content)
         }
-        fragmentDidLayout()
+        fragmentDidPlanContent()
         return true
     }
     
@@ -124,22 +124,22 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
     
     private(set) var layouted: Bool = false
     
-    open var layoutBehaviour: CellPlanningBehavior { .planOnce }
+    open var planningBehavior: CellPlanningBehavior { .planOnce }
     
     var collectionContentSize: CGSize = UIScreen.main.bounds.size
     
     open func planContent(_ layout: InsertablePlan) { }
     
-    open func fragmentWillLayout() {}
+    open func fragmentWillPlanContent() {}
     
-    open func fragmentDidLayout() {}
+    open func fragmentDidPlanContent() {}
     
     @discardableResult
     open func layoutContentIfNeeded() -> Bool {
         defer {
             layouted = true
         }
-        switch layoutBehaviour {
+        switch planningBehavior {
         case .planOn(let phase):
             if layoutPhase != .firstLoad && phase != layoutPhase {
                 return false
@@ -153,11 +153,11 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
         default:
             break
         }
-        fragmentWillLayout()
+        fragmentWillPlanContent()
         contentView.planContent(planningOption(on: layoutPhase)) { content in
             planContent(content)
         }
-        fragmentDidLayout()
+        fragmentDidPlanContent()
         return true
     }
     

@@ -12,8 +12,16 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		716D67B6E515B153412416D0 /* Pods_Artisan_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EFEDA3E99CC66FC0A60A05 /* Pods_Artisan_Example.framework */; };
+		BBED3C0425911F81004DF5F1 /* PlanContextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */; };
+		BBED3C0825911FAE004DF5F1 /* InsertableViewPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */; };
+		BBED3C0E259120FD004DF5F1 /* InsertableScrollPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */; };
+		BBED3C18259121C7004DF5F1 /* InsertablePlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C17259121C7004DF5F1 /* InsertablePlanSpec.swift */; };
+		BBED3C1E25912304004DF5F1 /* InsertableStackPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C1D25912304004DF5F1 /* InsertableStackPlanSpec.swift */; };
+		BBED3C2C259123A5004DF5F1 /* FragmentCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C2B259123A5004DF5F1 /* FragmentCellSpec.swift */; };
+		BBED3C382591263F004DF5F1 /* FragmentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C372591263F004DF5F1 /* FragmentSpec.swift */; };
+		BBED3C3E25912803004DF5F1 /* PlanCompatibleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */; };
+		BBED3C44259128CD004DF5F1 /* PlanLayoutSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C43259128CD004DF5F1 /* PlanLayoutSpec.swift */; };
 		C2F68948D69197EA6D212290 /* Pods_Artisan_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2769C24CE93AE61A51D7ED87 /* Pods_Artisan_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,9 +49,18 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Artisan_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Artisan_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		707361EB6E824177FA9C301F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		879BE10A59B15D19AC963F2E /* Pods-Artisan_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Artisan_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanContextSpec.swift; sourceTree = "<group>"; };
+		BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertableViewPlanSpec.swift; sourceTree = "<group>"; };
+		BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertableScrollPlanSpec.swift; sourceTree = "<group>"; };
+		BBED3C17259121C7004DF5F1 /* InsertablePlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertablePlanSpec.swift; sourceTree = "<group>"; };
+		BBED3C1D25912304004DF5F1 /* InsertableStackPlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertableStackPlanSpec.swift; sourceTree = "<group>"; };
+		BBED3C2B259123A5004DF5F1 /* FragmentCellSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FragmentCellSpec.swift; sourceTree = "<group>"; };
+		BBED3C372591263F004DF5F1 /* FragmentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FragmentSpec.swift; sourceTree = "<group>"; };
+		BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanCompatibleSpec.swift; sourceTree = "<group>"; };
+		BBED3C43259128CD004DF5F1 /* PlanLayoutSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanLayoutSpec.swift; sourceTree = "<group>"; };
 		D5F58F2417560DDDF0AD0E24 /* Pods-Artisan_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DC8A44295F25844F8072B11E /* Pods-Artisan_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -115,7 +132,8 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */,
+				BBED3BFF25911F6A004DF5F1 /* Plan */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -146,6 +164,22 @@
 				2769C24CE93AE61A51D7ED87 /* Pods_Artisan_Tests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BBED3BFF25911F6A004DF5F1 /* Plan */ = {
+			isa = PBXGroup;
+			children = (
+				BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */,
+				BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */,
+				BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */,
+				BBED3C17259121C7004DF5F1 /* InsertablePlanSpec.swift */,
+				BBED3C1D25912304004DF5F1 /* InsertableStackPlanSpec.swift */,
+				BBED3C2B259123A5004DF5F1 /* FragmentCellSpec.swift */,
+				BBED3C372591263F004DF5F1 /* FragmentSpec.swift */,
+				BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */,
+				BBED3C43259128CD004DF5F1 /* PlanLayoutSpec.swift */,
+			);
+			name = Plan;
 			sourceTree = "<group>";
 		};
 		D6154310B51A7BC8D1290CE7 /* Pods */ = {
@@ -217,7 +251,7 @@
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1230;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
 				};
@@ -366,7 +400,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				BBED3C2C259123A5004DF5F1 /* FragmentCellSpec.swift in Sources */,
+				BBED3C0825911FAE004DF5F1 /* InsertableViewPlanSpec.swift in Sources */,
+				BBED3C382591263F004DF5F1 /* FragmentSpec.swift in Sources */,
+				BBED3C0425911F81004DF5F1 /* PlanContextSpec.swift in Sources */,
+				BBED3C3E25912803004DF5F1 /* PlanCompatibleSpec.swift in Sources */,
+				BBED3C1E25912304004DF5F1 /* InsertableStackPlanSpec.swift in Sources */,
+				BBED3C0E259120FD004DF5F1 /* InsertableScrollPlanSpec.swift in Sources */,
+				BBED3C44259128CD004DF5F1 /* PlanLayoutSpec.swift in Sources */,
+				BBED3C18259121C7004DF5F1 /* InsertablePlanSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -535,6 +577,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DC8A44295F25844F8072B11E /* Pods-Artisan_Tests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -547,6 +590,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Artisan_Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Artisan_Example.app/Artisan_Example";
@@ -557,6 +602,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -565,6 +611,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/Artisan_Tests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Artisan_Example.app/Artisan_Example";

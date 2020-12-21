@@ -9,23 +9,23 @@ import Foundation
 import UIKit
 
 public protocol Fragment {
-    func fragmentWillLayout()
+    func fragmentWillPlanContent()
     func planContent(_ plan: InsertablePlan)
-    func fragmentDidLayout()
+    func fragmentDidPlanContent()
 }
 
 public extension Fragment {
-    func fragmentWillLayout() { }
-    func fragmentDidLayout() { }
+    func fragmentWillPlanContent() { }
+    func fragmentDidPlanContent() { }
 }
 
 public extension Fragment where Self: UIView {
     
     func planFragment(delegate: PlanDelegate? = nil) {
         let viewLayout = PlanLayout<Self>(view: self, context: .init(delegate: delegate, currentView: self))
-        fragmentWillLayout()
+        fragmentWillPlanContent()
         viewLayout.planContent(self.planContent(_:))
-        fragmentDidLayout()
+        fragmentDidPlanContent()
         NSLayoutConstraint.activate(viewLayout.plannedConstraints)
     }
     
