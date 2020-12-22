@@ -15,7 +15,7 @@ import Nimble
 
 class InsertableStackPlanSpec: QuickSpec {
     override func spec() {
-        describe("ViewLayout stack insertable helper") {
+        describe("InsertablaPlan stack helper") {
             var view: UIStackView!
             var testableInsertableViewPlan: TestableInsertableViewPlan<UIStackView>!
             beforeEach {
@@ -23,229 +23,229 @@ class InsertableStackPlanSpec: QuickSpec {
                 testableInsertableViewPlan = .init(view: view)
             }
             it("should fit stacked UIView") {
-                var layout = testableInsertableViewPlan.fitStackedView()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedView()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIView?
-                layout = testableInsertableViewPlan.fitStackedView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedView(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIActivityIndicatorView") {
-                var layout = testableInsertableViewPlan.fitStackedActivityIndicator()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedActivityIndicator()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIActivityIndicatorView?
-                layout = testableInsertableViewPlan.fitStackedActivityIndicator(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedActivityIndicator(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIButton") {
-                var layout = testableInsertableViewPlan.fitStackedButton()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedButton()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIButton?
-                layout = testableInsertableViewPlan.fitStackedButton(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedButton(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIDatePicker") {
-                var layout = testableInsertableViewPlan.fitStackedDatePicker()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedDatePicker()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIDatePicker?
-                layout = testableInsertableViewPlan.fitStackedDatePicker(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedDatePicker(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIPickerView") {
-                var layout = testableInsertableViewPlan.fitStackedPicker()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedPicker()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIPickerView?
-                layout = testableInsertableViewPlan.fitStackedPicker(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedPicker(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIImageView") {
-                var layout = testableInsertableViewPlan.fitStackedImageView()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedImageView()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIImageView?
-                layout = testableInsertableViewPlan.fitStackedImageView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedImageView(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIPageControl") {
-                var layout = testableInsertableViewPlan.fitStackedPageControl()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedPageControl()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIPageControl?
-                layout = testableInsertableViewPlan.fitStackedPageControl(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedPageControl(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIProgressView") {
-                var layout = testableInsertableViewPlan.fitStackedProgress()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedProgress()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIProgressView?
-                layout = testableInsertableViewPlan.fitStackedProgress(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedProgress(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UISearchBar") {
-                var layout = testableInsertableViewPlan.fitStackedSearchBar()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedSearchBar()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UISearchBar?
-                layout = testableInsertableViewPlan.fitStackedSearchBar(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedSearchBar(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UISearchTextField") {
                 guard #available(iOS 13.0, *) else { return }
-                var layout = testableInsertableViewPlan.fitStackedSearchField()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedSearchField()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UISearchTextField?
-                layout = testableInsertableViewPlan.fitStackedSearchField(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedSearchField(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UISegmentedControl") {
-                var layout = testableInsertableViewPlan.fitStackedSegmentedControl()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedSegmentedControl()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UISegmentedControl?
-                layout = testableInsertableViewPlan.fitStackedSegmentedControl(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedSegmentedControl(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UISlider") {
-                var layout = testableInsertableViewPlan.fitStackedSlider()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedSlider()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UISlider?
-                layout = testableInsertableViewPlan.fitStackedSlider(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedSlider(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIStackView") {
-                var layout = testableInsertableViewPlan.fitStackedStack()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedStack()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIStackView?
-                layout = testableInsertableViewPlan.fitStackedStack(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedStack(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 
-                layout = testableInsertableViewPlan.fitStackedVStack()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
-                expect(layout.view.axis).to(equal(.vertical))
-                layout = testableInsertableViewPlan.fitStackedVStack(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedVStack()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
+                expect(plan.view.axis).to(equal(.vertical))
+                plan = testableInsertableViewPlan.fitStackedVStack(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 expect(assignedView?.axis).to(equal(.vertical))
                 
-                layout = testableInsertableViewPlan.fitStackedHStack()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
-                expect(layout.view.axis).to(equal(.horizontal))
-                layout = testableInsertableViewPlan.fitStackedHStack(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedHStack()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
+                expect(plan.view.axis).to(equal(.horizontal))
+                plan = testableInsertableViewPlan.fitStackedHStack(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 expect(assignedView?.axis).to(equal(.horizontal))
             }
             it("should fit stacked UIStepper") {
-                var layout = testableInsertableViewPlan.fitStackedStepper()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedStepper()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIStepper?
-                layout = testableInsertableViewPlan.fitStackedStepper(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedStepper(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UISwitch") {
-                var layout = testableInsertableViewPlan.fitStackedSwitch()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedSwitch()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UISwitch?
-                layout = testableInsertableViewPlan.fitStackedSwitch(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedSwitch(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UITextField") {
-                var layout = testableInsertableViewPlan.fitStackedTextField()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedTextField()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UITextField?
-                layout = testableInsertableViewPlan.fitStackedTextField(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedTextField(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UITextView") {
-                var layout = testableInsertableViewPlan.fitStackedTextView()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedTextView()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UITextView?
-                layout = testableInsertableViewPlan.fitStackedTextView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedTextView(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIToolbar") {
-                var layout = testableInsertableViewPlan.fitStackedToolbar()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedToolbar()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIToolbar?
-                layout = testableInsertableViewPlan.fitStackedToolbar(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedToolbar(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked WKWebView") {
-                var layout = testableInsertableViewPlan.fitStackedWebView()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedWebView()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: WKWebView?
-                layout = testableInsertableViewPlan.fitStackedWebView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedWebView(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIScrollView") {
-                var layout = testableInsertableViewPlan.fitStackedScroll()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedScroll()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIScrollView?
-                layout = testableInsertableViewPlan.fitStackedScroll(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedScroll(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UITableView") {
-                var layout = testableInsertableViewPlan.fitStackedTable()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedTable()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UITableView?
-                layout = testableInsertableViewPlan.fitStackedTable(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedTable(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UICollectionView") {
-                var layout = testableInsertableViewPlan.fitStackedCollection()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedCollection()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UICollectionView?
-                layout = testableInsertableViewPlan.fitStackedCollection(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedCollection(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UILabel") {
-                var layout = testableInsertableViewPlan.fitStackedLabel()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedLabel()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UILabel?
-                layout = testableInsertableViewPlan.fitStackedLabel(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedLabel(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UIVisualEffectView") {
-                var layout = testableInsertableViewPlan.fitStackedVisualEffect()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedVisualEffect()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UIVisualEffectView?
-                layout = testableInsertableViewPlan.fitStackedVisualEffect(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedVisualEffect(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UINavigationBar") {
-                var layout = testableInsertableViewPlan.fitStackedNavigation()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedNavigation()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UINavigationBar?
-                layout = testableInsertableViewPlan.fitStackedNavigation(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedNavigation(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
             it("should fit stacked UITabBar") {
-                var layout = testableInsertableViewPlan.fitStackedTabBar()
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStackedTabBar()
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
                 var assignedView: UITabBar?
-                layout = testableInsertableViewPlan.fitStackedTabBar(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStackedTabBar(assignTo: &assignedView)
                 expect(view.arrangedSubviews.last).to(equal(assignedView))
-                expect(view.arrangedSubviews.last).to(equal(layout.view))
+                expect(view.arrangedSubviews.last).to(equal(plan.view))
             }
         }
     }

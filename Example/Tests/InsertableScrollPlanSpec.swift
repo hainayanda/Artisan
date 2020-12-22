@@ -14,7 +14,7 @@ import Nimble
 
 class InsertableScrollPlanSpec: QuickSpec {
     override func spec() {
-        describe("Layout insertable helper") {
+        describe("insertable helper") {
             var scroll: UIScrollView!
             var testableInsertableViewPlan: TestableInsertableViewPlan<UIScrollView>!
             beforeEach {
@@ -23,23 +23,23 @@ class InsertableScrollPlanSpec: QuickSpec {
             }
             it("should fit Vertical UIView") {
                 var content: UIView?
-                let layout = testableInsertableViewPlan.fitScrollVContentView(assignTo: &content)
-                expect(scroll.subviews.last).to(equal(layout.view))
-                expect(layout.view).to(equal(content))
+                let plan = testableInsertableViewPlan.fitScrollVContentView(assignTo: &content)
+                expect(scroll.subviews.last).to(equal(plan.view))
+                expect(plan.view).to(equal(content))
             }
             it("should fit Vertical UIView") {
-                let layout = testableInsertableViewPlan.fitScrollVContentView()
-                expect(scroll.subviews.last).to(equal(layout.view))
+                let plan = testableInsertableViewPlan.fitScrollVContentView()
+                expect(scroll.subviews.last).to(equal(plan.view))
             }
             it("should fit Horizontal UIView") {
                 var content: UIView?
-                let layout = testableInsertableViewPlan.fitScrollHContentView(assignTo: &content)
-                expect(scroll.subviews.last).to(equal(layout.view))
-                expect(layout.view).to(equal(content))
+                let plan = testableInsertableViewPlan.fitScrollHContentView(assignTo: &content)
+                expect(scroll.subviews.last).to(equal(plan.view))
+                expect(plan.view).to(equal(content))
             }
             it("should fit Horizontal UIView") {
-                let layout = testableInsertableViewPlan.fitScrollHContentView()
-                expect(scroll.subviews.last).to(equal(layout.view))
+                let plan = testableInsertableViewPlan.fitScrollHContentView()
+                expect(scroll.subviews.last).to(equal(plan.view))
             }
         }
     }

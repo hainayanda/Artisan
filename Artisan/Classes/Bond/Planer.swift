@@ -1,5 +1,5 @@
 //
-//  Planable.swift
+//  Planer.swift
 //  Artisan
 //
 //  Created by Nayanda Haberty (ID) on 18/08/20.
@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public extension Planable {
+public extension Planer {
     
     @discardableResult
     func apply(_ applicator: (View) -> Void) -> Self {

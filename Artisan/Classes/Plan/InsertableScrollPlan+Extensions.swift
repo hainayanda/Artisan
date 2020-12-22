@@ -10,42 +10,42 @@ import UIKit
 
 public extension InsertableViewPlan where View: UIScrollView {
     @discardableResult
-    func fitScrollVContentView() -> PlanLayout<UIView> {
+    func fitScrollVContentView() -> LayoutPlaner<UIView> {
         fitView()
             .edges(.equal, to: .parent)
             .height(.equalTo(.parent), priority: .defaultLow)
             .width(.equalTo(view.widthAnchor))
     }
     @discardableResult
-    func fitScrollHContentView() -> PlanLayout<UIView> {
+    func fitScrollHContentView() -> LayoutPlaner<UIView> {
         fitView()
             .edges(.equal, to: .parent)
             .width(.equalTo(.parent), priority: .defaultLow)
             .height(.equalTo(view.heightAnchor))
     }
     @discardableResult
-    func fitScrollVContentView(assignTo view: inout UIView?) -> PlanLayout<UIView> {
+    func fitScrollVContentView(assignTo view: inout UIView?) -> LayoutPlaner<UIView> {
         fitView(assignTo: &view)
             .edges(.equal, to: .parent)
             .height(.equalTo(.parent), priority: .defaultLow)
             .width(.equalTo(self.view.widthAnchor))
     }
     @discardableResult
-    func fitScrollHContentView(assignTo view: inout UIView?) -> PlanLayout<UIView> {
+    func fitScrollHContentView(assignTo view: inout UIView?) -> LayoutPlaner<UIView> {
         fitView(assignTo: &view)
             .edges(.equal, to: .parent)
             .width(.equalTo(.parent), priority: .defaultLow)
             .height(.equalTo(self.view.heightAnchor))
     }
     
-    func fitAsScrollVContent<View: UIView>(_ view: View) -> PlanLayout<View> {
+    func fitAsScrollVContent<View: UIView>(_ view: View) -> LayoutPlaner<View> {
         fit(view)
             .edges(.equal, to: .parent)
             .height(.equalTo(.parent), priority: .defaultLow)
             .width(.equalTo(self.view.widthAnchor))
     }
     
-    func fitAsScrollHContent<View: UIView>(_ view: View) -> PlanLayout<View> {
+    func fitAsScrollHContent<View: UIView>(_ view: View) -> LayoutPlaner<View> {
         fit(view)
             .edges(.equal, to: .parent)
             .width(.equalTo(.parent), priority: .defaultLow)

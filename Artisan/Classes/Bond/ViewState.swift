@@ -63,6 +63,7 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
     public func apply<View: UIView>(
         into view: View,
         _ keyPath: ReferenceWritableKeyPath<View, Wrapped>) -> Linker<View, Wrapped> {
+        bondingState = .applying
         return bonding(with: view, keyPath, withState: .applying)
     }
     
@@ -70,6 +71,7 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
     public func map<View: UIView>(
         from view: View,
         _ keyPath: ReferenceWritableKeyPath<View, Wrapped>) -> Linker<View, Wrapped> {
+        bondingState = .mapping
         return bonding(with: view, keyPath, withState: .mapping)
     }
     
@@ -77,7 +79,7 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
     public func bonding<View: UIView>(
         with view: View,
         _ keyPath: ReferenceWritableKeyPath<View, Wrapped>) -> Linker<View, Wrapped> {
-        return bonding(with: view, keyPath, withState: bondingState)
+        return bonding(with: view, keyPath, withState: .none)
     }
     
     @discardableResult

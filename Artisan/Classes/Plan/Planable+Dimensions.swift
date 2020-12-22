@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension Planable {
+public extension Planer {
     
     // MARK: Height Anchor
     

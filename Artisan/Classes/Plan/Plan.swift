@@ -1,5 +1,5 @@
 //
-//  Planer.swift
+//  Plan.swift
 //  Artisan
 //
 //  Created by Nayanda Haberty (ID) on 27/08/20.
@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-public protocol Planer: class {
+public protocol Plan: class {
     var plannedConstraints: [NSLayoutConstraint] { get set }
 }
 
-public protocol Planable: Planer {
+public protocol Planer: Plan {
     associatedtype View: UIView
     var view: View { get }
     var context: PlanContext { get }

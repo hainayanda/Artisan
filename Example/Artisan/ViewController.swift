@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Artisan
 
 class ViewController: UIViewController {
 

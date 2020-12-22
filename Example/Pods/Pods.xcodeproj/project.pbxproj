@@ -161,7 +161,7 @@
 		BB6FADCD2590F03600B6BB9D /* ObservableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADC72590F03600B6BB9D /* ObservableView.swift */; };
 		BB6FADCE2590F03600B6BB9D /* ObservableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADC82590F03600B6BB9D /* ObservableState.swift */; };
 		BB6FADCF2590F03600B6BB9D /* Linker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADC92590F03600B6BB9D /* Linker.swift */; };
-		BB6FADD02590F03600B6BB9D /* Planable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADCA2590F03600B6BB9D /* Planable.swift */; };
+		BB6FADD02590F03600B6BB9D /* Planer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADCA2590F03600B6BB9D /* Planer.swift */; };
 		BB6FADD12590F03600B6BB9D /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADCB2590F03600B6BB9D /* ViewState.swift */; };
 		BB6FADE02590F04F00B6BB9D /* Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADDB2590F04F00B6BB9D /* Dimensions.swift */; };
 		BB6FADE12590F04F00B6BB9D /* ArtisanError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADDC2590F04F00B6BB9D /* ArtisanError.swift */; };
@@ -173,9 +173,9 @@
 		BB6FADFF2590F17500B6BB9D /* UIView+Artisan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF02590F17400B6BB9D /* UIView+Artisan.swift */; };
 		BB6FAE002590F17500B6BB9D /* PlanContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF12590F17400B6BB9D /* PlanContext.swift */; };
 		BB6FAE012590F17500B6BB9D /* InsertableScrollPlan+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF22590F17400B6BB9D /* InsertableScrollPlan+Extensions.swift */; };
-		BB6FAE022590F17500B6BB9D /* Planer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF32590F17400B6BB9D /* Planer.swift */; };
+		BB6FAE022590F17500B6BB9D /* Plan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF32590F17400B6BB9D /* Plan.swift */; };
 		BB6FAE032590F17500B6BB9D /* Planable+Center.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF42590F17400B6BB9D /* Planable+Center.swift */; };
-		BB6FAE042590F17500B6BB9D /* PlanLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF52590F17400B6BB9D /* PlanLayout.swift */; };
+		BB6FAE042590F17500B6BB9D /* LayoutPlaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF52590F17400B6BB9D /* LayoutPlaner.swift */; };
 		BB6FAE052590F17500B6BB9D /* InsertablePlan+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF62590F17400B6BB9D /* InsertablePlan+Extensions.swift */; };
 		BB6FAE062590F17500B6BB9D /* Fragment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF72590F17400B6BB9D /* Fragment.swift */; };
 		BB6FAE072590F17500B6BB9D /* Planable+Dimensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADF82590F17400B6BB9D /* Planable+Dimensions.swift */; };
@@ -469,7 +469,7 @@
 		BB6FADC72590F03600B6BB9D /* ObservableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableView.swift; sourceTree = "<group>"; };
 		BB6FADC82590F03600B6BB9D /* ObservableState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableState.swift; sourceTree = "<group>"; };
 		BB6FADC92590F03600B6BB9D /* Linker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Linker.swift; sourceTree = "<group>"; };
-		BB6FADCA2590F03600B6BB9D /* Planable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Planable.swift; sourceTree = "<group>"; };
+		BB6FADCA2590F03600B6BB9D /* Planer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Planer.swift; sourceTree = "<group>"; };
 		BB6FADCB2590F03600B6BB9D /* ViewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
 		BB6FADDB2590F04F00B6BB9D /* Dimensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dimensions.swift; sourceTree = "<group>"; };
 		BB6FADDC2590F04F00B6BB9D /* ArtisanError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtisanError.swift; sourceTree = "<group>"; };
@@ -481,9 +481,9 @@
 		BB6FADF02590F17400B6BB9D /* UIView+Artisan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Artisan.swift"; sourceTree = "<group>"; };
 		BB6FADF12590F17400B6BB9D /* PlanContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanContext.swift; sourceTree = "<group>"; };
 		BB6FADF22590F17400B6BB9D /* InsertableScrollPlan+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InsertableScrollPlan+Extensions.swift"; sourceTree = "<group>"; };
-		BB6FADF32590F17400B6BB9D /* Planer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Planer.swift; sourceTree = "<group>"; };
+		BB6FADF32590F17400B6BB9D /* Plan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plan.swift; sourceTree = "<group>"; };
 		BB6FADF42590F17400B6BB9D /* Planable+Center.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Planable+Center.swift"; sourceTree = "<group>"; };
-		BB6FADF52590F17400B6BB9D /* PlanLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanLayout.swift; sourceTree = "<group>"; };
+		BB6FADF52590F17400B6BB9D /* LayoutPlaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutPlaner.swift; sourceTree = "<group>"; };
 		BB6FADF62590F17400B6BB9D /* InsertablePlan+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InsertablePlan+Extensions.swift"; sourceTree = "<group>"; };
 		BB6FADF72590F17400B6BB9D /* Fragment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fragment.swift; sourceTree = "<group>"; };
 		BB6FADF82590F17400B6BB9D /* Planable+Dimensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Planable+Dimensions.swift"; sourceTree = "<group>"; };
@@ -938,7 +938,7 @@
 				BB6FADC62590F03600B6BB9D /* LinkerProtocols.swift */,
 				BB6FADC82590F03600B6BB9D /* ObservableState.swift */,
 				BB6FADC72590F03600B6BB9D /* ObservableView.swift */,
-				BB6FADCA2590F03600B6BB9D /* Planable.swift */,
+				BB6FADCA2590F03600B6BB9D /* Planer.swift */,
 				BB6FADCB2590F03600B6BB9D /* ViewState.swift */,
 			);
 			path = Bond;
@@ -965,14 +965,14 @@
 				BB6FADF62590F17400B6BB9D /* InsertablePlan+Extensions.swift */,
 				BB6FADF22590F17400B6BB9D /* InsertableScrollPlan+Extensions.swift */,
 				BB6FADFC2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift */,
+				BB6FADF52590F17400B6BB9D /* LayoutPlaner.swift */,
 				BB6FADF42590F17400B6BB9D /* Planable+Center.swift */,
 				BB6FADF82590F17400B6BB9D /* Planable+Dimensions.swift */,
 				BB6FADFA2590F17500B6BB9D /* Planable+Edges.swift */,
 				BB6FADFB2590F17500B6BB9D /* Planable+Extensions.swift */,
 				BB6FADEF2590F17400B6BB9D /* PlanCompatible.swift */,
 				BB6FADF12590F17400B6BB9D /* PlanContext.swift */,
-				BB6FADF32590F17400B6BB9D /* Planer.swift */,
-				BB6FADF52590F17400B6BB9D /* PlanLayout.swift */,
+				BB6FADF32590F17400B6BB9D /* Plan.swift */,
 				BB6FADF02590F17400B6BB9D /* UIView+Artisan.swift */,
 			);
 			path = Plan;
@@ -1695,7 +1695,7 @@
 				BB6FAD982590EFD300B6BB9D /* CellMediator.swift in Sources */,
 				BB6FADBB2590EFEB00B6BB9D /* MainOperationHandler.swift in Sources */,
 				BB6FADFD2590F17500B6BB9D /* InsertablePlan.swift in Sources */,
-				BB6FADD02590F03600B6BB9D /* Planable.swift in Sources */,
+				BB6FADD02590F03600B6BB9D /* Planer.swift in Sources */,
 				BB6FADE02590F04F00B6BB9D /* Dimensions.swift in Sources */,
 				BB6FAE032590F17500B6BB9D /* Planable+Center.swift in Sources */,
 				BB6FAE082590F17500B6BB9D /* FragmentCell.swift in Sources */,
@@ -1706,8 +1706,8 @@
 				BB6FAE0A2590F17500B6BB9D /* Planable+Extensions.swift in Sources */,
 				BB6FAD9B2590EFD300B6BB9D /* UITableView+ReloadStrategy.swift in Sources */,
 				BB6FADCD2590F03600B6BB9D /* ObservableView.swift in Sources */,
-				BB6FAE042590F17500B6BB9D /* PlanLayout.swift in Sources */,
-				BB6FAE022590F17500B6BB9D /* Planer.swift in Sources */,
+				BB6FAE042590F17500B6BB9D /* LayoutPlaner.swift in Sources */,
+				BB6FAE022590F17500B6BB9D /* Plan.swift in Sources */,
 				BB6FADE32590F04F00B6BB9D /* Enumerations.swift in Sources */,
 				BB6FADB92590EFEB00B6BB9D /* UIKit+Extensions.swift in Sources */,
 				BB6FAD9A2590EFD300B6BB9D /* UICollectionView+Mediator.swift in Sources */,

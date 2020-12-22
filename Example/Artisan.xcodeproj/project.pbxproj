@@ -13,6 +13,16 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		716D67B6E515B153412416D0 /* Pods_Artisan_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EFEDA3E99CC66FC0A60A05 /* Pods_Artisan_Example.framework */; };
+		BB0D09272591B30F00C209E1 /* ViewStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09262591B30F00C209E1 /* ViewStateSpec.swift */; };
+		BB0D092C2591B3B300C209E1 /* CellMediatorBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D092B2591B3B300C209E1 /* CellMediatorBuilderSpec.swift */; };
+		BB0D09332591B41C00C209E1 /* CommonSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09322591B41C00C209E1 /* CommonSpec.swift */; };
+		BB0D09372591B44000C209E1 /* UIKitExtensionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09362591B44000C209E1 /* UIKitExtensionSpec.swift */; };
+		BB0D093C2591BB4F00C209E1 /* CellMediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */; };
+		BB0D09422591BBB800C209E1 /* CellContainerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */; };
+		BB0D094A2591BC5700C209E1 /* CellContainerMediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */; };
+		BB0D09502591BCAD00C209E1 /* MediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */; };
+		BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */; };
+		BB1170B025919BD100C2D13D /* PlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170AF25919BD100C2D13D /* PlanerSpec.swift */; };
 		BBED3C0425911F81004DF5F1 /* PlanContextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */; };
 		BBED3C0825911FAE004DF5F1 /* InsertableViewPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */; };
 		BBED3C0E259120FD004DF5F1 /* InsertableScrollPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */; };
@@ -21,7 +31,7 @@
 		BBED3C2C259123A5004DF5F1 /* FragmentCellSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C2B259123A5004DF5F1 /* FragmentCellSpec.swift */; };
 		BBED3C382591263F004DF5F1 /* FragmentSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C372591263F004DF5F1 /* FragmentSpec.swift */; };
 		BBED3C3E25912803004DF5F1 /* PlanCompatibleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */; };
-		BBED3C44259128CD004DF5F1 /* PlanLayoutSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C43259128CD004DF5F1 /* PlanLayoutSpec.swift */; };
+		BBED3C44259128CD004DF5F1 /* LayoutPlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */; };
 		C2F68948D69197EA6D212290 /* Pods_Artisan_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2769C24CE93AE61A51D7ED87 /* Pods_Artisan_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +61,16 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		707361EB6E824177FA9C301F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		879BE10A59B15D19AC963F2E /* Pods-Artisan_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		BB0D09262591B30F00C209E1 /* ViewStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewStateSpec.swift; sourceTree = "<group>"; };
+		BB0D092B2591B3B300C209E1 /* CellMediatorBuilderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellMediatorBuilderSpec.swift; sourceTree = "<group>"; };
+		BB0D09322591B41C00C209E1 /* CommonSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonSpec.swift; sourceTree = "<group>"; };
+		BB0D09362591B44000C209E1 /* UIKitExtensionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitExtensionSpec.swift; sourceTree = "<group>"; };
+		BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellMediatorSpec.swift; sourceTree = "<group>"; };
+		BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellContainerSpec.swift; sourceTree = "<group>"; };
+		BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellContainerMediatorSpec.swift; sourceTree = "<group>"; };
+		BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediatorSpec.swift; sourceTree = "<group>"; };
+		BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStateSpec.swift; sourceTree = "<group>"; };
+		BB1170AF25919BD100C2D13D /* PlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanerSpec.swift; sourceTree = "<group>"; };
 		BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Artisan_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanContextSpec.swift; sourceTree = "<group>"; };
 		BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertableViewPlanSpec.swift; sourceTree = "<group>"; };
@@ -60,7 +80,7 @@
 		BBED3C2B259123A5004DF5F1 /* FragmentCellSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FragmentCellSpec.swift; sourceTree = "<group>"; };
 		BBED3C372591263F004DF5F1 /* FragmentSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FragmentSpec.swift; sourceTree = "<group>"; };
 		BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanCompatibleSpec.swift; sourceTree = "<group>"; };
-		BBED3C43259128CD004DF5F1 /* PlanLayoutSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanLayoutSpec.swift; sourceTree = "<group>"; };
+		BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutPlanerSpec.swift; sourceTree = "<group>"; };
 		D5F58F2417560DDDF0AD0E24 /* Pods-Artisan_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DC8A44295F25844F8072B11E /* Pods-Artisan_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -133,8 +153,11 @@
 			isa = PBXGroup;
 			children = (
 				BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */,
+				BB1170A525919B3A00C2D13D /* Bond */,
+				BB0D093A2591BB2600C209E1 /* Mediator */,
 				BBED3BFF25911F6A004DF5F1 /* Plan */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				BB0D092A2591B39300C209E1 /* Utilities */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -166,18 +189,49 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		BB0D092A2591B39300C209E1 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				BB0D092B2591B3B300C209E1 /* CellMediatorBuilderSpec.swift */,
+				BB0D09322591B41C00C209E1 /* CommonSpec.swift */,
+				BB0D09362591B44000C209E1 /* UIKitExtensionSpec.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		BB0D093A2591BB2600C209E1 /* Mediator */ = {
+			isa = PBXGroup;
+			children = (
+				BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */,
+				BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */,
+				BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */,
+				BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */,
+			);
+			name = Mediator;
+			sourceTree = "<group>";
+		};
+		BB1170A525919B3A00C2D13D /* Bond */ = {
+			isa = PBXGroup;
+			children = (
+				BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */,
+				BB1170AF25919BD100C2D13D /* PlanerSpec.swift */,
+				BB0D09262591B30F00C209E1 /* ViewStateSpec.swift */,
+			);
+			name = Bond;
+			sourceTree = "<group>";
+		};
 		BBED3BFF25911F6A004DF5F1 /* Plan */ = {
 			isa = PBXGroup;
 			children = (
-				BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */,
-				BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */,
-				BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */,
-				BBED3C17259121C7004DF5F1 /* InsertablePlanSpec.swift */,
-				BBED3C1D25912304004DF5F1 /* InsertableStackPlanSpec.swift */,
 				BBED3C2B259123A5004DF5F1 /* FragmentCellSpec.swift */,
 				BBED3C372591263F004DF5F1 /* FragmentSpec.swift */,
+				BBED3C17259121C7004DF5F1 /* InsertablePlanSpec.swift */,
+				BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */,
+				BBED3C1D25912304004DF5F1 /* InsertableStackPlanSpec.swift */,
+				BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */,
+				BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */,
 				BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */,
-				BBED3C43259128CD004DF5F1 /* PlanLayoutSpec.swift */,
+				BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */,
 			);
 			name = Plan;
 			sourceTree = "<group>";
@@ -401,14 +455,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBED3C2C259123A5004DF5F1 /* FragmentCellSpec.swift in Sources */,
+				BB0D09272591B30F00C209E1 /* ViewStateSpec.swift in Sources */,
 				BBED3C0825911FAE004DF5F1 /* InsertableViewPlanSpec.swift in Sources */,
 				BBED3C382591263F004DF5F1 /* FragmentSpec.swift in Sources */,
+				BB1170B025919BD100C2D13D /* PlanerSpec.swift in Sources */,
 				BBED3C0425911F81004DF5F1 /* PlanContextSpec.swift in Sources */,
 				BBED3C3E25912803004DF5F1 /* PlanCompatibleSpec.swift in Sources */,
 				BBED3C1E25912304004DF5F1 /* InsertableStackPlanSpec.swift in Sources */,
 				BBED3C0E259120FD004DF5F1 /* InsertableScrollPlanSpec.swift in Sources */,
-				BBED3C44259128CD004DF5F1 /* PlanLayoutSpec.swift in Sources */,
+				BB0D093C2591BB4F00C209E1 /* CellMediatorSpec.swift in Sources */,
+				BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */,
+				BBED3C44259128CD004DF5F1 /* LayoutPlanerSpec.swift in Sources */,
+				BB0D092C2591B3B300C209E1 /* CellMediatorBuilderSpec.swift in Sources */,
+				BB0D09422591BBB800C209E1 /* CellContainerSpec.swift in Sources */,
+				BB0D094A2591BC5700C209E1 /* CellContainerMediatorSpec.swift in Sources */,
+				BB0D09502591BCAD00C209E1 /* MediatorSpec.swift in Sources */,
 				BBED3C18259121C7004DF5F1 /* InsertablePlanSpec.swift in Sources */,
+				BB0D09372591B44000C209E1 /* UIKitExtensionSpec.swift in Sources */,
+				BB0D09332591B41C00C209E1 /* CommonSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

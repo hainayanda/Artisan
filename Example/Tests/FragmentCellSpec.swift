@@ -14,140 +14,140 @@ import Nimble
 
 class FragmentCellSpec: QuickSpec {
     override func spec() {
-        describe("molecule cell behaviour") {
+        describe("fragment cell behaviour") {
             context("table molecule cell") {
                 var tableCell: TestableTableCell!
                 beforeEach {
                     tableCell = .init()
                 }
-                it("should layout content only first load") {
-                    var layouted: Bool = false
+                it("should plan content only first load") {
+                    var planed: Bool = false
                     tableCell.layoutPhase = .firstLoad
                     tableCell.planningBehavior = .planOnce
                     tableCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(tableCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .reused
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     tableCell.layoutPhase = .none
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                 }
-                it("should layout content only on reused and first load") {
-                    var layouted: Bool = false
+                it("should plan content only on reused and first load") {
+                    var planed: Bool = false
                     tableCell.layoutPhase = .firstLoad
                     tableCell.planningBehavior = .planOn(.reused)
                     tableCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(tableCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .reused
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     tableCell.layoutPhase = .none
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                 }
-                it("should layout content only on setNeedsLayout and first load") {
-                    var layouted: Bool = false
+                it("should plan content only on setNeedsLayout and first load") {
+                    var planed: Bool = false
                     tableCell.layoutPhase = .firstLoad
                     tableCell.planningBehavior = .planOn(.setNeedsLayout)
                     tableCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(tableCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .reused
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     tableCell.layoutPhase = .none
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                 }
-                it("should layout content on any given phase") {
-                    var layouted: Bool = false
+                it("should plan content on any given phase") {
+                    var planed: Bool = false
                     tableCell.layoutPhase = .firstLoad
                     tableCell.planningBehavior = .planOnEach([.none, .reused, .setNeedsLayout])
                     tableCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(tableCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .reused
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     tableCell.layoutPhase = .none
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
+                    expect(planed).to(beTrue())
                 }
-                it("should get sublayouting option") {
-                    var layoutOptionPhase: CellLayoutingPhase = .none
-                    var layouted: Bool = false
+                it("should get subplaning option") {
+                    var planOptionPhase: CellLayoutingPhase = .none
+                    var planed: Bool = false
                     tableCell.planningBehavior = .planIfPossible
                     tableCell.didNeedPlanningOption = { phase in
-                        layoutOptionPhase = phase
+                        planOptionPhase = phase
                         return .append
                     }
                     tableCell.didPlanContent = { plan in
                         let container = plan as? LayoutPlan<UIView>
                         expect(container?.view)
                             .to(equal(tableCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     tableCell.layoutPhase = .firstLoad
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    expect(layoutOptionPhase).to(equal(.firstLoad))
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    expect(planOptionPhase).to(equal(.firstLoad))
+                    planed = false
                     tableCell.layoutPhase = .reused
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    expect(layoutOptionPhase).to(equal(.reused))
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    expect(planOptionPhase).to(equal(.reused))
+                    planed = false
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    expect(layoutOptionPhase).to(equal(.setNeedsLayout))
+                    expect(planed).to(beTrue())
+                    expect(planOptionPhase).to(equal(.setNeedsLayout))
                 }
                 it("should use calculated size") {
-                    var layoutFitted: Bool = false
+                    var planFitted: Bool = false
                     var calculated: Bool = false
                     var tableWidth: CGFloat = .automatic
                     let tableHeight: CGFloat = .random(in: 0..<500)
                     tableCell.didLayoutFitting = { _ in
-                        layoutFitted = true
+                        planFitted = true
                     }
                     tableCell.didCalculatedCellHeight = { width in
                         defer {
@@ -161,7 +161,7 @@ class FragmentCellSpec: QuickSpec {
                         withHorizontalFittingPriority: .defaultHigh,
                         verticalFittingPriority: .defaultHigh
                     )
-                    expect(layoutFitted).to(beTrue())
+                    expect(planFitted).to(beTrue())
                     expect(calculated).to(beTrue())
                     expect(size).to(equal(.init(width: tableWidth, height: tableHeight)))
                 }
@@ -171,126 +171,126 @@ class FragmentCellSpec: QuickSpec {
                 beforeEach {
                     collectionCell = .init()
                 }
-                it("should layout content only first load") {
-                    var layouted: Bool = false
+                it("should plan content only first load") {
+                    var planed: Bool = false
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.planningBehavior = .planOnce
                     collectionCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(collectionCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .reused
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     collectionCell.layoutPhase = .none
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                 }
-                it("should layout content only on reused and first load") {
-                    var layouted: Bool = false
+                it("should plan content only on reused and first load") {
+                    var planed: Bool = false
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.planningBehavior = .planOn(.reused)
                     collectionCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(collectionCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .reused
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     collectionCell.layoutPhase = .none
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                 }
-                it("should layout content only on setNeedsLayout and first load") {
-                    var layouted: Bool = false
+                it("should plan content only on setNeedsLayout and first load") {
+                    var planed: Bool = false
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.planningBehavior = .planOn(.setNeedsLayout)
                     collectionCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(collectionCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .reused
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                     collectionCell.layoutPhase = .none
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beFalse())
+                    expect(planed).to(beFalse())
                 }
-                it("should layout content on any given phase") {
-                    var layouted: Bool = false
+                it("should plan content on any given phase") {
+                    var planed: Bool = false
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.planningBehavior = .planOnEach([.none, .reused, .setNeedsLayout])
                     collectionCell.didPlanContent = { plan in
                         expect((plan as? LayoutPlan<UIView>)?.view)
                             .to(equal(collectionCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .reused
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    planed = false
                     collectionCell.layoutPhase = .none
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
+                    expect(planed).to(beTrue())
                 }
-                it("should get sublayouting option") {
-                    var layoutOptionPhase: CellLayoutingPhase = .none
-                    var layouted: Bool = false
+                it("should get subplaning option") {
+                    var planOptionPhase: CellLayoutingPhase = .none
+                    var planed: Bool = false
                     collectionCell.planningBehavior = .planIfPossible
                     collectionCell.didNeedPlanningOption = { phase in
-                        layoutOptionPhase = phase
+                        planOptionPhase = phase
                         return .append
                     }
                     collectionCell.didPlanContent = { plan in
                         let container = plan as? LayoutPlan<UIView>
                         expect(container?.view)
                             .to(equal(collectionCell.contentView))
-                        layouted = true
+                        planed = true
                     }
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    expect(layoutOptionPhase).to(equal(.firstLoad))
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    expect(planOptionPhase).to(equal(.firstLoad))
+                    planed = false
                     collectionCell.layoutPhase = .reused
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    expect(layoutOptionPhase).to(equal(.reused))
-                    layouted = false
+                    expect(planed).to(beTrue())
+                    expect(planOptionPhase).to(equal(.reused))
+                    planed = false
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
-                    expect(layouted).to(beTrue())
-                    expect(layoutOptionPhase).to(equal(.setNeedsLayout))
+                    expect(planed).to(beTrue())
+                    expect(planOptionPhase).to(equal(.setNeedsLayout))
                 }
             }
         }
@@ -307,13 +307,13 @@ class TestableTableCell: TableFragmentCell {
             _layoutPhase = newValue
         }
     }
-    private var _layoutBehaviour: CellPlanningBehavior = .planOnce
+    private var _planBehaviour: CellPlanningBehavior = .planOnce
     override var planningBehavior: CellPlanningBehavior {
         get {
-            _layoutBehaviour
+            _planBehaviour
         }
         set {
-            _layoutBehaviour = newValue
+            _planBehaviour = newValue
         }
     }
     

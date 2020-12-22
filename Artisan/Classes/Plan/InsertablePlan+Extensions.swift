@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 extension InsertablePlan {
-    func fitNewView<View: UIView>(thenAssignTo view: inout View?) -> PlanLayout<View> {
+    func fitNewView<View: UIView>(thenAssignTo view: inout View?) -> LayoutPlaner<View> {
         let viewToPut = view ?? .init()
         defer {
             view = viewToPut
@@ -20,182 +20,182 @@ extension InsertablePlan {
     
     //MARK: UIView
     @discardableResult
-    public func fitView(assignTo view: inout UIView?) -> PlanLayout<UIView> {
+    public func fitView(assignTo view: inout UIView?) -> LayoutPlaner<UIView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitView() -> PlanLayout<UIView> {
+    public func fitView() -> LayoutPlaner<UIView> {
         fit(UIView())
     }
     
     //MARK: UIActivityIndicatorView
     
     @discardableResult
-    public func fitActivityIndicator(assignTo view: inout UIActivityIndicatorView?) -> PlanLayout<UIActivityIndicatorView> {
+    public func fitActivityIndicator(assignTo view: inout UIActivityIndicatorView?) -> LayoutPlaner<UIActivityIndicatorView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitActivityIndicator() -> PlanLayout<UIActivityIndicatorView> {
+    public func fitActivityIndicator() -> LayoutPlaner<UIActivityIndicatorView> {
         fit(.init())
     }
     
     //MARK: UIButton
     
     @discardableResult
-    public func fitButton(assignTo view: inout UIButton?) -> PlanLayout<UIButton> {
+    public func fitButton(assignTo view: inout UIButton?) -> LayoutPlaner<UIButton> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitButton() -> PlanLayout<UIButton> {
+    public func fitButton() -> LayoutPlaner<UIButton> {
         fit(.init())
     }
     
     //MARK: UIDatePicker
     
     @discardableResult
-    public func fitDatePicker(assignTo view: inout UIDatePicker?) -> PlanLayout<UIDatePicker> {
+    public func fitDatePicker(assignTo view: inout UIDatePicker?) -> LayoutPlaner<UIDatePicker> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitDatePicker() -> PlanLayout<UIDatePicker> {
+    public func fitDatePicker() -> LayoutPlaner<UIDatePicker> {
         fit(.init())
     }
     
     //MARK: UIPickerView
     
     @discardableResult
-    public func fitPicker(assignTo view: inout UIPickerView?) -> PlanLayout<UIPickerView> {
+    public func fitPicker(assignTo view: inout UIPickerView?) -> LayoutPlaner<UIPickerView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitPicker() -> PlanLayout<UIPickerView> {
+    public func fitPicker() -> LayoutPlaner<UIPickerView> {
         fit(.init())
     }
     
     //MARK: UIImageView
     
     @discardableResult
-    public func fitImageView(assignTo view: inout UIImageView?) -> PlanLayout<UIImageView> {
+    public func fitImageView(assignTo view: inout UIImageView?) -> LayoutPlaner<UIImageView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitImageView() -> PlanLayout<UIImageView> {
+    public func fitImageView() -> LayoutPlaner<UIImageView> {
         fit(.init())
     }
     
     //MARK: UIPageControl
     
     @discardableResult
-    public func fitPageControl(assignTo view: inout UIPageControl?) -> PlanLayout<UIPageControl> {
+    public func fitPageControl(assignTo view: inout UIPageControl?) -> LayoutPlaner<UIPageControl> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitPageControl() -> PlanLayout<UIPageControl> {
+    public func fitPageControl() -> LayoutPlaner<UIPageControl> {
         fit(.init())
     }
     
     //MARK: UIProgressView
     
     @discardableResult
-    public func fitProgress(assignTo view: inout UIProgressView?) -> PlanLayout<UIProgressView> {
+    public func fitProgress(assignTo view: inout UIProgressView?) -> LayoutPlaner<UIProgressView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitProgress() -> PlanLayout<UIProgressView> {
+    public func fitProgress() -> LayoutPlaner<UIProgressView> {
         fit(.init())
     }
     
     //MARK: UISearchBar
     
     @discardableResult
-    public func fitSearchBar(assignTo view: inout UISearchBar?) -> PlanLayout<UISearchBar> {
+    public func fitSearchBar(assignTo view: inout UISearchBar?) -> LayoutPlaner<UISearchBar> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitSearchBar() -> PlanLayout<UISearchBar> {
+    public func fitSearchBar() -> LayoutPlaner<UISearchBar> {
         fit(.init())
     }
     
     @available(iOS 13.0, *)
     @discardableResult
-    public func fitSearchField(assignTo view: inout UISearchTextField?) -> PlanLayout<UISearchTextField> {
+    public func fitSearchField(assignTo view: inout UISearchTextField?) -> LayoutPlaner<UISearchTextField> {
         fitNewView(thenAssignTo: &view)
     }
     
     @available(iOS 13.0, *)
     @discardableResult
-    public func fitSearchField() -> PlanLayout<UISearchTextField> {
+    public func fitSearchField() -> LayoutPlaner<UISearchTextField> {
         fit(.init())
     }
     
     //MARK: UISegmentedControl
     
     @discardableResult
-    public func fitSegmentedControl(assignTo view: inout UISegmentedControl?) -> PlanLayout<UISegmentedControl> {
+    public func fitSegmentedControl(assignTo view: inout UISegmentedControl?) -> LayoutPlaner<UISegmentedControl> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitSegmentedControl() -> PlanLayout<UISegmentedControl> {
+    public func fitSegmentedControl() -> LayoutPlaner<UISegmentedControl> {
         fit(.init())
     }
     
     //MARK: UISlider
     
     @discardableResult
-    public func fitSlider(assignTo view: inout UISlider?) -> PlanLayout<UISlider> {
+    public func fitSlider(assignTo view: inout UISlider?) -> LayoutPlaner<UISlider> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitSlider() -> PlanLayout<UISlider> {
+    public func fitSlider() -> LayoutPlaner<UISlider> {
         fit(.init())
     }
     
     //MARK: UIStackView
     
     @discardableResult
-    public func fitStack(assignTo view: inout UIStackView?) -> PlanLayout<UIStackView> {
+    public func fitStack(assignTo view: inout UIStackView?) -> LayoutPlaner<UIStackView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitStack() -> PlanLayout<UIStackView> {
+    public func fitStack() -> LayoutPlaner<UIStackView> {
         fit(.init())
     }
     
     @discardableResult
-    public func fitVStack(assignTo view: inout UIStackView?) -> PlanLayout<UIStackView> {
+    public func fitVStack(assignTo view: inout UIStackView?) -> LayoutPlaner<UIStackView> {
         let layout = fitNewView(thenAssignTo: &view)
         view?.axis = .vertical
         return layout
     }
     
     @discardableResult
-    public func fitVStack() -> PlanLayout<UIStackView> {
+    public func fitVStack() -> LayoutPlaner<UIStackView> {
         let stack: UIStackView = .init()
         stack.axis = .vertical
         return fit(stack)
     }
     
     @discardableResult
-    public func fitHStack(assignTo view: inout UIStackView?) -> PlanLayout<UIStackView> {
+    public func fitHStack(assignTo view: inout UIStackView?) -> LayoutPlaner<UIStackView> {
         let layout = fitNewView(thenAssignTo: &view)
         view?.axis = .horizontal
         return layout
     }
     
     @discardableResult
-    public func fitHStack() -> PlanLayout<UIStackView> {
+    public func fitHStack() -> LayoutPlaner<UIStackView> {
         let stack: UIStackView = .init()
         stack.axis = .horizontal
         return fit(stack)
@@ -204,103 +204,103 @@ extension InsertablePlan {
     //MARK: UIStepper
     
     @discardableResult
-    public func fitStepper(assignTo view: inout UIStepper?) -> PlanLayout<UIStepper> {
+    public func fitStepper(assignTo view: inout UIStepper?) -> LayoutPlaner<UIStepper> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitStepper() -> PlanLayout<UIStepper> {
+    public func fitStepper() -> LayoutPlaner<UIStepper> {
         fit(.init())
     }
     
     //MARK: UISwitch
     
     @discardableResult
-    public func fitSwitch(assignTo view: inout UISwitch?) -> PlanLayout<UISwitch> {
+    public func fitSwitch(assignTo view: inout UISwitch?) -> LayoutPlaner<UISwitch> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitSwitch() -> PlanLayout<UISwitch> {
+    public func fitSwitch() -> LayoutPlaner<UISwitch> {
         fit(.init())
     }
     
     //MARK: UITextField
     
     @discardableResult
-    public func fitTextField(assignTo view: inout UITextField?) -> PlanLayout<UITextField> {
+    public func fitTextField(assignTo view: inout UITextField?) -> LayoutPlaner<UITextField> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitTextField() -> PlanLayout<UITextField> {
+    public func fitTextField() -> LayoutPlaner<UITextField> {
         fit(.init())
     }
     
     //MARK: UITextView
     
     @discardableResult
-    public func fitTextView(assignTo view: inout UITextView?) -> PlanLayout<UITextView> {
+    public func fitTextView(assignTo view: inout UITextView?) -> LayoutPlaner<UITextView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitTextView() -> PlanLayout<UITextView> {
+    public func fitTextView() -> LayoutPlaner<UITextView> {
         fit(.init())
     }
     
     //MARK: UIToolbar
     
     @discardableResult
-    public func fitToolbar(assignTo view: inout UIToolbar?) -> PlanLayout<UIToolbar> {
+    public func fitToolbar(assignTo view: inout UIToolbar?) -> LayoutPlaner<UIToolbar> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitToolbar() -> PlanLayout<UIToolbar> {
+    public func fitToolbar() -> LayoutPlaner<UIToolbar> {
         fit(.init())
     }
     
     //MARK: WKWebView
     
     @discardableResult
-    public func fitWebView(assignTo view: inout WKWebView?) -> PlanLayout<WKWebView> {
+    public func fitWebView(assignTo view: inout WKWebView?) -> LayoutPlaner<WKWebView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitWebView() -> PlanLayout<WKWebView> {
+    public func fitWebView() -> LayoutPlaner<WKWebView> {
         fit(.init())
     }
     
     //MARK: UIScrollView
     
     @discardableResult
-    public func fitScroll(assignTo view: inout UIScrollView?) -> PlanLayout<UIScrollView> {
+    public func fitScroll(assignTo view: inout UIScrollView?) -> LayoutPlaner<UIScrollView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitScroll() -> PlanLayout<UIScrollView> {
+    public func fitScroll() -> LayoutPlaner<UIScrollView> {
         fit(.init())
     }
     
     //MARK: UITableView
     
     @discardableResult
-    public func fitTable(assignTo view: inout UITableView?) -> PlanLayout<UITableView> {
+    public func fitTable(assignTo view: inout UITableView?) -> LayoutPlaner<UITableView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitTable() -> PlanLayout<UITableView> {
+    public func fitTable() -> LayoutPlaner<UITableView> {
         fit(.init())
     }
     
     //MARK: UICollectionView
     
     @discardableResult
-    public func fitCollection(assignTo view: inout UICollectionView?) -> PlanLayout<UICollectionView> {
+    public func fitCollection(assignTo view: inout UICollectionView?) -> LayoutPlaner<UICollectionView> {
         let collectionToPut = view ?? .init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         defer {
             view = collectionToPut
@@ -309,55 +309,55 @@ extension InsertablePlan {
     }
     
     @discardableResult
-    public func fitCollection() -> PlanLayout<UICollectionView> {
+    public func fitCollection() -> LayoutPlaner<UICollectionView> {
         fit(.init(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()))
     }
     
     //MARK: UILabel
     
     @discardableResult
-    public func fitLabel(assignTo view: inout UILabel?) -> PlanLayout<UILabel> {
+    public func fitLabel(assignTo view: inout UILabel?) -> LayoutPlaner<UILabel> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitLabel() -> PlanLayout<UILabel> {
+    public func fitLabel() -> LayoutPlaner<UILabel> {
         fit(.init())
     }
     
     //MARK: UIVisualEffectView
     
     @discardableResult
-    public func fitVisualEffect(assignTo view: inout UIVisualEffectView?) -> PlanLayout<UIVisualEffectView> {
+    public func fitVisualEffect(assignTo view: inout UIVisualEffectView?) -> LayoutPlaner<UIVisualEffectView> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitVisualEffect() -> PlanLayout<UIVisualEffectView> {
+    public func fitVisualEffect() -> LayoutPlaner<UIVisualEffectView> {
         fit(.init())
     }
     
     //MARK: UINavigationBar
     
     @discardableResult
-    public func fitNavigation(assignTo view: inout UINavigationBar?) -> PlanLayout<UINavigationBar> {
+    public func fitNavigation(assignTo view: inout UINavigationBar?) -> LayoutPlaner<UINavigationBar> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitNavigation() -> PlanLayout<UINavigationBar> {
+    public func fitNavigation() -> LayoutPlaner<UINavigationBar> {
         fit(.init())
     }
     
     //MARK: UITabBar
     
     @discardableResult
-    public func fitTabBar(assignTo view: inout UITabBar?) -> PlanLayout<UITabBar> {
+    public func fitTabBar(assignTo view: inout UITabBar?) -> LayoutPlaner<UITabBar> {
         fitNewView(thenAssignTo: &view)
     }
     
     @discardableResult
-    public func fitTabBar() -> PlanLayout<UITabBar> {
+    public func fitTabBar() -> LayoutPlaner<UITabBar> {
         fit(.init())
     }
 }

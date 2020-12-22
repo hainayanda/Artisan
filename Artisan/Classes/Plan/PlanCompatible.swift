@@ -11,7 +11,7 @@ public protocol PlanCompatible { }
 
 public extension PlanCompatible where Self: UIView {
     
-    func plan(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (PlanLayout<Self>) -> Void) {
+    func plan(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlaner<Self>) -> Void) {
         translatesAutoresizingMaskIntoConstraints = false
         planing(withDelegate: delegate, options, layouter)
     }
@@ -22,14 +22,14 @@ public extension PlanCompatible where Self: UIView {
         }
     }
     
-    private func planing(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (PlanLayout<Self>) -> Void) {
+    private func planing(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlaner<Self>) -> Void) {
         if options.shouldRemoveOldPlannedConstraints {
             removeAllPlannedConstraints()
         }
         if options.shouldCleanAllConstraints {
             cleanSubViews()
         }
-        let viewLayout = PlanLayout(view: self, context: .init(delegate: delegate, currentView: self))
+        let viewLayout = LayoutPlaner(view: self, context: .init(delegate: delegate, currentView: self))
         layouter(viewLayout)
         let constraints = viewLayout.plannedConstraints
         switch options {
@@ -45,7 +45,7 @@ public extension PlanCompatible where Self: UIView {
 }
 
 public extension PlanCompatible where Self: UIViewController {
-    func plan(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (PlanLayout<UIView>) -> Void) {
+    func plan(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlaner<UIView>) -> Void) {
         view.plan(withDelegate: delegate, options, layouter)
     }
     

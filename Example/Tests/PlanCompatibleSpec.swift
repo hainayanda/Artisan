@@ -1,5 +1,5 @@
 //
-//  NamadaLayoutCompatibleSpec.swift
+//  PlanCompatibleSpec.swift
 //  Artisan_Tests
 //
 //  Created by Nayanda Haberty (ID) on 08/09/20.

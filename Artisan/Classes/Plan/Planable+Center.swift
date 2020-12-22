@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public extension Planable {
+public extension Planer {
     
     // MARK: Center Anchor
     

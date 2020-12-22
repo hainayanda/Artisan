@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 
 public protocol InsertablePlan: class {
-    var fittedPlans: [Planer] { get set }
+    var fittedPlans: [Plan] { get set }
     var context: PlanContext { get }
     @discardableResult
-    func fit<V: UIView>(_ view: V) -> PlanLayout<V>
+    func fit<V: UIView>(_ view: V) -> LayoutPlaner<V>
     @discardableResult
-    func fit(_ viewController: UIViewController) -> PlanLayout<UIView>
+    func fit(_ viewController: UIViewController) -> LayoutPlaner<UIView>
 }
 
 public protocol InsertableViewPlan: InsertablePlan {
@@ -24,10 +24,10 @@ public protocol InsertableViewPlan: InsertablePlan {
 
 public extension InsertableViewPlan where View: UIStackView {
     @discardableResult
-    func fitStacked<V>(_ view: V) -> PlanLayout<V> where V : UIView {
+    func fitStacked<V>(_ view: V) -> LayoutPlaner<V> where V : UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addArrangedSubview(view)
-        let plan = PlanLayout(view: view, context: context)
+        let plan = LayoutPlaner(view: view, context: context)
         fittedPlans.append(plan)
         if let molecule = view as? Fragment {
             plan.planContent(molecule.planContent(_:))
@@ -36,7 +36,7 @@ public extension InsertableViewPlan where View: UIStackView {
     }
     
     @discardableResult
-    func fitStacked(_ viewController: UIViewController) -> PlanLayout<UIView> {
+    func fitStacked(_ viewController: UIViewController) -> LayoutPlaner<UIView> {
         if let parentController: UIViewController = view.parentViewController
             ?? context.delegate.planer(neededViewControllerFor: viewController) {
             parentController.addChild(viewController)
@@ -55,10 +55,10 @@ public extension InsertableViewPlan where View: UIStackView {
 
 public extension InsertableViewPlan {
     @discardableResult
-    func fit<V: UIView>(_ view: V) -> PlanLayout<V> {
+    func fit<V: UIView>(_ view: V) -> LayoutPlaner<V> {
         view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(view)
-        let plan = PlanLayout(view: view, context: context)
+        let plan = LayoutPlaner(view: view, context: context)
         fittedPlans.append(plan)
         if let molecule = view as? Fragment {
             plan.planContent(molecule.planContent(_:))
@@ -67,7 +67,7 @@ public extension InsertableViewPlan {
     }
     
     @discardableResult
-    func fit(_ viewController: UIViewController) -> PlanLayout<UIView> {
+    func fit(_ viewController: UIViewController) -> LayoutPlaner<UIView> {
         if let parentController: UIViewController = view.parentViewController
             ?? context.delegate.planer(neededViewControllerFor: viewController) {
             parentController.addChild(viewController)
@@ -87,7 +87,7 @@ public extension InsertableViewPlan {
 
 public class LayoutPlan<View: UIView>: InsertableViewPlan {
     public var view: View
-    public var fittedPlans: [Planer] = []
+    public var fittedPlans: [Plan] = []
     public var context: PlanContext
     
     init(view: View, context: PlanContext) {

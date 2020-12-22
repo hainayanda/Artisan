@@ -14,7 +14,7 @@ import Nimble
 
 class PlanContextSpec: QuickSpec {
     override func spec() {
-        describe("layout context") {
+        describe("plan context") {
             var context: PlanContext!
             beforeEach {
                 context = .init(currentView: UIView())

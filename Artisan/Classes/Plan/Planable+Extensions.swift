@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Planable {
+extension Planer {
     
     func identifier(ofSecondItemIn constraint: NSLayoutConstraint) -> String {
         let relatedKey = (constraint.secondItem as? UIView)?.uniqueKey ?? constraint.uniqueKey

@@ -186,3 +186,87 @@ extension UITextView {
         }
     }
 }
+
+extension UIControl {
+    
+    struct AssociatedKey {
+        static var touchDown: String = "Artisan_touchDown_event"
+        static var touchDownRepeat: String = "Artisan_touchDownRepeat_event"
+        static var touchDragInside: String = "Artisan_touchDragInside_event"
+        static var touchDragOutside: String = "Artisan_touchDragOutside_event"
+        static var touchDragEnter: String = "Artisan_touchDragEnter_event"
+        static var touchDragExit: String = "Artisan_touchDragExit_event"
+        static var touchUpInside: String = "Artisan_touchUpInside_event"
+        static var touchUpOutside: String = "Artisan_touchUpOutside_event"
+        static var touchCancel: String = "Artisan_touchCancel_event"
+        static var valueChanged: String = "Artisan_valueChanged_event"
+        static var primaryActionTriggered: String = "Artisan_primaryActionTriggered_event"
+        @available(iOS 14.0, *)
+        static var menuActionTriggered: String = "Artisan_menuActionTriggered_event"
+        static var editingDidBegin: String = "Artisan_editingDidBegin_event"
+        static var editingChanged: String = "Artisan_editingChanged_event"
+        static var editingDidEnd: String = "Artisan_editingDidEnd_event"
+        static var editingDidEndOnExit: String = "Artisan_editingDidEndOnExit_event"
+        static var allTouchEvents: String = "Artisan_allTouchEvents_event"
+        static var allEditingEvents: String = "Artisan_allEditingEvents_event"
+        static var applicationReserved: String = "Artisan_applicationReserved_event"
+        static var systemReserved: String = "Artisan_systemReserved_event"
+        static var allEvents: String = "Artisan_allEvents_event"
+        
+        static var eventKeys: [UIControl.Event: UnsafeRawPointer] {
+            var keys: [UIControl.Event: UnsafeRawPointer] = [
+                .touchDown: .init(&touchDown),
+                .touchDownRepeat: .init(&touchDownRepeat),
+                .touchDragInside: .init(&touchDragInside),
+                .touchDragOutside: .init(&touchDragOutside),
+                .touchDragEnter: .init(&touchDragEnter),
+                .touchDragExit: .init(&touchDragExit),
+                .touchUpInside: .init(&touchUpInside),
+                .touchUpOutside: .init(&touchUpOutside),
+                .touchCancel: .init(&touchCancel),
+                .valueChanged: .init(&valueChanged),
+                .primaryActionTriggered: .init(&primaryActionTriggered),
+                .editingDidBegin: .init(&editingDidBegin),
+                .editingChanged: .init(&editingChanged),
+                .editingDidEnd: .init(&editingDidEnd),
+                .editingDidEndOnExit: .init(&editingDidEndOnExit),
+                .allTouchEvents: .init(&allTouchEvents),
+                .allEditingEvents: .init(&allEditingEvents),
+                .applicationReserved: .init(&applicationReserved),
+                .systemReserved: .init(&systemReserved),
+                .allEvents: .init(&allEvents)
+            ]
+            if #available(iOS 14.0, *) {
+                keys[.menuActionTriggered] = .init(&menuActionTriggered)
+            }
+            return keys
+        }
+    }
+    
+    @objc class EventClosure: NSObject {
+        let closure: (UIControl) -> Void
+        
+        init(_ closure: @escaping (UIControl) -> Void) {
+            self.closure = closure
+        }
+        
+        @objc func invoke(with sender: UIControl) {
+            closure(sender)
+        }
+    }
+    
+    public func didTriggered(by event: UIControl.Event, then: @escaping (UIControl) -> Void) {
+        guard let eventAssociatedKey = AssociatedKey.eventKeys[event] else {
+            return
+        }
+        let eventClosure = EventClosure(then)
+        addTarget(eventClosure, action: #selector(EventClosure.invoke(with:)), for: event)
+        objc_setAssociatedObject(self, eventAssociatedKey, eventClosure, .OBJC_ASSOCIATION_RETAIN)
+    }
+}
+
+extension UIControl.Event: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.rawValue)
+    }
+}

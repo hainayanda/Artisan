@@ -22,11 +22,11 @@ public extension Fragment {
 public extension Fragment where Self: UIView {
     
     func planFragment(delegate: PlanDelegate? = nil) {
-        let viewLayout = PlanLayout<Self>(view: self, context: .init(delegate: delegate, currentView: self))
+        let layoutPlaner = LayoutPlaner<Self>(view: self, context: .init(delegate: delegate, currentView: self))
         fragmentWillPlanContent()
-        viewLayout.planContent(self.planContent(_:))
+        layoutPlaner.planContent(self.planContent(_:))
         fragmentDidPlanContent()
-        NSLayoutConstraint.activate(viewLayout.plannedConstraints)
+        NSLayoutConstraint.activate(layoutPlaner.plannedConstraints)
     }
     
     func replanContent(delegate: PlanDelegate? = nil) {

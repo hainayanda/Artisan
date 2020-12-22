@@ -8,8 +8,8 @@
 import Foundation
 
 @dynamicMemberLookup
-public class PlanLayout<View: UIView>: Planable {
-    public typealias PropertyPlaner<Property> = ((Property) -> PlanLayout<View>)
+public class LayoutPlaner<View: UIView>: Planer {
+    public typealias PropertyPlaner<Property> = ((Property) -> LayoutPlaner<View>)
     
     public var plannedConstraints: [NSLayoutConstraint] = []
     public var view: View

@@ -23,236 +23,236 @@ class InsertableViewPlanSpec: QuickSpec {
                 testableInsertableViewPlan = .init(view: view)
             }
             it("should fit UIView") {
-                var layout = testableInsertableViewPlan.fitView()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitView()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIView?
-                layout = testableInsertableViewPlan.fitView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitView(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIActivityIndicatorView") {
-                var layout = testableInsertableViewPlan.fitActivityIndicator()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitActivityIndicator()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIActivityIndicatorView?
-                layout = testableInsertableViewPlan.fitActivityIndicator(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitActivityIndicator(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIButton") {
-                var layout = testableInsertableViewPlan.fitButton()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitButton()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIButton?
-                layout = testableInsertableViewPlan.fitButton(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitButton(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIDatePicker") {
-                var layout = testableInsertableViewPlan.fitDatePicker()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitDatePicker()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIDatePicker?
-                layout = testableInsertableViewPlan.fitDatePicker(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitDatePicker(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIPickerView") {
-                var layout = testableInsertableViewPlan.fitPicker()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitPicker()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIPickerView?
-                layout = testableInsertableViewPlan.fitPicker(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitPicker(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIImageView") {
-                var layout = testableInsertableViewPlan.fitImageView()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitImageView()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIImageView?
-                layout = testableInsertableViewPlan.fitImageView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitImageView(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIPageControl") {
-                var layout = testableInsertableViewPlan.fitPageControl()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitPageControl()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIPageControl?
-                layout = testableInsertableViewPlan.fitPageControl(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitPageControl(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIProgressView") {
-                var layout = testableInsertableViewPlan.fitProgress()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitProgress()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIProgressView?
-                layout = testableInsertableViewPlan.fitProgress(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitProgress(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UISearchBar") {
-                var layout = testableInsertableViewPlan.fitSearchBar()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitSearchBar()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UISearchBar?
-                layout = testableInsertableViewPlan.fitSearchBar(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitSearchBar(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UISearchTextField") {
                 guard #available(iOS 13.0, *) else { return }
-                var layout = testableInsertableViewPlan.fitSearchField()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitSearchField()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UISearchTextField?
-                layout = testableInsertableViewPlan.fitSearchField(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitSearchField(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UISegmentedControl") {
-                var layout = testableInsertableViewPlan.fitSegmentedControl()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitSegmentedControl()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UISegmentedControl?
-                layout = testableInsertableViewPlan.fitSegmentedControl(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitSegmentedControl(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UISlider") {
-                var layout = testableInsertableViewPlan.fitSlider()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitSlider()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UISlider?
-                layout = testableInsertableViewPlan.fitSlider(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitSlider(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIStackView") {
-                var layout = testableInsertableViewPlan.fitStack()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStack()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIStackView?
-                layout = testableInsertableViewPlan.fitStack(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStack(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
                 
-                layout = testableInsertableViewPlan.fitVStack()
-                expect(view.subviews.last).to(equal(layout.view))
-                expect(layout.view.axis).to(equal(.vertical))
-                layout = testableInsertableViewPlan.fitVStack(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitVStack()
+                expect(view.subviews.last).to(equal(plan.view))
+                expect(plan.view.axis).to(equal(.vertical))
+                plan = testableInsertableViewPlan.fitVStack(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
                 expect(assignedView?.axis).to(equal(.vertical))
                 
-                layout = testableInsertableViewPlan.fitHStack()
-                expect(view.subviews.last).to(equal(layout.view))
-                expect(layout.view.axis).to(equal(.horizontal))
-                layout = testableInsertableViewPlan.fitHStack(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitHStack()
+                expect(view.subviews.last).to(equal(plan.view))
+                expect(plan.view.axis).to(equal(.horizontal))
+                plan = testableInsertableViewPlan.fitHStack(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
                 expect(assignedView?.axis).to(equal(.horizontal))
             }
             it("should fit UIStepper") {
-                var layout = testableInsertableViewPlan.fitStepper()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitStepper()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIStepper?
-                layout = testableInsertableViewPlan.fitStepper(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitStepper(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UISwitch") {
-                var layout = testableInsertableViewPlan.fitSwitch()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitSwitch()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UISwitch?
-                layout = testableInsertableViewPlan.fitSwitch(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitSwitch(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UITextField") {
-                var layout = testableInsertableViewPlan.fitTextField()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitTextField()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UITextField?
-                layout = testableInsertableViewPlan.fitTextField(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitTextField(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UITextView") {
-                var layout = testableInsertableViewPlan.fitTextView()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitTextView()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UITextView?
-                layout = testableInsertableViewPlan.fitTextView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitTextView(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIToolbar") {
-                var layout = testableInsertableViewPlan.fitToolbar()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitToolbar()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIToolbar?
-                layout = testableInsertableViewPlan.fitToolbar(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitToolbar(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit WKWebView") {
-                var layout = testableInsertableViewPlan.fitWebView()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitWebView()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: WKWebView?
-                layout = testableInsertableViewPlan.fitWebView(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitWebView(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIScrollView") {
-                var layout = testableInsertableViewPlan.fitScroll()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitScroll()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIScrollView?
-                layout = testableInsertableViewPlan.fitScroll(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitScroll(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UITableView") {
-                var layout = testableInsertableViewPlan.fitTable()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitTable()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UITableView?
-                layout = testableInsertableViewPlan.fitTable(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitTable(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UICollectionView") {
-                var layout = testableInsertableViewPlan.fitCollection()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitCollection()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UICollectionView?
-                layout = testableInsertableViewPlan.fitCollection(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitCollection(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UILabel") {
-                var layout = testableInsertableViewPlan.fitLabel()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitLabel()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UILabel?
-                layout = testableInsertableViewPlan.fitLabel(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitLabel(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UIVisualEffectView") {
-                var layout = testableInsertableViewPlan.fitVisualEffect()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitVisualEffect()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UIVisualEffectView?
-                layout = testableInsertableViewPlan.fitVisualEffect(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitVisualEffect(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UINavigationBar") {
-                var layout = testableInsertableViewPlan.fitNavigation()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitNavigation()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UINavigationBar?
-                layout = testableInsertableViewPlan.fitNavigation(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitNavigation(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
             it("should fit UITabBar") {
-                var layout = testableInsertableViewPlan.fitTabBar()
-                expect(view.subviews.last).to(equal(layout.view))
+                var plan = testableInsertableViewPlan.fitTabBar()
+                expect(view.subviews.last).to(equal(plan.view))
                 var assignedView: UITabBar?
-                layout = testableInsertableViewPlan.fitTabBar(assignTo: &assignedView)
+                plan = testableInsertableViewPlan.fitTabBar(assignTo: &assignedView)
                 expect(view.subviews.last).to(equal(assignedView))
-                expect(view.subviews.last).to(equal(layout.view))
+                expect(view.subviews.last).to(equal(plan.view))
             }
         }
     }
 }
 
 class TestableInsertableViewPlan<View: UIView>: InsertableViewPlan {
-    var fittedPlans: [Planer] = []
+    var fittedPlans: [Plan] = []
     lazy var context: PlanContext = .init(currentView: view)
     var view: View
     
