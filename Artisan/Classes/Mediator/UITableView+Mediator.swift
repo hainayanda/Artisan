@@ -47,6 +47,7 @@ extension UITableView {
         public var insertSectionAnimation: UITableView.RowAnimation = .top
         public var reloadSectionAnimation: UITableView.RowAnimation = .top
         public var deleteSectionAnimation: UITableView.RowAnimation = .top
+        public var alwaysRefreshSameCell: Bool = false
         public var reloadStrategy: CellReloadStrategy = .reloadLinearDifferences
         private var didReloadAction: ((Bool) -> Void)?
         

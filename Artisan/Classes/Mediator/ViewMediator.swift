@@ -72,6 +72,7 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     weak public private(set) var view: View?
     required public override init() {
         super.init()
+        didInit()
     }
     
     deinit {
@@ -110,6 +111,8 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
         }
         mediatorDidMapped(from: view)
     }
+    
+    open func didInit() { }
     
     open func willApplying(_ view: View) { }
     

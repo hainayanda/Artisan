@@ -251,7 +251,7 @@ extension UITableView.Mediator {
             }
             sameCells.append(indexPath)
         }
-        if !sameCells.isEmpty {
+        if !sameCells.isEmpty, alwaysRefreshSameCell {
             tableView.reloadRows(at: sameCells, with: .fade)
         }
         if !cellDifference.isEmpty {

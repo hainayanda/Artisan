@@ -17,6 +17,24 @@ public class PartialLinker<View: UIView, State>: AnyLinker {
     }
     
     @discardableResult
+    public func viewDidSet<Observer: AnyObject>(observer: Observer, thenCall method: @escaping ((Observer) -> (View, Changes<State>) -> Void)) -> Self {
+        viewListener = { [weak observer] view, changes in
+            guard let observer = observer else { return }
+            method(observer)(view, changes)
+        }
+        return self
+    }
+    
+    @discardableResult
+    public func viewDidSet<Observer: AnyObject>(observer: Observer, then: @escaping (Observer, View, Changes<State>) -> Void) -> Self {
+        viewListener = { [weak observer] view, changes in
+            guard let observer = observer else { return }
+            then(observer, view, changes)
+        }
+        return self
+    }
+    
+    @discardableResult
     public func viewDidSet(then: @escaping (View, Changes<State>) -> Void) -> Self {
         viewListener = then
         return self
@@ -37,8 +55,38 @@ public class Linker<View: UIView, State>: PartialLinker<View, State> {
     var applicator: ((View, State) -> Void)?
     
     @discardableResult
+    public func stateDidSet<Observer: AnyObject>(observer: Observer, thenCall method: @escaping ((Observer) -> (View, Changes<State>) -> Void)) -> Self {
+        stateListener = { [weak observer] view, changes in
+            guard let observer = observer else { return }
+            method(observer)(view, changes)
+        }
+        return self
+    }
+    
+    @discardableResult
+    public func stateDidSet<Observer: AnyObject>(observer: Observer, then: @escaping (Observer, View, Changes<State>) -> Void) -> Self {
+        stateListener = { [weak observer] view, changes in
+            guard let observer = observer else { return }
+            then(observer, view, changes)
+        }
+        return self
+    }
+    
+    @discardableResult
     public func stateDidSet(then: @escaping (View, Changes<State>) -> Void) -> Self {
         stateListener = then
+        return self
+    }
+    
+    @discardableResult
+    public override func viewDidSet<Observer: AnyObject>(observer: Observer, thenCall method: @escaping ((Observer) -> (View, Changes<State>) -> Void)) -> Self {
+        super.viewDidSet(observer: observer, thenCall: method)
+        return self
+    }
+    
+    @discardableResult
+    public override func viewDidSet<Observer: AnyObject>(observer: Observer, then: @escaping (Observer, View, Changes<State>) -> Void) -> Self {
+        super.viewDidSet(observer: observer, then: then)
         return self
     }
     
@@ -153,8 +201,12 @@ public class WrappedPropertyObserver<Wrapped> {
 }
 
 public class PropertyObservers<Observer: AnyObject, Wrapped>: WrappedPropertyObserver<Wrapped> {
+    typealias SetListener = (Changes<Wrapped>) -> Void
+    typealias GetListener = (Wrapped) -> Void
     typealias ObservedSetListener = (Observer, Changes<Wrapped>) -> Void
     typealias ObservedGetListener = (Observer, Wrapped) -> Void
+    typealias ObservedSetListenerPointer = (Observer) -> SetListener
+    typealias ObservedGetListenerPointer = (Observer) -> GetListener
     weak var observer: Observer?
     
     init(obsever: Observer) {
@@ -164,6 +216,12 @@ public class PropertyObservers<Observer: AnyObject, Wrapped>: WrappedPropertyObs
     @discardableResult
     public func delayMultipleSetTrigger(by delay: TimeInterval) -> Self {
         self.delay = delay
+        return self
+    }
+    
+    @discardableResult
+    public func willSet(thenCall method: @escaping (Observer) ->((Changes<Wrapped>) -> Void)) -> Self {
+        willSetListener = asListener(method: method)
         return self
     }
     
@@ -180,14 +238,32 @@ public class PropertyObservers<Observer: AnyObject, Wrapped>: WrappedPropertyObs
     }
     
     @discardableResult
+    public func didSet(thenCall method: @escaping (Observer) ->((Changes<Wrapped>) -> Void)) -> Self {
+        didSetListener = asListener(method: method)
+        return self
+    }
+    
+    @discardableResult
     public func didGet(then: @escaping (Observer, Wrapped) -> Void) -> Self {
         didGetListener = asListener(closure: then)
         return self
     }
     
     @discardableResult
+    public func didGet(thenCall method: @escaping (Observer) ->((Wrapped) -> Void)) -> Self {
+        didGetListener = asListener(method: method)
+        return self
+    }
+    
+    @discardableResult
     public func willGet(then: @escaping (Observer, Wrapped) -> Void) -> Self {
         willGetListener = asListener(closure: then)
+        return self
+    }
+    
+    @discardableResult
+    public func willGet(thenCall method: @escaping (Observer) ->((Wrapped) -> Void)) -> Self {
+        willGetListener = asListener(method: method)
         return self
     }
     
@@ -204,6 +280,20 @@ public class PropertyObservers<Observer: AnyObject, Wrapped>: WrappedPropertyObs
             closure(observer, value)
         }
     }
+    
+    func asListener(method: @escaping ObservedSetListenerPointer) -> SetListener {
+        return { [weak self] changes in
+            guard let observer = self?.observer else { return }
+            method(observer)(changes)
+        }
+    }
+    
+    func asListener(method: @escaping ObservedGetListenerPointer) -> GetListener {
+        return { [weak self] value in
+            guard let observer = self?.observer else { return }
+            method(observer)(value)
+        }
+    }
 }
 
 public extension PropertyObservers where Wrapped: Equatable {
@@ -218,10 +308,28 @@ public extension PropertyObservers where Wrapped: Equatable {
     }
     
     @discardableResult
+    func didUniqueSet(thenCall method: @escaping (Observer) ->((Changes<Wrapped>) -> Void)) -> Self {
+        didSetListener = { [weak self] value in
+            guard let observer = self?.observer, value.isChanging else { return }
+            method(observer)(value)
+        }
+        return self
+    }
+    
+    @discardableResult
     func willUniqueSet(then: @escaping (Observer, Changes<Wrapped>) -> Void) -> Self {
         willSetListener = { [weak self] value in
             guard let observer = self?.observer, value.isChanging else { return }
             then(observer, value)
+        }
+        return self
+    }
+    
+    @discardableResult
+    func willUniqueSet(thenCall method: @escaping (Observer) ->((Changes<Wrapped>) -> Void)) -> Self {
+        willSetListener = { [weak self] value in
+            guard let observer = self?.observer, value.isChanging else { return }
+            method(observer)(value)
         }
         return self
     }

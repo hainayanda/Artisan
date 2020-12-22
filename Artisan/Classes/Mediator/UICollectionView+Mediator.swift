@@ -43,6 +43,7 @@ extension UICollectionView {
         @ObservableState public var sections: [Section] = []
         public var reloadStrategy: CellReloadStrategy = .reloadLinearDifferences
         private var didReloadAction: ((Bool) -> Void)?
+        public var alwaysRefreshSameCell: Bool = false
         
         public override func bonding(with view: UICollectionView) {
             super.bonding(with: view)

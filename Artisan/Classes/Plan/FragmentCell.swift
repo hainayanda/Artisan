@@ -33,7 +33,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
     
     open func planContent(_ plan: InsertablePlan) { }
     
-    open func moleculeWillLayout() {}
+    open func fragmentWillPlanContent() {}
     
     open func fragmentDidPlanContent() {}
     
@@ -56,7 +56,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         default:
             break
         }
-        moleculeWillLayout()
+        fragmentWillPlanContent()
         contentView.planContent(planningOption(on: layoutPhase)) { content in
             planContent(content)
         }
