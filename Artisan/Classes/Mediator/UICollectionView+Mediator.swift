@@ -41,9 +41,8 @@ extension UICollectionView {
     public class Mediator: ViewMediator<UICollectionView> {
         var applicableSections: [Section] = []
         @ObservableState public var sections: [Section] = []
-        public var reloadStrategy: CellReloadStrategy = .reloadLinearDifferences
+        public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         private var didReloadAction: ((Bool) -> Void)?
-        public var alwaysRefreshSameCell: Bool = false
         
         public override func bonding(with view: UICollectionView) {
             super.bonding(with: view)

@@ -132,6 +132,24 @@ public enum LayoutStackedStrategy {
 
 public enum CellReloadStrategy {
     case reloadAll
-    case reloadLinearDifferences
-    case reloadArangementDifferences
+    case reloadArrangementDifference
+    case reloadArrangementDifferenceAndRefresh
+    
+    var shouldRefresh: Bool {
+        switch self {
+        case .reloadArrangementDifferenceAndRefresh:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var shouldReloadAll: Bool {
+        switch self {
+        case .reloadAll:
+            return true
+        default:
+            return false
+        }
+    }
 }

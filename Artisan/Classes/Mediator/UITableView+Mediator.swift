@@ -38,17 +38,41 @@ extension UITableView {
         }
     }
     
+    public struct AnimationSet {
+        public let insertRowAnimation: UITableView.RowAnimation
+        public let reloadRowAnimation: UITableView.RowAnimation
+        public let deleteRowAnimation: UITableView.RowAnimation
+        public let insertSectionAnimation: UITableView.RowAnimation
+        public let deleteSectionAnimation: UITableView.RowAnimation
+        
+        public init(insertRowAnimation: UITableView.RowAnimation = .left,
+             reloadRowAnimation: UITableView.RowAnimation = .fade,
+             deleteRowAnimation: UITableView.RowAnimation = .left,
+             insertSectionAnimation: UITableView.RowAnimation = .top,
+             deleteSectionAnimation: UITableView.RowAnimation = .top) {
+            self.insertRowAnimation = insertRowAnimation
+            self.reloadRowAnimation = reloadRowAnimation
+            self.deleteRowAnimation = deleteRowAnimation
+            self.insertSectionAnimation = insertSectionAnimation
+            self.deleteSectionAnimation = deleteSectionAnimation
+        }
+        
+        public init(insertAnimation: UITableView.RowAnimation,
+             reloadAnimation: UITableView.RowAnimation,
+             deleteAnimation: UITableView.RowAnimation) {
+            self.insertRowAnimation = insertAnimation
+            self.reloadRowAnimation = reloadAnimation
+            self.deleteRowAnimation = deleteAnimation
+            self.insertSectionAnimation = insertAnimation
+            self.deleteSectionAnimation = deleteAnimation
+        }
+    }
+    
     public class Mediator: ViewMediator<UITableView> {
         var applicableSections: [Section] = []
         @ObservableState public var sections: [Section] = []
-        public var insertRowAnimation: UITableView.RowAnimation = .left
-        public var reloadRowAnimation: UITableView.RowAnimation = .fade
-        public var deleteRowAnimation: UITableView.RowAnimation = .left
-        public var insertSectionAnimation: UITableView.RowAnimation = .top
-        public var reloadSectionAnimation: UITableView.RowAnimation = .top
-        public var deleteSectionAnimation: UITableView.RowAnimation = .top
-        public var alwaysRefreshSameCell: Bool = false
-        public var reloadStrategy: CellReloadStrategy = .reloadLinearDifferences
+        public var animationSet: UITableView.AnimationSet = .init()
+        public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         private var didReloadAction: ((Bool) -> Void)?
         
         public override func bonding(with view: UITableView) {

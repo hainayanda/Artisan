@@ -27,48 +27,6 @@ class CellContainerMediatorSpec: QuickSpec {
                 expect(collectionView.dataSource).toNot(beNil())
                 expect(collectionView.dataSource as? UICollectionView.Mediator).to(equal(collectionMediator))
             }
-            it("should verify linearity when old section is bigger than new") {
-                var oldSections: [UICollectionView.Section] = []
-                var newSections: [UICollectionView.Section] = []
-                for index in 0 ..< Int.random(in: 5..<10) {
-                    oldSections.append(.init(identifier: index))
-                }
-                for index in 0 ..< Int.random(in: 1..<oldSections.count) {
-                    newSections.append(.init(identifier: index))
-                }
-                var count: Int = 0
-                collectionMediator.verifyLinearity(
-                    for: collectionView,
-                    with: newSections,
-                    oldSections: oldSections) { old, new, index in
-                        expect(old).to(equal(new))
-                        expect(index).to(beGreaterThanOrEqualTo(0))
-                        expect(index).to(beLessThan(newSections.count))
-                        count += 1
-                }
-                expect(count).to(equal(newSections.count))
-            }
-            it("sshould verify linearity when new section is bigger than old") {
-                var oldSections: [UICollectionView.Section] = []
-                var newSections: [UICollectionView.Section] = []
-                for index in 0 ..< Int.random(in: 5..<10) {
-                    oldSections.append(.init(identifier: index))
-                }
-                for index in 0 ..< Int.random(in: oldSections.count..<20) {
-                    newSections.append(.init(identifier: index))
-                }
-                var count: Int = 0
-                collectionMediator.verifyLinearity(
-                    for: collectionView,
-                    with: newSections,
-                    oldSections: oldSections) { old, new, index in
-                        expect(old).to(equal(new))
-                        expect(index).to(beGreaterThanOrEqualTo(0))
-                        expect(index).to(beLessThan(oldSections.count))
-                        count += 1
-                }
-                expect(count).to(equal(oldSections.count))
-            }
             it("should provide clean datasource") {
                 var sections: [UICollectionView.Section] = []
                 for index in 0 ..< Int.random(in: 5..<10) {
@@ -124,60 +82,6 @@ class CellContainerMediatorSpec: QuickSpec {
                 tableMediator.apply(to: tableView)
                 expect(tableView.dataSource).toNot(beNil())
                 expect(tableView.dataSource as? UITableView.Mediator).to(equal(tableMediator))
-            }
-            it("should verify linearity when old section is bigger than new") {
-                var oldSections: [UITableView.Section] = []
-                var newSections: [UITableView.Section] = []
-                for index in 0 ..< Int.random(in: 5..<10) {
-                    oldSections.append(.init(identifier: index))
-                }
-                for index in 0 ..< Int.random(in: 1..<oldSections.count) {
-                    newSections.append(.init(identifier: index))
-                }
-                var count: Int = 0
-                tableMediator.verifyLinearity(
-                    for: tableView,
-                    with: newSections,
-                    oldSections: oldSections) { old, new, index in
-                        expect(old).to(equal(new))
-                        expect(index).to(beGreaterThanOrEqualTo(0))
-                        expect(index).to(beLessThan(newSections.count))
-                        count += 1
-                }
-                expect(count).to(equal(newSections.count))
-            }
-            it("should verify linearity when new section is bigger than old") {
-                var oldSections: [UITableView.Section] = []
-                var newSections: [UITableView.Section] = []
-                for index in 0 ..< Int.random(in: 5..<10) {
-                    oldSections.append(.init(identifier: index))
-                }
-                for index in 0 ..< Int.random(in: oldSections.count..<20) {
-                    newSections.append(.init(identifier: index))
-                }
-                var count: Int = 0
-                tableMediator.verifyLinearity(
-                    for: tableView,
-                    with: newSections,
-                    oldSections: oldSections) { old, new, index in
-                        expect(old).to(equal(new))
-                        expect(index).to(beGreaterThanOrEqualTo(0))
-                        expect(index).to(beLessThan(oldSections.count))
-                        count += 1
-                }
-                expect(count).to(equal(oldSections.count))
-            }
-            it("should generate differences") {
-                let start = Int.random(in: 0..<5)
-                let end = Int.random(in: 5..<10)
-                let section = Int.random(in: 0..<5)
-                let differences = tableMediator.getIndexPath(from: start, to: end, section: section)
-                expect(differences.count).to(equal(end - start))
-                for difference in differences {
-                    expect(difference.section).to(equal(section))
-                    expect(difference.row).to(beLessThan(end + 1))
-                    expect(difference.row).to(beGreaterThan(start - 1))
-                }
             }
             it("should provide clean datasource") {
                 var sections: [UITableView.Section] = []

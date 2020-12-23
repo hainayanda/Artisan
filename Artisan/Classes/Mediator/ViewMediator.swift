@@ -84,6 +84,7 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
         let states = bondingStates
         states.forEach {
             var state = $0
+            state.removeBonding()
             state.bondingState = .applying
         }
         bonding(with: view)
@@ -102,8 +103,10 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
         let states = bondingStates
         states.forEach {
             var state = $0
+            state.removeBonding()
             state.bondingState = .mapping
         }
+        removeBond()
         bonding(with: view)
         states.forEach {
             var state = $0
@@ -127,6 +130,7 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     open func didLoosingBond(with view: View?) { }
     
     open func bonding(with view: View) {
+        (view.getMediator() as? StatedMediator)?.removeBond()
         let mediatorWrapper = AssociatedWrapper(wrapped: self)
         objc_setAssociatedObject(view,  &NSObject.AssociatedKey.mediator, mediatorWrapper, .OBJC_ASSOCIATION_RETAIN)
         self.view = view
@@ -137,15 +141,12 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
         }
     }
     
-    final func removeBond() {
+    final public func removeBond() {
         let currentView = self.view
         willLoosingBond(with: currentView)
         if let view = self.view {
             objc_setAssociatedObject(view,  &NSObject.AssociatedKey.mediator, nil, .OBJC_ASSOCIATION_RETAIN)
             self.view = nil
-        }
-        observables.forEach {
-            $0.removeAllObservers()
         }
         bondingStates.forEach {
             $0.removeBonding()

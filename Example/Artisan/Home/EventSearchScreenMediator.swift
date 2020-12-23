@@ -44,7 +44,7 @@ class EventSearchScreenMediator: ViewMediator<EventSearchScreen> {
             mediator.eventName = event.name
             mediator.eventDetails = event.details
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd MMM yyyy, hh:mm"
+            dateFormatter.dateFormat = "dd MMM yyyy"
             mediator.eventDate = dateFormatter.string(from: event.date)
             return mediator
         }

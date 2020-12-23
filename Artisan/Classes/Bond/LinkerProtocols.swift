@@ -10,6 +10,7 @@ import Foundation
 public protocol StatedMediator {
     var bondingStates: [ViewBondingState] { get }
     var observables: [StateObservable] { get }
+    func removeBond()
 }
 
 public protocol BondableMediator: class, Buildable, StatedMediator {

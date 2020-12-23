@@ -17,7 +17,7 @@ class EventCell: TableFragmentCell {
         $0.layer.shadowColor = UIColor.inactive.cgColor
         $0.layer.shadowOpacity = 1
         $0.layer.shadowOffset = .init(width: 0, height: 2)
-        $0.layer.shadowRadius = 2
+        $0.layer.shadowRadius = 4
     }
     var banner: UIImageView = build {
         $0.layer.cornerRadius = .x8
@@ -45,7 +45,7 @@ class EventCell: TableFragmentCell {
     
     override func fragmentWillPlanContent() {
         contentView.backgroundColor = .background
-        contentView.layer.borderWidth = .x1
+        contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor.inactive.withAlphaComponent(.semiOpaque).cgColor
     }
     
