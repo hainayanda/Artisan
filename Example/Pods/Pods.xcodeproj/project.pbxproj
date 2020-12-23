@@ -183,6 +183,7 @@
 		BB6FAE092590F17500B6BB9D /* Planable+Edges.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADFA2590F17500B6BB9D /* Planable+Edges.swift */; };
 		BB6FAE0A2590F17500B6BB9D /* Planable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADFB2590F17500B6BB9D /* Planable+Extensions.swift */; };
 		BB6FAE0B2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADFC2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift */; };
+		BBF98C1B25936736002AF568 /* DiffReloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C1A25936736002AF568 /* DiffReloader.swift */; };
 		BD4953074A12E769ED4E6C94F5E73694 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B191FCDE235BED8CFDEE881C72302B5 /* UIKit.framework */; };
 		BE56C54CD29F23A1C631645390E8569D /* ErrorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E690B9DE1C5B82AF026B990401DD4BC0 /* ErrorUtility.swift */; };
 		BFEBC90223F66B0FF770B92B1C670BCF /* QuickConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E91880FA0638C89FBF025F24D5DF5C /* QuickConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -492,6 +493,7 @@
 		BB6FADFB2590F17500B6BB9D /* Planable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Planable+Extensions.swift"; sourceTree = "<group>"; };
 		BB6FADFC2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InsertableStackPlan+Extensions.swift"; sourceTree = "<group>"; };
 		BB9BF1BF4172F97ED5D0DF84A14D7008 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		BBF98C1A25936736002AF568 /* DiffReloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffReloader.swift; sourceTree = "<group>"; };
 		BC215521BB1EC60C90136D00C8AAA7E7 /* UIImage+Compare.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Compare.h"; path = "FBSnapshotTestCase/Categories/UIImage+Compare.h"; sourceTree = "<group>"; };
 		BD1D39F93B10E03FD0DAB8D612910C8A /* Quick.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Quick.release.xcconfig; sourceTree = "<group>"; };
 		C02C838B479DA9D87C0BC24B928E4F77 /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCase.h; path = FBSnapshotTestCase/FBSnapshotTestCase.h; sourceTree = "<group>"; };
@@ -912,6 +914,7 @@
 				BB6FAD8F2590EFD300B6BB9D /* UITableView+Mediator.swift */,
 				BB6FAD942590EFD300B6BB9D /* UITableView+ReloadStrategy.swift */,
 				BB6FAD922590EFD300B6BB9D /* ViewMediator.swift */,
+				BBF98C1A25936736002AF568 /* DiffReloader.swift */,
 			);
 			path = Mediator;
 			sourceTree = "<group>";
@@ -1722,6 +1725,7 @@
 				BB6FAE052590F17500B6BB9D /* InsertablePlan+Extensions.swift in Sources */,
 				BB6FADBC2590EFEB00B6BB9D /* CommonExtensions.swift in Sources */,
 				BB6FAE092590F17500B6BB9D /* Planable+Edges.swift in Sources */,
+				BBF98C1B25936736002AF568 /* DiffReloader.swift in Sources */,
 				BB6FADFF2590F17500B6BB9D /* UIView+Artisan.swift in Sources */,
 				BB6FAE072590F17500B6BB9D /* Planable+Dimensions.swift in Sources */,
 				BB6FAD972590EFD300B6BB9D /* GenericCellViewModel.swift in Sources */,

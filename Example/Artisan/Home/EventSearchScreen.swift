@@ -9,8 +9,12 @@
 import UIKit
 import Artisan
 
+protocol EventSearchScreenObserver: ObservingMediator {
+    func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath)
+}
+
 class EventSearchScreen: UIViewController, ObservableView {
-    typealias Observer = ObservingMediator
+    typealias Observer = EventSearchScreenObserver
     
     // MARK: View
     lazy var searchBar: UISearchBar = build {
@@ -23,12 +27,13 @@ class EventSearchScreen: UIViewController, ObservableView {
         $0.mediator.animationSet =  .init(insertAnimation: .top, reloadAnimation: .fade, deleteAnimation: .top)
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
-        $0.allowsSelection = false
+        $0.allowsSelection = true
         if #available(iOS 11.0, *) {
             $0.contentInset = view.safeAreaInsets
         } else {
             $0.contentInset = view.layoutMargins
         }
+        $0.delegate = self
     }
     
     override func viewDidLoad() {
@@ -55,5 +60,21 @@ extension EventSearchScreen {
         planContent { plan in
             plan.fit(tableView).edges(.equal, to: .safeArea)
         }
+    }
+}
+
+extension EventSearchScreen: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let cell = tableView.cellForRow(at: indexPath) else {
+            return
+        }
+        observer?.didTap(tableView, cell: cell, at: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = .background
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.textColor = .secondary
     }
 }
