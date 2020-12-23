@@ -43,84 +43,13 @@ extension UICollectionView.Mediator {
         oldSections: [UICollectionView.Section],
         completion: ((Bool) -> Void)?) {
         collectionView.performBatchUpdates({
-            var mutableSection = oldSections
-            var removedIndex: [Int] = []
-            var mutableIndex: Int = 0
-            for (sectionIndex, oldSection) in oldSections.enumerated() {
-                guard sections.contains(where: { $0.isSameSection(with: oldSection)} ) else {
-                    mutableSection.remove(at: mutableIndex)
-                    removedIndex.append(sectionIndex)
-                    continue
-                }
-                mutableIndex += 1
-            }
-            if !removedIndex.isEmpty {
-                collectionView.deleteSections(.init(removedIndex))
-            }
-            for (sectionIndex, section) in sections.enumerated() {
-                if let oldSection = mutableSection[safe: sectionIndex],
-                   oldSection.isSameSection(with: section) {
-                    reloadSection(collectionView, with: section, oldSections: oldSection, at: sectionIndex)
-                } else if let realIndex = mutableSection.firstIndex(where: { $0.isSameSection(with: section)}) {
-                    let removedSection = mutableSection.remove(at: realIndex)
-                    mutableSection.insert(removedSection, at: sectionIndex)
-                    collectionView.moveSection(realIndex, toSection: sectionIndex)
-                    reloadSection(collectionView, with: section, oldSections: removedSection, at: sectionIndex)
-                } else {
-                    mutableSection.insert(section, at: sectionIndex)
-                    collectionView.insertSections(.init([sectionIndex]))
-                }
-            }
-        },
-        completion: completion
-        )
-    }
-    
-    func reloadSection(
-        _ collectionView: UICollectionView,
-        with sections: UICollectionView.Section,
-        oldSections: UICollectionView.Section,
-        at index: Int) {
-        let oldCells = oldSections.cells
-        var mutableCells = oldCells
-        let newCells = sections.cells
-        var removedIndex: [IndexPath] = []
-        var mutableIndex: Int = 0
-        for (cellIndex, oldCell) in oldCells.enumerated() {
-            guard newCells.contains(where: { $0.isSameMediator(with: oldCell)}) else {
-                mutableCells.remove(at: mutableIndex)
-                removedIndex.append(.init(row: cellIndex, section: index))
-                continue
-            }
-            mutableIndex += 1
-        }
-        if !removedIndex.isEmpty {
-            collectionView.deleteItems(at: removedIndex)
-        }
-        var reloadedIndex: [IndexPath] = []
-        for (cellIndex, cell) in newCells.enumerated() {
-            if let oldCell = mutableCells[safe: cellIndex],
-               oldCell.isSameMediator(with: cell) {
-                if reloadStrategy.shouldRefresh {
-                    reloadedIndex.append(.init(row: cellIndex, section: index))
-                }
-            } else if let realIndex = mutableCells.firstIndex(where: { $0.isSameMediator(with: cell)}) {
-                let removedCell = mutableCells.remove(at: realIndex)
-                mutableCells.insert(removedCell, at: cellIndex)
-                let oldIndexPath = IndexPath(row: realIndex, section: index)
-                let newIndexPath = IndexPath(row: cellIndex, section: index)
-                collectionView.moveItem(at: oldIndexPath, to: newIndexPath)
-                if reloadStrategy.shouldRefresh {
-                    reloadedIndex.append(newIndexPath)
-                }
-            } else {
-                mutableCells.insert(cell, at: cellIndex)
-                collectionView.insertItems(at: [.init(row: cellIndex, section: index)])
-            }
-        }
-        if !reloadedIndex.isEmpty {
-            collectionView.reloadItems(at: reloadedIndex)
-        }
+            let sectionReloader = CollectionMediatorSectionReloader(
+                collection: collectionView,
+                forceRefresh: reloadStrategy.shouldRefresh
+            )
+            let diffReloader = DiffReloader(worker: sectionReloader)
+            diffReloader.reloadDifference(oldIdentities: oldSections, newIdentities: sections)
+        }, completion: completion)
     }
     
     func dataIsValid(_ collectionView: UICollectionView, oldData: [UICollectionView.Section]) -> Bool {
@@ -129,5 +58,70 @@ extension UICollectionView.Mediator {
             guard collectionView.numberOfItems(inSection: section) == cells.cellCount else { return false }
         }
         return true
+    }
+}
+
+public struct CollectionMediatorSectionReloader: DiffReloaderWorker {
+    let collection: UICollectionView
+    let forceRefresh: Bool
+    
+    init(collection: UICollectionView, forceRefresh: Bool) {
+        self.collection = collection
+        self.forceRefresh = forceRefresh
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
+        collection.deleteSections(.init(identifiables.keys))
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+        collection.insertSections(.init(integer: index))
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+        for (index, pair) in identifiables {
+            guard let oldSection = pair.old as? UITableView.Section,
+                  let newSection = pair.new as? UITableView.Section else {
+                continue
+            }
+            let cellReloader = CollectionMediatorCellReloader(section: index, collection: collection, forceRefresh: forceRefresh)
+            let diffReloader = DiffReloader(worker: cellReloader)
+            diffReloader.reloadDifference(oldIdentities: oldSection.cells, newIdentities: newSection.cells)
+        }
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+        collection.moveSection(index, toSection: destIndex)
+    }
+}
+
+public struct CollectionMediatorCellReloader: DiffReloaderWorker {
+    let collection: UICollectionView
+    let section: Int
+    let forceRefresh: Bool
+    
+    init(section: Int, collection: UICollectionView, forceRefresh: Bool) {
+        self.section = section
+        self.collection = collection
+        self.forceRefresh = forceRefresh
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
+        let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(item: $0, section: section) }
+        collection.deleteItems(at: indexPaths)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+        collection.insertItems(at: [.init(item: index, section: section)])
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+        guard forceRefresh else { return }
+        let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(item: $0, section: section) }
+        collection.reloadItems(at: indexPaths)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+        collection.moveItem(at: .init(item: index, section: section), to: .init(item: destIndex, section: section))
     }
 }

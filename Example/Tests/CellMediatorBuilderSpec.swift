@@ -27,7 +27,7 @@ class CellMediatorBuilderSpec: QuickSpec {
                     dummyItems.append(.randomString())
                 }
                 let result = builder
-                    .next(type: DummyCollectionMediator.self, from: dummyItems) { mediator, item in
+                    .next(mediatorType: DummyCollectionMediator.self, fromItems: dummyItems) { mediator, item in
                         mediator.id = item
                 }.build()
                 expect(result.count).to(equal(1))
@@ -47,8 +47,8 @@ class CellMediatorBuilderSpec: QuickSpec {
                 let newSection = UICollectionView.Section(identifier: String.randomString())
                 let result = builder.nextSection(newSection).build()
                 expect(result.count).to(equal(2))
-                expect(result.first?.sectionIdentifier).to(equal(firstSection.sectionIdentifier))
-                expect(result.last?.sectionIdentifier).to(equal(newSection.sectionIdentifier))
+                expect(result.first?.identifier).to(equal(firstSection.identifier))
+                expect(result.last?.identifier).to(equal(newSection.identifier))
             }
         }
         describe("table mediator builder") {
@@ -64,7 +64,7 @@ class CellMediatorBuilderSpec: QuickSpec {
                     dummyItems.append(.randomString())
                 }
                 let result = builder
-                    .next(type: DummyTableMediator.self, from: dummyItems) { mediator, item in
+                    .next(mediatorType: DummyTableMediator.self, fromItems: dummyItems) { mediator, item in
                         mediator.id = item
                 }.build()
                 expect(result.count).to(equal(1))
@@ -84,8 +84,8 @@ class CellMediatorBuilderSpec: QuickSpec {
                 let newSection = UITableView.Section(identifier: String.randomString())
                 let result = builder.nextSection(newSection).build()
                 expect(result.count).to(equal(2))
-                expect(result.first?.sectionIdentifier).to(equal(firstSection.sectionIdentifier))
-                expect(result.last?.sectionIdentifier).to(equal(newSection.sectionIdentifier))
+                expect(result.first?.identifier).to(equal(firstSection.identifier))
+                expect(result.last?.identifier).to(equal(newSection.identifier))
             }
         }
     }

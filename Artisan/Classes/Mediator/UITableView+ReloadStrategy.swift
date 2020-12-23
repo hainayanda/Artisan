@@ -47,81 +47,13 @@ extension UITableView.Mediator {
             tableView.endUpdates()
             completion?(true)
         }
-        var mutableSection = oldSections
-        var removedIndex: [Int] = []
-        var mutableIndex: Int = 0
-        for (sectionIndex, oldSection) in oldSections.enumerated() {
-            guard sections.contains(where: { $0.isSameSection(with: oldSection)} ) else {
-                mutableSection.remove(at: mutableIndex)
-                removedIndex.append(sectionIndex)
-                continue
-            }
-            mutableIndex += 1
-        }
-        if !removedIndex.isEmpty {
-            tableView.deleteSections(.init(removedIndex), with: animationSet.deleteSectionAnimation)
-        }
-        for (sectionIndex, section) in sections.enumerated() {
-            if let oldSection = mutableSection[safe: sectionIndex],
-               oldSection.isSameSection(with: section) {
-                reloadSection(tableView, with: section, oldSections: oldSection, at: sectionIndex)
-            } else if let realIndex = mutableSection.firstIndex(where: { $0.isSameSection(with: section)}) {
-                let removedSection = mutableSection.remove(at: realIndex)
-                mutableSection.insert(removedSection, at: sectionIndex)
-                tableView.moveSection(realIndex, toSection: sectionIndex)
-                reloadSection(tableView, with: section, oldSections: removedSection, at: sectionIndex)
-            } else {
-                mutableSection.insert(section, at: sectionIndex)
-                tableView.insertSections(.init([sectionIndex]), with: animationSet.insertSectionAnimation)
-            }
-        }
-    }
-    
-    func reloadSection(
-        _ tableView: UITableView,
-        with sections: UITableView.Section,
-        oldSections: UITableView.Section,
-        at index: Int) {
-        let oldCells = oldSections.cells
-        var mutableCells = oldCells
-        let newCells = sections.cells
-        var removedIndex: [IndexPath] = []
-        var mutableIndex: Int = 0
-        for (cellIndex, oldCell) in oldCells.enumerated() {
-            guard newCells.contains(where: { $0.isSameMediator(with: oldCell)}) else {
-                mutableCells.remove(at: mutableIndex)
-                removedIndex.append(.init(row: cellIndex, section: index))
-                continue
-            }
-            mutableIndex += 1
-        }
-        if !removedIndex.isEmpty {
-            tableView.deleteRows(at: removedIndex, with: animationSet.deleteRowAnimation)
-        }
-        var reloadedIndex: [IndexPath] = []
-        for (cellIndex, cell) in newCells.enumerated() {
-            if let oldCell = mutableCells[safe: cellIndex],
-               oldCell.isSameMediator(with: cell) {
-                if reloadStrategy.shouldRefresh {
-                    reloadedIndex.append(.init(row: cellIndex, section: index))
-                }
-            } else if let realIndex = mutableCells.firstIndex(where: { $0.isSameMediator(with: cell)}) {
-                let removedCell = mutableCells.remove(at: realIndex)
-                mutableCells.insert(removedCell, at: cellIndex)
-                let oldIndexPath = IndexPath(row: realIndex, section: index)
-                let newIndexPath = IndexPath(row: cellIndex, section: index)
-                tableView.moveRow(at: oldIndexPath, to: newIndexPath)
-                if reloadStrategy.shouldRefresh {
-                    reloadedIndex.append(newIndexPath)
-                }
-            } else {
-                mutableCells.insert(cell, at: cellIndex)
-                tableView.insertRows(at: [.init(row: cellIndex, section: index)], with: animationSet.insertRowAnimation)
-            }
-        }
-        if !reloadedIndex.isEmpty {
-            tableView.reloadRows(at: reloadedIndex, with: animationSet.reloadRowAnimation)
-        }
+        let sectionReloader = TableMediatorSectionReloader(
+            table: tableView,
+            forceRefresh: reloadStrategy.shouldRefresh,
+            animationSet: animationSet
+        )
+        let diffReloader = DiffReloader(worker: sectionReloader)
+        diffReloader.reloadDifference(oldIdentities: oldSections, newIdentities: sections)
     }
     
     func dataIsValid(_ tableView: UITableView, oldData: [UITableView.Section]) -> Bool {
@@ -130,5 +62,74 @@ extension UITableView.Mediator {
             guard tableView.numberOfRows(inSection: section) == cells.cellCount else { return false }
         }
         return true
+    }
+}
+
+public struct TableMediatorSectionReloader: DiffReloaderWorker {
+    let table: UITableView
+    let animationSet: UITableView.AnimationSet
+    let forceRefresh: Bool
+    
+    init(table: UITableView, forceRefresh: Bool, animationSet: UITableView.AnimationSet) {
+        self.table = table
+        self.animationSet = animationSet
+        self.forceRefresh = forceRefresh
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
+        table.deleteSections(.init(identifiables.keys), with: animationSet.deleteSectionAnimation)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+        table.insertSections(.init(integer: index), with: animationSet.insertSectionAnimation)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+        for (index, pair) in identifiables {
+            guard let oldSection = pair.old as? UITableView.Section,
+                  let newSection = pair.new as? UITableView.Section else {
+                continue
+            }
+            let cellReloader = TableMediatorCellReloader(section: index, table: table, forceRefresh: forceRefresh, animationSet: animationSet)
+            let diffReloader = DiffReloader(worker: cellReloader)
+            diffReloader.reloadDifference(oldIdentities: oldSection.cells, newIdentities: newSection.cells)
+        }
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+        table.moveSection(index, toSection: destIndex)
+    }
+}
+
+public struct TableMediatorCellReloader: DiffReloaderWorker {
+    let table: UITableView
+    let animationSet: UITableView.AnimationSet
+    let section: Int
+    let forceRefresh: Bool
+    
+    init(section: Int, table: UITableView, forceRefresh: Bool, animationSet: UITableView.AnimationSet) {
+        self.section = section
+        self.table = table
+        self.animationSet = animationSet
+        self.forceRefresh = forceRefresh
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
+        let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(row: $0, section: section) }
+        table.deleteRows(at: indexPaths, with: animationSet.deleteRowAnimation)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+        table.insertRows(at: [.init(row: index, section: section)], with: animationSet.insertRowAnimation)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+        guard forceRefresh else { return }
+        let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(row: $0, section: section) }
+        table.reloadRows(at: indexPaths, with: animationSet.reloadRowAnimation)
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+        table.moveRow(at: .init(row: index, section: section), to: .init(row: destIndex, section: section))
     }
 }

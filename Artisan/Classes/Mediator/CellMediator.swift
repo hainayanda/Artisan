@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public protocol CellMediator: Buildable {
+public protocol CellMediator: Buildable, Identifiable {
     static var cellViewClass: AnyClass { get }
     static var cellReuseIdentifier: String { get }
     func isSameMediator(with other: CellMediator) -> Bool
@@ -36,7 +36,6 @@ public protocol TableCellMediator: CellMediator {
 }
 
 open class TableViewCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, TableCellMediator {
-    
     public static var cellViewClass: AnyClass { Cell.self }
     public static var cellReuseIdentifier: String {
         let camelCaseName = String(describing: Cell.self).filter { $0.isLetter || $0.isNumber }.camelCaseToSnakeCase()
@@ -45,6 +44,7 @@ open class TableViewCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, Tab
     
     public var animateInteraction: Bool = false
     public var cellIdentifier: AnyHashable  = String.randomString()
+    public var identifier: AnyHashable { cellIdentifier }
     
     public func apply(cell: UITableViewCell) {
         guard let cell = cell as? Cell else {
@@ -97,6 +97,7 @@ open class CollectionViewCellMediator<Cell: UICollectionViewCell>: ViewMediator<
     }
     
     public var cellIdentifier: AnyHashable  = String.randomString()
+    public var identifier: AnyHashable { cellIdentifier }
     
     public func apply(cell: UICollectionReusableView) {
         guard let cell = cell as? Cell else {

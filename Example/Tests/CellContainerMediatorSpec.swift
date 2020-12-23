@@ -131,6 +131,7 @@ class CellContainerMediatorSpec: QuickSpec {
 
 class DummyCollectionCellMediator: CollectionCellMediator {
     var id: String = .randomString()
+    var identifier: AnyHashable { id }
     static var cellViewClass: AnyClass = UICollectionReusableView.self
     static var cellReuseIdentifier: String = .randomString()
     
@@ -149,6 +150,7 @@ class DummyCollectionCellMediator: CollectionCellMediator {
 
 class DummyTableCell: TableCellMediator {
     var id: String = .randomString()
+    var identifier: AnyHashable { id }
     static var cellViewClass: AnyClass = UITableViewCell.self
     static var cellReuseIdentifier: String = .randomString()
     

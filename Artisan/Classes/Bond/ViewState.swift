@@ -53,7 +53,7 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
         removeBonding()
         observedSet(value: view[keyPath: keyPath], from: .bond)
         observe(view: view, keyPath)
-        let linker: PartialLinker<View, Wrapped> = .init(view: view)
+        let linker: PartialLinker<View, Wrapped> = .init(state: self, view: view)
         self.linker = linker
         return linker
     }
@@ -96,7 +96,7 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
             break
         }
         observe(view: view, keyPath)
-        let linker: Linker<View, Wrapped> = .init(view: view)
+        let linker: Linker<View, Wrapped> = .init(state: self, view: view)
         self.linker = linker
         linker.applicator = { [weak self] view, newValue in
             self?.ignoreViewListener = true

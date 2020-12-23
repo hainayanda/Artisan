@@ -65,14 +65,13 @@ extension UICollectionView {
         }
     }
     
-    open class Section: Equatable {
-        
+    open class Section: Identifiable, Equatable {
         public var cells: [CollectionCellMediator]
         public var cellCount: Int { cells.count }
-        public var sectionIdentifier: AnyHashable
+        public var identifier: AnyHashable
         
         public init(identifier: AnyHashable = String.randomString(), cells: [CollectionCellMediator] = []) {
-            self.sectionIdentifier = identifier
+            self.identifier = identifier
             self.cells = cells
         }
         
@@ -86,7 +85,7 @@ extension UICollectionView {
         
         func isSameSection(with other: Section) -> Bool {
             if other === self { return true }
-            return other.sectionIdentifier == sectionIdentifier
+            return other.identifier == identifier
         }
         
         public func clear() {
@@ -94,13 +93,13 @@ extension UICollectionView {
         }
         
         public func copy() -> Section {
-            return Section(identifier: sectionIdentifier, cells: cells)
+            return Section(identifier: identifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.Section, rhs: UICollectionView.Section) -> Bool {
             let left = lhs.copy()
             let right = rhs.copy()
-            guard left.sectionIdentifier == right.sectionIdentifier,
+            guard left.identifier == right.identifier,
                   left.cells.count == right.cells.count else { return false }
             for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
                 return false
@@ -119,7 +118,7 @@ extension UICollectionView {
         }
         
         public override func copy() -> Section {
-            return IndexedSection(indexTitle: indexTitle, identifier: sectionIdentifier, cells: cells)
+            return IndexedSection(indexTitle: indexTitle, identifier: identifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.IndexedSection, rhs: UICollectionView.IndexedSection) -> Bool {
@@ -127,7 +126,7 @@ extension UICollectionView {
                   let right = rhs.copy() as? UICollectionView.IndexedSection else {
                 return false
             }
-            guard left.sectionIdentifier == right.sectionIdentifier,
+            guard left.identifier == right.identifier,
                   left.indexTitle == right.indexTitle,
                   left.cells.count == right.cells.count else { return false }
             for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
@@ -149,7 +148,7 @@ extension UICollectionView {
         }
         
         public override func copy() -> Section {
-            return SupplementedSection(header: header, footer: footer, identifier: sectionIdentifier, cells: cells)
+            return SupplementedSection(header: header, footer: footer, identifier: identifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.SupplementedSection, rhs: UICollectionView.SupplementedSection) -> Bool {
@@ -157,7 +156,7 @@ extension UICollectionView {
                   let right = rhs.copy() as? UICollectionView.SupplementedSection else {
                 return false
             }
-            guard left.sectionIdentifier == right.sectionIdentifier,
+            guard left.identifier == right.identifier,
                   left.cells.count == right.cells.count else { return false }
             for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
                 return false

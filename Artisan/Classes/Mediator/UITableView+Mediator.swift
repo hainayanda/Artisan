@@ -96,14 +96,13 @@ extension UITableView {
         }
     }
     
-    open class Section: Equatable {
-        
+    open class Section: Identifiable, Equatable {
         public var cells: [TableCellMediator]
         public var cellCount: Int { cells.count }
-        public var sectionIdentifier: AnyHashable
+        public var identifier: AnyHashable
         
         public init(identifier: AnyHashable = String.randomString(), cells: [TableCellMediator] = []) {
-            self.sectionIdentifier = identifier
+            self.identifier = identifier
             self.cells = cells
         }
         
@@ -117,7 +116,7 @@ extension UITableView {
         
         func isSameSection(with other: Section) -> Bool {
             if other === self { return true }
-            return other.sectionIdentifier == sectionIdentifier
+            return other.identifier == identifier
         }
         
         public func clear() {
@@ -125,13 +124,13 @@ extension UITableView {
         }
         
         public func copy() -> Section {
-            return Section(identifier: sectionIdentifier, cells: cells)
+            return Section(identifier: identifier, cells: cells)
         }
         
         public static func == (lhs: UITableView.Section, rhs: UITableView.Section) -> Bool {
             let left = lhs.copy()
             let right = rhs.copy()
-            guard left.sectionIdentifier == right.sectionIdentifier,
+            guard left.identifier == right.identifier,
                   left.cells.count == right.cells.count else { return false }
             for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
                 return false
@@ -150,7 +149,7 @@ extension UITableView {
         }
         
         public override func copy() -> Section {
-            return TitledSection(title: title, identifier: sectionIdentifier, cells: cells)
+            return TitledSection(title: title, identifier: identifier, cells: cells)
         }
         
         public static func == (lhs: UITableView.TitledSection, rhs: UITableView.TitledSection) -> Bool {
@@ -158,7 +157,7 @@ extension UITableView {
                   let right = rhs.copy() as? UITableView.TitledSection else {
                 return false
             }
-            guard left.sectionIdentifier == right.sectionIdentifier,
+            guard left.identifier == right.identifier,
                   left.title == right.title,
                   left.cells.count == right.cells.count else { return false }
             for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {

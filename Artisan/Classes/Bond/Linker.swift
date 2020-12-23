@@ -11,9 +11,15 @@ import UIKit
 public class PartialLinker<View: UIView, State>: AnyLinker {
     var viewListener: ((View, Changes<State>) -> Void)?
     weak var view: View?
+    unowned var state: ViewState<State>
     
-    init(view: View) {
+    init(state: ViewState<State>, view: View) {
         self.view = view
+        self.state = state
+    }
+    
+    public func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, State> {
+        state.observe(observer: observer)
     }
     
     @discardableResult
@@ -53,6 +59,10 @@ public class PartialLinker<View: UIView, State>: AnyLinker {
 public class Linker<View: UIView, State>: PartialLinker<View, State> {
     var stateListener: ((View, Changes<State>) -> Void)?
     var applicator: ((View, State) -> Void)?
+    
+    public override func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, State> {
+        super.observe(observer: observer)
+    }
     
     @discardableResult
     public func stateDidSet<Observer: AnyObject>(observer: Observer, thenCall method: @escaping ((Observer) -> (View, Changes<State>) -> Void)) -> Self {
