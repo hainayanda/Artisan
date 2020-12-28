@@ -1,5 +1,5 @@
 //
-//  EventDetailScreenMediator.swift
+//  EventDetailScreenVM.swift
 //  Artisan_Example
 //
 //  Created by Nayanda Haberty on 24/12/20.
@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 import Artisan
 
-class EventDetailScreenMediator: ViewMediator<EventDetailsScreen> {
+class EventDetailScreenVM: ViewMediator<EventDetailsScreen> {
     @ObservableState var event: Event?
     
     override func didInit() {
         $event.observe(observer: self)
-            .didSet(thenCall: EventDetailScreenMediator.change(event:))
+            .didSet(thenCall: EventDetailScreenVM.change(event:))
     }
     
     override func bonding(with view: EventDetailsScreen) {
@@ -23,7 +23,7 @@ class EventDetailScreenMediator: ViewMediator<EventDetailsScreen> {
     }
 }
 
-extension EventDetailScreenMediator {
+extension EventDetailScreenVM {
     func change(event: Changes<Event?>) {
         let events: [Event]
         if let new = event.new {
@@ -33,7 +33,7 @@ extension EventDetailScreenMediator {
         }
         view?.title = event.new?.name
         view?.tableView.sections = TableCellBuilder(section: UITableView.Section(identifier: "header"))
-            .next(mediatorType: EventCellMediator<EventHeaderCell>.self, fromItems: events) { mediator, event in
+            .next(mediatorType: EventCellVM<EventHeaderCell>.self, fromItems: events) { mediator, event in
             mediator.event = event
         }.build()
     }

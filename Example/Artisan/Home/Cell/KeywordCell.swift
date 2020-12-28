@@ -37,20 +37,18 @@ class KeywordCell: TableFragmentCell {
     }
 }
 
-class KeywordCellMediator: TableViewCellMediator<KeywordCell> {
+class KeywordCellVM: TableViewCellMediator<KeywordCell> {
     @ViewState var keyword: String?
     var delegate: KeywordCellMediatorDelegate?
     override func bonding(with view: KeywordCell) {
         super.bonding(with: view)
         $keyword.bonding(with: view.keywordLabel, \.text)
-        view.clearButton.didTapped(observing: self, thenCall: KeywordCellMediator.didTapClear(on:))
-    }
-    
-    func didTapClear(on button: UIButton) {
-        delegate?.keywordCellDidTapClear(self)
+        view.clearButton.whenDidTapped(observing: self) { viewModel, _ in
+            viewModel.delegate?.keywordCellDidTapClear(viewModel)
+        }
     }
 }
 
 protocol KeywordCellMediatorDelegate: class {
-    func keywordCellDidTapClear(_ mediator: KeywordCellMediator)
+    func keywordCellDidTapClear(_ mediator: KeywordCellVM)
 }

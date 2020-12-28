@@ -103,7 +103,7 @@ class UIKitExtensionSpec: QuickSpec {
             }
             it("should run closure on clicked") {
                 var closureRun: Bool = false
-                button.didTapped { btn in
+                button.whenDidTapped { btn in
                     expect(btn).to(equal(button))
                     closureRun = true
                 }
@@ -118,7 +118,7 @@ class UIKitExtensionSpec: QuickSpec {
             }
             it("should run closure on clicked") {
                 var closureRun: Bool = false
-                button.didTapped { btn in
+                button.whenDidTapped { btn in
                     expect(btn).to(equal(button))
                     closureRun = true
                 }
@@ -134,7 +134,7 @@ class UIKitExtensionSpec: QuickSpec {
             it("should run closure on event") {
                 var closureRun: Bool = false
                 for event in UIControl.AssociatedKey.eventKeys.keys {
-                    control.didTriggered(by: event, then: { ctrl in
+                    control.whenDidTriggered(by: event, then: { ctrl in
                         expect(ctrl).to(equal(control))
                         closureRun = true
                     })

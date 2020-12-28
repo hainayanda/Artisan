@@ -129,13 +129,13 @@ extension UIButton {
         }
     }
     
-    public func didTapped(then: @escaping (UIButton) -> Void) {
+    public func whenDidTapped(then: @escaping (UIButton) -> Void) {
         let tappedClosure = TappedClosure(then)
         addTarget(tappedClosure, action: #selector(TappedClosure.invoke(with:)), for: .touchUpInside)
         objc_setAssociatedObject(self, &AssociatedKey.tappedClosure, tappedClosure, .OBJC_ASSOCIATION_RETAIN)
     }
     
-    public func didTapped<Observer: AnyObject>(observing observer: Observer, then: @escaping (Observer, UIButton) -> Void) {
+    public func whenDidTapped<Observer: AnyObject>(observing observer: Observer, then: @escaping (Observer, UIButton) -> Void) {
         let eventClosure = TappedClosure { [weak observer] button in
             guard let observer = observer else { return }
             then(observer, button)
@@ -144,7 +144,7 @@ extension UIButton {
         objc_setAssociatedObject(self, &AssociatedKey.tappedClosure, eventClosure, .OBJC_ASSOCIATION_RETAIN)
     }
     
-    public func didTapped<Observer: AnyObject>(observing observer: Observer, thenCall method: @escaping (Observer) -> ((UIButton) -> Void)) {
+    public func whenDidTapped<Observer: AnyObject>(observing observer: Observer, thenCall method: @escaping (Observer) -> ((UIButton) -> Void)) {
         let eventClosure = TappedClosure { [weak observer] button in
             guard let observer = observer else { return }
             method(observer)(button)
@@ -273,7 +273,7 @@ extension UIControl {
         }
     }
     
-    public func didTriggered(by event: UIControl.Event, then: @escaping (UIControl) -> Void) {
+    public func whenDidTriggered(by event: UIControl.Event, then: @escaping (UIControl) -> Void) {
         guard let eventAssociatedKey = AssociatedKey.eventKeys[event] else {
             return
         }
@@ -282,7 +282,7 @@ extension UIControl {
         objc_setAssociatedObject(self, eventAssociatedKey, eventClosure, .OBJC_ASSOCIATION_RETAIN)
     }
     
-    public func didTriggered<Observer: AnyObject>(by event: UIControl.Event, observing observer: Observer, then: @escaping (Observer, UIControl) -> Void) {
+    public func whenDidTriggered<Observer: AnyObject>(by event: UIControl.Event, observing observer: Observer, then: @escaping (Observer, UIControl) -> Void) {
         guard let eventAssociatedKey = AssociatedKey.eventKeys[event] else {
             return
         }
@@ -294,7 +294,7 @@ extension UIControl {
         objc_setAssociatedObject(self, eventAssociatedKey, eventClosure, .OBJC_ASSOCIATION_RETAIN)
     }
     
-    public func didTriggered<Observer: AnyObject>(by event: UIControl.Event, observing observer: Observer, thenCall method: @escaping (Observer) -> ((UIControl) -> Void)) {
+    public func whenDidTriggered<Observer: AnyObject>(by event: UIControl.Event, observing observer: Observer, thenCall method: @escaping (Observer) -> ((UIControl) -> Void)) {
         guard let eventAssociatedKey = AssociatedKey.eventKeys[event] else {
             return
         }

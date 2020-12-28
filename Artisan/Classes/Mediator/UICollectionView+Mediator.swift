@@ -38,6 +38,19 @@ extension UICollectionView {
         }
     }
     
+    public var reloadStrategy: CellReloadStrategy {
+        get {
+            mediator.reloadStrategy
+        }
+        set {
+            mediator.reloadStrategy = newValue
+        }
+    }
+    
+    public func whenDidReloadCells(then: ((Bool) -> Void)?) {
+        mediator.whenDidReloadCells(then: then)
+    }
+    
     public class Mediator: ViewMediator<UICollectionView> {
         var applicableSections: [Section] = []
         @ObservableState public var sections: [Section] = []
@@ -56,7 +69,7 @@ extension UICollectionView {
             }
         }
         
-        public func didReloadCells(then: ((Bool) -> Void)?) {
+        public func whenDidReloadCells(then: ((Bool) -> Void)?) {
             didReloadAction = then
         }
         

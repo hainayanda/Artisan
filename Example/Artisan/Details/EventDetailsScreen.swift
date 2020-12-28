@@ -14,12 +14,10 @@ class EventDetailsScreen: UIViewController, ObservableView {
     typealias Observer = ObservingMediator
     
     lazy var tableView: UITableView = build {
-        $0.mediator.animationSet =  .init(insertAnimation: .right, reloadAnimation: .fade, deleteAnimation: .right)
+        $0.animationSet =  .init(insertAnimation: .right, reloadAnimation: .fade, deleteAnimation: .right)
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.allowsSelection = false
-        $0.estimatedRowHeight = .x128
-        $0.rowHeight = UITableView.automaticDimension
         if #available(iOS 11.0, *) {
             $0.contentInset = view.safeAreaInsets
         } else {
@@ -40,7 +38,8 @@ extension EventDetailsScreen {
     
     private func planViewContent() {
         planContent { plan in
-            plan.fit(tableView).edges(.equal, to: .safeArea)
+            plan.fit(tableView)
+                .edges(.equal, to: .safeArea)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  HeroHomeScreenMediator.swift
+//  EventSearchScreenVM.swift
 //  Artisan_Example
 //
 //  Created by Nayanda Haberty on 22/12/20.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Artisan
 
-class EventSearchScreenMediator: ViewMediator<EventSearchScreen> {
+class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
     
     var service: EventService = MockEventService()
     
@@ -20,9 +20,9 @@ class EventSearchScreenMediator: ViewMediator<EventSearchScreen> {
     
     override func didInit() {
         $results.observe(observer: self)
-            .didSet(thenCall: EventSearchScreenMediator.didGet(results:))
+            .didSet(thenCall: EventSearchScreenVM.didGet(results:))
         $history.observe(observer: self)
-            .didSet(thenCall: EventSearchScreenMediator.didHistory(updated:))
+            .didSet(thenCall: EventSearchScreenVM.didHistory(updated:))
     }
     
     override func bonding(with view: EventSearchScreen) {
@@ -30,18 +30,18 @@ class EventSearchScreenMediator: ViewMediator<EventSearchScreen> {
         $searchPhrase.bonding(with: view.searchBar, \.text)
             .observe(observer: self)
             .delayMultipleSetTrigger(by: .fastest)
-            .didSet(thenCall: EventSearchScreenMediator.search(for:))
+            .didSet(thenCall: EventSearchScreenVM.search(for:))
     }
 }
 
-extension EventSearchScreenMediator: EventSearchScreenObserver {
+extension EventSearchScreenVM: EventSearchScreenObserver {
     func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath) {
         guard let mediator = cell.getMediator() else { return }
-        if let keywordMediator = mediator as? KeywordCellMediator {
+        if let keywordMediator = mediator as? KeywordCellVM {
             searchPhrase = keywordMediator.keyword
-        } else if let eventMediator = mediator as? EventCellMediator {
+        } else if let eventMediator = mediator as? EventCellVM {
             let detailsScreen = EventDetailsScreen()
-            let detailScreenMediator = EventDetailScreenMediator()
+            let detailScreenMediator = EventDetailScreenVM()
             detailScreenMediator.event = eventMediator.event
             detailScreenMediator.apply(to: detailsScreen)
             view?.navigationController?.pushViewController(detailsScreen, animated: true)
@@ -49,15 +49,15 @@ extension EventSearchScreenMediator: EventSearchScreenObserver {
     }
 }
 
-extension EventSearchScreenMediator: KeywordCellMediatorDelegate {
-    func keywordCellDidTapClear(_ mediator: KeywordCellMediator) {
+extension EventSearchScreenVM: KeywordCellMediatorDelegate {
+    func keywordCellDidTapClear(_ mediator: KeywordCellVM) {
         var currentHistory = history
         currentHistory.removeAll { $0 == mediator.keyword }
         history = currentHistory
     }
 }
 
-extension EventSearchScreenMediator {
+extension EventSearchScreenVM {
     
     func search(for changes: Changes<String?>) {
         addToHistory(changes)
@@ -95,12 +95,12 @@ extension EventSearchScreenMediator {
     
     func constructCells(with histories: [String], and events: [Event]) -> [UITableView.Section] {
         TableCellBuilder(section: UITableView.TitledSection(title: "Search History", identifier: "history"))
-            .next(mediatorType: KeywordCellMediator.self, fromItems: histories) { mediator, history in
+            .next(mediatorType: KeywordCellVM.self, fromItems: histories) { mediator, history in
                 mediator.cellIdentifier = history
                 mediator.keyword = history
                 mediator.delegate = self
             }.nextSection(UITableView.TitledSection(title: "Search Results", identifier: "results"))
-            .next(mediatorType: EventCellMediator.self, fromItems: events) { mediator, event in
+            .next(mediatorType: EventCellVM.self, fromItems: events) { mediator, event in
                 mediator.event = event
             }.build()
     }

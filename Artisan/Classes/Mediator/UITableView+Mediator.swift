@@ -38,6 +38,28 @@ extension UITableView {
         }
     }
     
+    public var animationSet: AnimationSet {
+        get {
+            mediator.animationSet
+        }
+        set {
+            mediator.animationSet = newValue
+        }
+    }
+    
+    public var reloadStrategy: CellReloadStrategy {
+        get {
+            mediator.reloadStrategy
+        }
+        set {
+            mediator.reloadStrategy = newValue
+        }
+    }
+    
+    public func whenDidReloadCells(then: ((Bool) -> Void)?) {
+        mediator.whenDidReloadCells(then: then)
+    }
+    
     public struct AnimationSet {
         public let insertRowAnimation: UITableView.RowAnimation
         public let reloadRowAnimation: UITableView.RowAnimation
@@ -87,7 +109,7 @@ extension UITableView {
             }
         }
         
-        public func didReloadCells(then: ((Bool) -> Void)?) {
+        public func whenDidReloadCells(then: ((Bool) -> Void)?) {
             didReloadAction = then
         }
         

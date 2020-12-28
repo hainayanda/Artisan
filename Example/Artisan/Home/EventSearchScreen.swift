@@ -24,7 +24,7 @@ class EventSearchScreen: UIViewController, ObservableView {
         $0.barTintColor = .background
     }
     lazy var tableView: UITableView = build {
-        $0.mediator.animationSet =  .init(insertAnimation: .top, reloadAnimation: .fade, deleteAnimation: .top)
+        $0.animationSet =  .init(insertAnimation: .top, reloadAnimation: .fade, deleteAnimation: .top)
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.allowsSelection = true

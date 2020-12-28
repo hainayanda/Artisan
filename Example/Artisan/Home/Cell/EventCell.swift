@@ -76,7 +76,7 @@ class EventCell: TableFragmentCell {
     }
 }
 
-class EventCellMediator<Cell: EventCell>: TableViewCellMediator<Cell> {
+class EventCellVM<Cell: EventCell>: TableViewCellMediator<Cell> {
     @ObservableState var event: Event?
     @ViewState var bannerImage: UIImage?
     @ViewState var eventName: String?
@@ -85,7 +85,7 @@ class EventCellMediator<Cell: EventCell>: TableViewCellMediator<Cell> {
     
     override func didInit() {
         $event.observe(observer: self)
-            .didSet(thenCall: EventCellMediator.set(eventChanges:))
+            .didSet(thenCall: EventCellVM.set(eventChanges:))
     }
     
     override func bonding(with view: Cell) {

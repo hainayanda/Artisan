@@ -21,7 +21,7 @@
 		BB0D094A2591BC5700C209E1 /* CellContainerMediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */; };
 		BB0D09502591BCAD00C209E1 /* MediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */; };
 		BB0D09872591C45300C209E1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09862591C45300C209E1 /* Constants.swift */; };
-		BB0D098D2591C4DA00C209E1 /* EventSearchScreenMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D098C2591C4DA00C209E1 /* EventSearchScreenMediator.swift */; };
+		BB0D098D2591C4DA00C209E1 /* EventSearchScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */; };
 		BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D099A2591DDB800C209E1 /* EventCell.swift */; };
 		BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09A02591E99700C209E1 /* MockEventService.swift */; };
 		BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */; };
@@ -38,7 +38,7 @@
 		BBED3C44259128CD004DF5F1 /* LayoutPlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */; };
 		BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C2425936AE2002AF568 /* KeywordCell.swift */; };
 		BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */; };
-		BBF98C452593C5EA002AF568 /* EventDetailScreenMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C442593C5EA002AF568 /* EventDetailScreenMediator.swift */; };
+		BBF98C452593C5EA002AF568 /* EventDetailScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C442593C5EA002AF568 /* EventDetailScreenVM.swift */; };
 		BBF98C4A2593C68B002AF568 /* EventHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C492593C68B002AF568 /* EventHeaderCell.swift */; };
 		C2F68948D69197EA6D212290 /* Pods_Artisan_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2769C24CE93AE61A51D7ED87 /* Pods_Artisan_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -77,7 +77,7 @@
 		BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellContainerMediatorSpec.swift; sourceTree = "<group>"; };
 		BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediatorSpec.swift; sourceTree = "<group>"; };
 		BB0D09862591C45300C209E1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		BB0D098C2591C4DA00C209E1 /* EventSearchScreenMediator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchScreenMediator.swift; sourceTree = "<group>"; };
+		BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchScreenVM.swift; sourceTree = "<group>"; };
 		BB0D099A2591DDB800C209E1 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		BB0D09A02591E99700C209E1 /* MockEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventService.swift; sourceTree = "<group>"; };
 		BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStateSpec.swift; sourceTree = "<group>"; };
@@ -95,7 +95,7 @@
 		BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutPlanerSpec.swift; sourceTree = "<group>"; };
 		BBF98C2425936AE2002AF568 /* KeywordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordCell.swift; sourceTree = "<group>"; };
 		BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailsScreen.swift; sourceTree = "<group>"; };
-		BBF98C442593C5EA002AF568 /* EventDetailScreenMediator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailScreenMediator.swift; sourceTree = "<group>"; };
+		BBF98C442593C5EA002AF568 /* EventDetailScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailScreenVM.swift; sourceTree = "<group>"; };
 		BBF98C492593C68B002AF568 /* EventHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderCell.swift; sourceTree = "<group>"; };
 		D5F58F2417560DDDF0AD0E24 /* Pods-Artisan_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -232,7 +232,7 @@
 			children = (
 				BBF98C432593C5CE002AF568 /* Cell */,
 				607FACD71AFB9204008FA782 /* EventSearchScreen.swift */,
-				BB0D098C2591C4DA00C209E1 /* EventSearchScreenMediator.swift */,
+				BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -277,7 +277,7 @@
 			children = (
 				BBF98C482593C676002AF568 /* Cell */,
 				BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */,
-				BBF98C442593C5EA002AF568 /* EventDetailScreenMediator.swift */,
+				BBF98C442593C5EA002AF568 /* EventDetailScreenVM.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
@@ -513,12 +513,12 @@
 				BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */,
 				BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */,
 				BB0D09872591C45300C209E1 /* Constants.swift in Sources */,
-				BBF98C452593C5EA002AF568 /* EventDetailScreenMediator.swift in Sources */,
+				BBF98C452593C5EA002AF568 /* EventDetailScreenVM.swift in Sources */,
 				BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */,
 				BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */,
-				BB0D098D2591C4DA00C209E1 /* EventSearchScreenMediator.swift in Sources */,
+				BB0D098D2591C4DA00C209E1 /* EventSearchScreenVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
