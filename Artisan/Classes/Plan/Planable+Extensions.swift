@@ -108,7 +108,7 @@ extension Planer {
     // MARK: Position Anchor
     
     @discardableResult
-    public func at(_ positions: [LayoutPosition], _ relation: LayoutRelation<InsetsConvertible>, to anchor: AnonymousRelation, priority: UILayoutPriority? = nil) -> Self {
+    public func at(_ positions: [LayoutEdge], _ relation: LayoutRelation<InsetsConvertible>, to anchor: AnonymousRelation, priority: UILayoutPriority? = nil) -> Self {
         let priority: UILayoutPriority = priority ?? context.mutatingPriority
         for position in positions {
             switch position {
@@ -153,6 +153,7 @@ extension Planer {
     
     // MARK: Between Anchor
     
+    @discardableResult
     public func inBetween(of view: UIView, and otherView: UIView, _ position: MiddlePosition, priority: UILayoutPriority? = nil) -> Self {
         let priority: UILayoutPriority = priority ?? context.mutatingPriority
         switch position {
@@ -168,7 +169,7 @@ extension Planer {
     
 }
 
-public extension Array where Element == LayoutPosition {
+public extension Array where Element == LayoutEdge {
     static var topLeft: [Element] { [.top, .left] }
     static var topRight: [Element] { [.top, .right] }
     static var bottomLeft: [Element] { [.bottom, .left] }

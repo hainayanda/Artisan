@@ -39,14 +39,16 @@ extension InsertableViewPlan where View: UIStackView {
     }
     
     public func fitVSpace(by space: CGFloat) {
-        fitStacked(UIView())
-            .backgroundColor(.clear)
+        let viewAsSpace = UIView()
+        viewAsSpace.backgroundColor = .clear
+        fitStacked(viewAsSpace)
             .height(.equalTo(space), priority: .required)
     }
     
     public func fitHSpace(by space: CGFloat) {
+        let viewAsSpace = UIView()
+        viewAsSpace.backgroundColor = .clear
         fitStacked(UIView())
-            .backgroundColor(.clear)
             .width(.equalTo(space), priority: .required)
     }
     

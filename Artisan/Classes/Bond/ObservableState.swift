@@ -58,9 +58,12 @@ open class ObservableState<Wrapped>: StateObservable {
         self._wrappedValue = wrappedValue
     }
     
-    public func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, Wrapped> {
+    public func observe<Observer: AnyObject>(
+        observer: Observer,
+        on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main,
+        syncIfPossible: Bool = true) -> PropertyObservers<Observer, Wrapped> {
         remove(observer: observer)
-        let newObserver = PropertyObservers<Observer, Wrapped>(obsever: observer)
+        let newObserver = PropertyObservers<Observer, Wrapped>(obsever: observer, dispatcher: dispatcher, syncIfPossible: syncIfPossible)
         self.observers.append(newObserver)
         return newObserver
     }
@@ -106,8 +109,11 @@ public class WeakObservableState<Wrapped: AnyObject>: ObservableState<Wrapped?> 
         super.init(wrappedValue: wrappedValue)
     }
     
-    public override func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, Wrapped?> {
-        super.observe(observer: observer)
+    public override func observe<Observer: AnyObject>(
+        observer: Observer,
+        on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main,
+        syncIfPossible: Bool = true) -> PropertyObservers<Observer, Wrapped?> {
+        super.observe(observer: observer, on: dispatcher, syncIfPossible: syncIfPossible)
     }
     
     public override func remove<Observer>(observer: Observer) where Observer : AnyObject {

@@ -175,7 +175,7 @@ public extension InterRelation where Related == UIView {
 }
 
 public extension RelatedPosition {
-    var position: LayoutPosition {
+    var position: LayoutEdge {
         switch self {
         case .topOf(_), .topOfAndParallelWith(_):
             return .top

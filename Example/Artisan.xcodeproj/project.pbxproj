@@ -26,6 +26,7 @@
 		BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09A02591E99700C209E1 /* MockEventService.swift */; };
 		BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */; };
 		BB1170B025919BD100C2D13D /* PlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170AF25919BD100C2D13D /* PlanerSpec.swift */; };
+		BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */; };
 		BBED3C0425911F81004DF5F1 /* PlanContextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */; };
 		BBED3C0825911FAE004DF5F1 /* InsertableViewPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */; };
 		BBED3C0E259120FD004DF5F1 /* InsertableScrollPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */; };
@@ -36,6 +37,9 @@
 		BBED3C3E25912803004DF5F1 /* PlanCompatibleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */; };
 		BBED3C44259128CD004DF5F1 /* LayoutPlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */; };
 		BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C2425936AE2002AF568 /* KeywordCell.swift */; };
+		BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */; };
+		BBF98C452593C5EA002AF568 /* EventDetailScreenMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C442593C5EA002AF568 /* EventDetailScreenMediator.swift */; };
+		BBF98C4A2593C68B002AF568 /* EventHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C492593C68B002AF568 /* EventHeaderCell.swift */; };
 		C2F68948D69197EA6D212290 /* Pods_Artisan_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2769C24CE93AE61A51D7ED87 /* Pods_Artisan_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -78,6 +82,7 @@
 		BB0D09A02591E99700C209E1 /* MockEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventService.swift; sourceTree = "<group>"; };
 		BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStateSpec.swift; sourceTree = "<group>"; };
 		BB1170AF25919BD100C2D13D /* PlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanerSpec.swift; sourceTree = "<group>"; };
+		BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarEventCell.swift; sourceTree = "<group>"; };
 		BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Artisan_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanContextSpec.swift; sourceTree = "<group>"; };
 		BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertableViewPlanSpec.swift; sourceTree = "<group>"; };
@@ -89,6 +94,9 @@
 		BBED3C3D25912803004DF5F1 /* PlanCompatibleSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanCompatibleSpec.swift; sourceTree = "<group>"; };
 		BBED3C43259128CD004DF5F1 /* LayoutPlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutPlanerSpec.swift; sourceTree = "<group>"; };
 		BBF98C2425936AE2002AF568 /* KeywordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordCell.swift; sourceTree = "<group>"; };
+		BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailsScreen.swift; sourceTree = "<group>"; };
+		BBF98C442593C5EA002AF568 /* EventDetailScreenMediator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailScreenMediator.swift; sourceTree = "<group>"; };
+		BBF98C492593C68B002AF568 /* EventHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderCell.swift; sourceTree = "<group>"; };
 		D5F58F2417560DDDF0AD0E24 /* Pods-Artisan_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DC8A44295F25844F8072B11E /* Pods-Artisan_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -138,6 +146,7 @@
 		607FACD21AFB9204008FA782 /* Example for Artisan */ = {
 			isa = PBXGroup;
 			children = (
+				BBF98C3E2593C3E8002AF568 /* Details */,
 				BB0D09852591C43100C209E1 /* Utilities */,
 				BB0D09792591BFD600C209E1 /* Home */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
@@ -221,11 +230,9 @@
 		BB0D09792591BFD600C209E1 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				BBF98C432593C5CE002AF568 /* Cell */,
 				607FACD71AFB9204008FA782 /* EventSearchScreen.swift */,
 				BB0D098C2591C4DA00C209E1 /* EventSearchScreenMediator.swift */,
-				BB0D099A2591DDB800C209E1 /* EventCell.swift */,
-				BBF98C2425936AE2002AF568 /* KeywordCell.swift */,
-				BB0D09A02591E99700C209E1 /* MockEventService.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -234,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				BB0D09862591C45300C209E1 /* Constants.swift */,
+				BB0D09A02591E99700C209E1 /* MockEventService.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -262,6 +270,34 @@
 				BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */,
 			);
 			name = Plan;
+			sourceTree = "<group>";
+		};
+		BBF98C3E2593C3E8002AF568 /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				BBF98C482593C676002AF568 /* Cell */,
+				BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */,
+				BBF98C442593C5EA002AF568 /* EventDetailScreenMediator.swift */,
+			);
+			path = Details;
+			sourceTree = "<group>";
+		};
+		BBF98C432593C5CE002AF568 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				BB0D099A2591DDB800C209E1 /* EventCell.swift */,
+				BBF98C2425936AE2002AF568 /* KeywordCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		BBF98C482593C676002AF568 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				BBF98C492593C68B002AF568 /* EventHeaderCell.swift */,
+				BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		D6154310B51A7BC8D1290CE7 /* Pods */ = {
@@ -473,8 +509,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* EventSearchScreen.swift in Sources */,
+				BBF98C4A2593C68B002AF568 /* EventHeaderCell.swift in Sources */,
 				BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */,
+				BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */,
 				BB0D09872591C45300C209E1 /* Constants.swift in Sources */,
+				BBF98C452593C5EA002AF568 /* EventDetailScreenMediator.swift in Sources */,
+				BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */,
 				BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */,

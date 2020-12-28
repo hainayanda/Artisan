@@ -18,8 +18,8 @@ public class PartialLinker<View: UIView, State>: AnyLinker {
         self.state = state
     }
     
-    public func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, State> {
-        state.observe(observer: observer)
+    public func observe<Observer: AnyObject>(observer: Observer, on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main) -> PropertyObservers<Observer, State> {
+        state.observe(observer: observer, on: dispatcher)
     }
     
     @discardableResult
@@ -60,8 +60,8 @@ public class Linker<View: UIView, State>: PartialLinker<View, State> {
     var stateListener: ((View, Changes<State>) -> Void)?
     var applicator: ((View, State) -> Void)?
     
-    public override func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, State> {
-        super.observe(observer: observer)
+    public override func observe<Observer: AnyObject>(observer: Observer, on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main) -> PropertyObservers<Observer, State> {
+        super.observe(observer: observer, on: dispatcher)
     }
     
     @discardableResult
@@ -179,12 +179,16 @@ public class WrappedPropertyObserver<Wrapped> {
     var willGetListener: ((Wrapped) -> Void)?
     var didGetListener: ((Wrapped) -> Void)?
     
-    var mainHandler: ParallelOperationHandler = MainOperationHandler()
+    var operationHandler: OperationHandler
     
     @Atomic var delay: TimeInterval = 0
     @Atomic var latestChangesTriggered: Date = .distantPast
     @Atomic var latestChanges: Changes<Wrapped>?
     @Atomic var onDelayed: Bool = false
+    
+    init(dispatcher: DispatchQueue, syncIfPossible: Bool) {
+        operationHandler = ObservableOperationHandler(dispatcher: dispatcher, syncIfPossible: syncIfPossible)
+    }
     
     func triggerDidSet(with changes: Changes<Wrapped>) {
         if let latest = self.latestChanges {
@@ -195,18 +199,22 @@ public class WrappedPropertyObserver<Wrapped> {
         let intervalFromLatestTrigger = -(latestChangesTriggered.timeIntervalSinceNow)
         guard intervalFromLatestTrigger > delay else {
             let nextTrigger = delay - intervalFromLatestTrigger
-            DispatchQueue.main.asyncAfter(deadline: .now() + nextTrigger) { [weak self] in
+            getCurrentDispatcher().asyncAfter(deadline: .now() + nextTrigger) { [weak self] in
                 guard let self = self, let changes = self.latestChanges else { return }
                 self.triggerDidSet(with: changes)
             }
             return
         }
-        mainHandler.addOperation { [weak self] in
+        operationHandler.addOperation { [weak self] in
             guard let self = self, let changes = self.latestChanges else { return }
             self.latestChanges = nil
             self.didSetListener?(changes)
             self.latestChangesTriggered = Date()
         }
+    }
+    
+    func getCurrentDispatcher() -> DispatchQueue {
+        OperationQueue.current?.underlyingQueue ?? .main
     }
 }
 
@@ -219,8 +227,9 @@ public class PropertyObservers<Observer: AnyObject, Wrapped>: WrappedPropertyObs
     typealias ObservedGetListenerPointer = (Observer) -> GetListener
     weak var observer: Observer?
     
-    init(obsever: Observer) {
+    init(obsever: Observer, dispatcher: DispatchQueue, syncIfPossible: Bool) {
         self.observer = obsever
+        super.init(dispatcher: dispatcher, syncIfPossible: syncIfPossible)
     }
     
     @discardableResult

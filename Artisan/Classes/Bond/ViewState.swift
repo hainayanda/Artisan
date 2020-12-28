@@ -38,8 +38,11 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
         reset()
     }
     
-    public override func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, Wrapped> {
-        super.observe(observer: observer)
+    public override func observe<Observer: AnyObject>(
+        observer: Observer,
+        on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main,
+        syncIfPossible: Bool = true) -> PropertyObservers<Observer, Wrapped> {
+        super.observe(observer: observer, on: dispatcher, syncIfPossible: syncIfPossible)
     }
     
     public override func remove<Observer: AnyObject>(observer: Observer) {
@@ -270,8 +273,11 @@ public class WeakViewState<Wrapped: AnyObject>: ViewState<Wrapped?> {
         super.init(wrappedValue: wrappedValue)
     }
     
-    public override func observe<Observer: AnyObject>(observer: Observer) -> PropertyObservers<Observer, Wrapped?> {
-        super.observe(observer: observer)
+    public override func observe<Observer:  AnyObject>(
+        observer: Observer,
+        on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main,
+        syncIfPossible: Bool = true) -> PropertyObservers<Observer, Wrapped?> {
+        super.observe(observer: observer, on: dispatcher, syncIfPossible: syncIfPossible)
     }
     
     public override func remove<Observer>(observer: Observer) where Observer : AnyObject {

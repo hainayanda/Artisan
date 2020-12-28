@@ -155,7 +155,7 @@
 		BB6FADB82590EFEB00B6BB9D /* PriorityConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADB02590EFEB00B6BB9D /* PriorityConvertible.swift */; };
 		BB6FADB92590EFEB00B6BB9D /* UIKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADB12590EFEB00B6BB9D /* UIKit+Extensions.swift */; };
 		BB6FADBA2590EFEB00B6BB9D /* Enumeration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADB22590EFEB00B6BB9D /* Enumeration+Extensions.swift */; };
-		BB6FADBB2590EFEB00B6BB9D /* MainOperationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADB32590EFEB00B6BB9D /* MainOperationHandler.swift */; };
+		BB6FADBB2590EFEB00B6BB9D /* ObservableOperationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADB32590EFEB00B6BB9D /* ObservableOperationHandler.swift */; };
 		BB6FADBC2590EFEB00B6BB9D /* CommonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADB42590EFEB00B6BB9D /* CommonExtensions.swift */; };
 		BB6FADCC2590F03600B6BB9D /* LinkerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADC62590F03600B6BB9D /* LinkerProtocols.swift */; };
 		BB6FADCD2590F03600B6BB9D /* ObservableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADC72590F03600B6BB9D /* ObservableView.swift */; };
@@ -184,6 +184,7 @@
 		BB6FAE0A2590F17500B6BB9D /* Planable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADFB2590F17500B6BB9D /* Planable+Extensions.swift */; };
 		BB6FAE0B2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FADFC2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift */; };
 		BBF98C1B25936736002AF568 /* DiffReloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C1A25936736002AF568 /* DiffReloader.swift */; };
+		BBF98C2B2593B5CC002AF568 /* AnchorExtraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C2A2593B5CC002AF568 /* AnchorExtraction.swift */; };
 		BD4953074A12E769ED4E6C94F5E73694 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B191FCDE235BED8CFDEE881C72302B5 /* UIKit.framework */; };
 		BE56C54CD29F23A1C631645390E8569D /* ErrorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E690B9DE1C5B82AF026B990401DD4BC0 /* ErrorUtility.swift */; };
 		BFEBC90223F66B0FF770B92B1C670BCF /* QuickConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E91880FA0638C89FBF025F24D5DF5C /* QuickConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -464,7 +465,7 @@
 		BB6FADB02590EFEB00B6BB9D /* PriorityConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriorityConvertible.swift; sourceTree = "<group>"; };
 		BB6FADB12590EFEB00B6BB9D /* UIKit+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+Extensions.swift"; sourceTree = "<group>"; };
 		BB6FADB22590EFEB00B6BB9D /* Enumeration+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Enumeration+Extensions.swift"; sourceTree = "<group>"; };
-		BB6FADB32590EFEB00B6BB9D /* MainOperationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainOperationHandler.swift; sourceTree = "<group>"; };
+		BB6FADB32590EFEB00B6BB9D /* ObservableOperationHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperationHandler.swift; sourceTree = "<group>"; };
 		BB6FADB42590EFEB00B6BB9D /* CommonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonExtensions.swift; sourceTree = "<group>"; };
 		BB6FADC62590F03600B6BB9D /* LinkerProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinkerProtocols.swift; sourceTree = "<group>"; };
 		BB6FADC72590F03600B6BB9D /* ObservableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableView.swift; sourceTree = "<group>"; };
@@ -494,6 +495,7 @@
 		BB6FADFC2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InsertableStackPlan+Extensions.swift"; sourceTree = "<group>"; };
 		BB9BF1BF4172F97ED5D0DF84A14D7008 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		BBF98C1A25936736002AF568 /* DiffReloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffReloader.swift; sourceTree = "<group>"; };
+		BBF98C2A2593B5CC002AF568 /* AnchorExtraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorExtraction.swift; sourceTree = "<group>"; };
 		BC215521BB1EC60C90136D00C8AAA7E7 /* UIImage+Compare.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+Compare.h"; path = "FBSnapshotTestCase/Categories/UIImage+Compare.h"; sourceTree = "<group>"; };
 		BD1D39F93B10E03FD0DAB8D612910C8A /* Quick.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Quick.release.xcconfig; sourceTree = "<group>"; };
 		C02C838B479DA9D87C0BC24B928E4F77 /* FBSnapshotTestCase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBSnapshotTestCase.h; path = FBSnapshotTestCase/FBSnapshotTestCase.h; sourceTree = "<group>"; };
@@ -926,7 +928,7 @@
 				BB6FADAE2590EFEA00B6BB9D /* CellModelBuilder.swift */,
 				BB6FADB42590EFEB00B6BB9D /* CommonExtensions.swift */,
 				BB6FADB22590EFEB00B6BB9D /* Enumeration+Extensions.swift */,
-				BB6FADB32590EFEB00B6BB9D /* MainOperationHandler.swift */,
+				BB6FADB32590EFEB00B6BB9D /* ObservableOperationHandler.swift */,
 				BB6FADB02590EFEB00B6BB9D /* PriorityConvertible.swift */,
 				BB6FADB12590EFEB00B6BB9D /* UIKit+Extensions.swift */,
 				BB6FADAF2590EFEA00B6BB9D /* UIView+Extension.swift */,
@@ -962,6 +964,7 @@
 		BB6FADED2590F16800B6BB9D /* Plan */ = {
 			isa = PBXGroup;
 			children = (
+				BBF98C2A2593B5CC002AF568 /* AnchorExtraction.swift */,
 				BB6FADF72590F17400B6BB9D /* Fragment.swift */,
 				BB6FADF92590F17400B6BB9D /* FragmentCell.swift */,
 				BB6FADEE2590F17400B6BB9D /* InsertablePlan.swift */,
@@ -969,13 +972,13 @@
 				BB6FADF22590F17400B6BB9D /* InsertableScrollPlan+Extensions.swift */,
 				BB6FADFC2590F17500B6BB9D /* InsertableStackPlan+Extensions.swift */,
 				BB6FADF52590F17400B6BB9D /* LayoutPlaner.swift */,
+				BB6FADF32590F17400B6BB9D /* Plan.swift */,
 				BB6FADF42590F17400B6BB9D /* Planable+Center.swift */,
 				BB6FADF82590F17400B6BB9D /* Planable+Dimensions.swift */,
 				BB6FADFA2590F17500B6BB9D /* Planable+Edges.swift */,
 				BB6FADFB2590F17500B6BB9D /* Planable+Extensions.swift */,
 				BB6FADEF2590F17400B6BB9D /* PlanCompatible.swift */,
 				BB6FADF12590F17400B6BB9D /* PlanContext.swift */,
-				BB6FADF32590F17400B6BB9D /* Plan.swift */,
 				BB6FADF02590F17400B6BB9D /* UIView+Artisan.swift */,
 			);
 			path = Plan;
@@ -1696,7 +1699,7 @@
 				BB6FADB72590EFEB00B6BB9D /* UIView+Extension.swift in Sources */,
 				BB6FADCF2590F03600B6BB9D /* Linker.swift in Sources */,
 				BB6FAD982590EFD300B6BB9D /* CellMediator.swift in Sources */,
-				BB6FADBB2590EFEB00B6BB9D /* MainOperationHandler.swift in Sources */,
+				BB6FADBB2590EFEB00B6BB9D /* ObservableOperationHandler.swift in Sources */,
 				BB6FADFD2590F17500B6BB9D /* InsertablePlan.swift in Sources */,
 				BB6FADD02590F03600B6BB9D /* Planer.swift in Sources */,
 				BB6FADE02590F04F00B6BB9D /* Dimensions.swift in Sources */,
@@ -1705,6 +1708,7 @@
 				BB6FAD952590EFD300B6BB9D /* UICollectionView+ReloadStrategy.swift in Sources */,
 				BB6FAE002590F17500B6BB9D /* PlanContext.swift in Sources */,
 				BB6FADCC2590F03600B6BB9D /* LinkerProtocols.swift in Sources */,
+				BBF98C2B2593B5CC002AF568 /* AnchorExtraction.swift in Sources */,
 				BB6FADBA2590EFEB00B6BB9D /* Enumeration+Extensions.swift in Sources */,
 				BB6FAE0A2590F17500B6BB9D /* Planable+Extensions.swift in Sources */,
 				BB6FAD9B2590EFD300B6BB9D /* UITableView+ReloadStrategy.swift in Sources */,

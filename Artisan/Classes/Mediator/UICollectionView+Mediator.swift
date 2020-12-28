@@ -46,7 +46,7 @@ extension UICollectionView {
         
         public override func bonding(with view: UICollectionView) {
             super.bonding(with: view)
-            $sections.observe(observer: self).didSet { mediator, changes  in
+            $sections.observe(observer: self, on: .main, syncIfPossible: false).didSet { mediator, changes  in
                 guard let collection = mediator.view else { return }
                 let newSection = changes.new
                 collection.registerNewCell(from: newSection)

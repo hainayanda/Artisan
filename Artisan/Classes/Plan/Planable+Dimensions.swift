@@ -30,13 +30,13 @@ public extension Planer {
     }
     
     @discardableResult
-    func height(_ relation: InterRelation<NSLayoutDimension>, multiplyBy multipier: CGFloat = 0, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+    func height(_ relation: InterRelation<NSLayoutDimension>, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
         let priority = priority ?? context.mutatingPriority
         return height(relation, multiplyBy: multipier, constant: constant, priority: priority)
     }
     
     @discardableResult
-    func height(_ relation: InterRelation<RelatedAnchor<NSLayoutDimension>>, multiplyBy multipier: CGFloat = 0, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+    func height(_ relation: InterRelation<RelatedAnchor<NSLayoutDimension>>, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
         guard let offsetedAnchor = relation.related.getOffsettedAnchor(from: context) else {
             context.delegate.planer(
                 view,
@@ -51,7 +51,7 @@ public extension Planer {
     }
     
     @discardableResult
-    func height(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self {
+    func height(_ relation: InterRelation<AnonymousRelation>, _ dimension: LayoutDimension, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self {
         guard let relatedView = getView(from: relation.related) else {
             context.delegate.planer(
                 view,
@@ -65,40 +65,51 @@ public extension Planer {
         switch relation {
         case .moreThanTo(let related):
             if related.isView {
-                height(.moreThanTo(relatedView.heightAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                height(.moreThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else if #available(iOS 11.0, *) {
-                height(.moreThanTo(relatedView.safeAreaLayoutGuide.heightAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                height(.moreThanTo(relatedView.safeAreaLayoutGuide.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else {
                 let layoutMargins = relatedView.layoutMargins
-                let totalMargin = layoutMargins.top + layoutMargins.bottom
-                height(.moreThanTo(relatedView.heightAnchor), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
+                let totalMargin = dimension == .height ? layoutMargins.top + layoutMargins.bottom : layoutMargins.left + layoutMargins.right
+                height(.moreThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
             }
         case .lessThanTo(let related):
             if related.isView {
-                height(.lessThanTo(relatedView.heightAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                height(.lessThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else if #available(iOS 11.0, *) {
-                height(.lessThanTo(relatedView.safeAreaLayoutGuide.heightAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                height(.lessThanTo(relatedView.safeAreaLayoutGuide.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else {
                 let layoutMargins = relatedView.layoutMargins
-                let totalMargin = layoutMargins.top + layoutMargins.bottom
-                height(.lessThanTo(relatedView.heightAnchor), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
+                let totalMargin = dimension == .height ? layoutMargins.top + layoutMargins.bottom : layoutMargins.left + layoutMargins.right
+                height(.lessThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
             }
         case .equalTo(let related):
             if related.isView {
-                height(.equalTo(relatedView.heightAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                height(.equalTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else if #available(iOS 11.0, *) {
-                height(.equalTo(relatedView.safeAreaLayoutGuide.heightAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                height(.equalTo(relatedView.safeAreaLayoutGuide.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else {
                 let layoutMargins = relatedView.layoutMargins
-                let totalMargin = layoutMargins.top + layoutMargins.bottom
-                height(.equalTo(relatedView.heightAnchor), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
+                let totalMargin = dimension == .height ? layoutMargins.top + layoutMargins.bottom : layoutMargins.left + layoutMargins.right
+                height(.equalTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
             }
         }
         return self
     }
     
     @discardableResult
-    func height(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat = 0, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+    func height(_ relation: InterRelation<AnonymousRelation>, _ dimension: LayoutDimension, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+        let priority = priority ?? context.mutatingPriority
+        return width(relation, dimension, multiplyBy: multipier, constant: constant, priority: priority)
+    }
+    
+    @discardableResult
+    func height(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self {
+        return height(relation, .height, multiplyBy: multipier, constant: constant, priority: priority)
+    }
+    
+    @discardableResult
+    func height(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
         let priority = priority ?? context.mutatingPriority
         return height(relation, multiplyBy: multipier, constant: constant, priority: priority)
     }
@@ -156,7 +167,7 @@ public extension Planer {
     }
     
     @discardableResult
-    func width(_ relation: InterRelation<RelatedAnchor<NSLayoutDimension>>, multiplyBy multipier: CGFloat = 0, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+    func width(_ relation: InterRelation<RelatedAnchor<NSLayoutDimension>>, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
         guard let offsetedAnchor = relation.related.getOffsettedAnchor(from: context) else {
             context.delegate.planer(
                 view,
@@ -171,7 +182,7 @@ public extension Planer {
     }
     
     @discardableResult
-    func width(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self {
+    func width(_ relation: InterRelation<AnonymousRelation>, _ dimension: LayoutDimension, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self {
         guard let relatedView = getView(from: relation.related) else {
             context.delegate.planer(
                 view,
@@ -185,40 +196,51 @@ public extension Planer {
         switch relation {
         case .moreThanTo(let related):
             if related.isView {
-                width(.moreThanTo(relatedView.widthAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                width(.moreThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else if #available(iOS 11.0, *) {
-                width(.moreThanTo(relatedView.safeAreaLayoutGuide.widthAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                width(.moreThanTo(relatedView.safeAreaLayoutGuide.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else {
                 let layoutMargins = relatedView.layoutMargins
-                let totalMargin = layoutMargins.left + layoutMargins.right
-                width(.moreThanTo(relatedView.widthAnchor), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
+                let totalMargin = dimension == .height ? layoutMargins.top + layoutMargins.bottom : layoutMargins.left + layoutMargins.right
+                width(.moreThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
             }
         case .lessThanTo(let related):
             if related.isView {
-                width(.lessThanTo(relatedView.widthAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                width(.lessThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else if #available(iOS 11.0, *) {
-                width(.lessThanTo(relatedView.safeAreaLayoutGuide.widthAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                width(.lessThanTo(relatedView.safeAreaLayoutGuide.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else {
                 let layoutMargins = relatedView.layoutMargins
-                let totalMargin = layoutMargins.left + layoutMargins.right
-                width(.lessThanTo(relatedView.widthAnchor), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
+                let totalMargin = dimension == .height ? layoutMargins.top + layoutMargins.bottom : layoutMargins.left + layoutMargins.right
+                width(.lessThanTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
             }
         case .equalTo(let related):
             if related.isView {
-                width(.equalTo(relatedView.widthAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                width(.equalTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else if #available(iOS 11.0, *) {
-                width(.equalTo(relatedView.safeAreaLayoutGuide.widthAnchor), multiplyBy: multipier, constant: constant, priority: priority)
+                width(.equalTo(relatedView.safeAreaLayoutGuide.anchor(of: dimension)), multiplyBy: multipier, constant: constant, priority: priority)
             } else {
                 let layoutMargins = relatedView.layoutMargins
-                let totalMargin = layoutMargins.left + layoutMargins.right
-                width(.equalTo(relatedView.widthAnchor), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
+                let totalMargin = dimension == .height ? layoutMargins.top + layoutMargins.bottom : layoutMargins.left + layoutMargins.right
+                width(.equalTo(relatedView.anchor(of: dimension)), multiplyBy: multipier, constant: constant - totalMargin, priority: priority)
             }
         }
         return self
     }
     
     @discardableResult
-    func width(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat = 0, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+    func width(_ relation: InterRelation<AnonymousRelation>, _ dimension: LayoutDimension, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
+        let priority = priority ?? context.mutatingPriority
+        return width(relation, dimension, multiplyBy: multipier, constant: constant, priority: priority)
+    }
+    
+    @discardableResult
+    func width(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self {
+        return width(relation, .width, multiplyBy: multipier, constant: constant, priority: priority)
+    }
+    
+    @discardableResult
+    func width(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil) -> Self {
         let priority = priority ?? context.mutatingPriority
         return width(relation, multiplyBy: multipier, constant: constant, priority: priority)
     }

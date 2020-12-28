@@ -53,6 +53,7 @@ class EventSearchScreen: UIViewController, ObservableView {
 extension EventSearchScreen {
     
     private func setupNavigation() {
+        navigationController?.navigationBar.tintColor = .main
         navigationItem.titleView = searchBar
     }
     

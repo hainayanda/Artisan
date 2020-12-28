@@ -100,7 +100,7 @@ public enum CellPlanningBehavior {
     case planIfPossible
 }
 
-public enum LayoutPosition {
+public enum LayoutEdge {
     case top
     case bottom
     case left

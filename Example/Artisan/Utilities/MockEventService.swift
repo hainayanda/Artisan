@@ -87,13 +87,29 @@ class MockEventService: EventService {
             date: .init(timeIntervalSince1970: 1579219200)
         )
     ]
+    
     func searchEvent(withSearchPhrase searchPhrase: String, then: @escaping ([Event]) -> Void) {
         // mimicking network
-        DispatchQueue.global().asyncAfter(deadline: .now() + .random(in: 0.1..<1)) {
+        DispatchQueue.global().asyncAfter(deadline: .now() + .random(in: 0.1..<3)) {
             then(MockEventService.mockData.filter {
                 searchPhrase.isEmpty ||
                     $0.name.lowercased().contains(searchPhrase.lowercased()) ||
                     $0.details.lowercased().contains(searchPhrase.lowercased())
+            })
+        }
+    }
+    
+    func similarEvent(with event: Event, then: @escaping ([Event]) -> Void) {
+        // mimicking network
+        DispatchQueue.global().asyncAfter(deadline: .now() + .random(in: 0.1..<3)) {
+            then(MockEventService.mockData.filter {
+                let eventNameComponents = event.name.components(separatedBy: .whitespaces)
+                for component in eventNameComponents
+                where $0.name.lowercased().contains(component.lowercased())
+                    || $0.details.lowercased().contains(component.lowercased()) {
+                    return true
+                }
+                return false
             })
         }
     }

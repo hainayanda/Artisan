@@ -150,6 +150,7 @@ class DummyCollectionCellMediator: CollectionCellMediator {
 
 class DummyTableCell: TableCellMediator {
     var id: String = .randomString()
+    var index: String?
     var identifier: AnyHashable { id }
     static var cellViewClass: AnyClass = UITableViewCell.self
     static var cellReuseIdentifier: String = .randomString()

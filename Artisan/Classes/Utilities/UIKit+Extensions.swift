@@ -134,6 +134,24 @@ extension UIButton {
         addTarget(tappedClosure, action: #selector(TappedClosure.invoke(with:)), for: .touchUpInside)
         objc_setAssociatedObject(self, &AssociatedKey.tappedClosure, tappedClosure, .OBJC_ASSOCIATION_RETAIN)
     }
+    
+    public func didTapped<Observer: AnyObject>(observing observer: Observer, then: @escaping (Observer, UIButton) -> Void) {
+        let eventClosure = TappedClosure { [weak observer] button in
+            guard let observer = observer else { return }
+            then(observer, button)
+        }
+        addTarget(eventClosure, action: #selector(TappedClosure.invoke(with:)), for: .touchUpInside)
+        objc_setAssociatedObject(self, &AssociatedKey.tappedClosure, eventClosure, .OBJC_ASSOCIATION_RETAIN)
+    }
+    
+    public func didTapped<Observer: AnyObject>(observing observer: Observer, thenCall method: @escaping (Observer) -> ((UIButton) -> Void)) {
+        let eventClosure = TappedClosure { [weak observer] button in
+            guard let observer = observer else { return }
+            method(observer)(button)
+        }
+        addTarget(eventClosure, action: #selector(TappedClosure.invoke(with:)), for: .touchUpInside)
+        objc_setAssociatedObject(self, &AssociatedKey.tappedClosure, eventClosure, .OBJC_ASSOCIATION_RETAIN)
+    }
 }
 
 extension UITextField {
@@ -260,6 +278,30 @@ extension UIControl {
             return
         }
         let eventClosure = EventClosure(then)
+        addTarget(eventClosure, action: #selector(EventClosure.invoke(with:)), for: event)
+        objc_setAssociatedObject(self, eventAssociatedKey, eventClosure, .OBJC_ASSOCIATION_RETAIN)
+    }
+    
+    public func didTriggered<Observer: AnyObject>(by event: UIControl.Event, observing observer: Observer, then: @escaping (Observer, UIControl) -> Void) {
+        guard let eventAssociatedKey = AssociatedKey.eventKeys[event] else {
+            return
+        }
+        let eventClosure = EventClosure { [weak observer] control in
+            guard let observer = observer else { return }
+            then(observer, control)
+        }
+        addTarget(eventClosure, action: #selector(EventClosure.invoke(with:)), for: event)
+        objc_setAssociatedObject(self, eventAssociatedKey, eventClosure, .OBJC_ASSOCIATION_RETAIN)
+    }
+    
+    public func didTriggered<Observer: AnyObject>(by event: UIControl.Event, observing observer: Observer, thenCall method: @escaping (Observer) -> ((UIControl) -> Void)) {
+        guard let eventAssociatedKey = AssociatedKey.eventKeys[event] else {
+            return
+        }
+        let eventClosure = EventClosure { [weak observer] control in
+            guard let observer = observer else { return }
+            method(observer)(control)
+        }
         addTarget(eventClosure, action: #selector(EventClosure.invoke(with:)), for: event)
         objc_setAssociatedObject(self, eventAssociatedKey, eventClosure, .OBJC_ASSOCIATION_RETAIN)
     }

@@ -77,7 +77,7 @@ extension UITableView {
         
         public override func bonding(with view: UITableView) {
             super.bonding(with: view)
-            $sections.observe(observer: self).didSet { mediator, changes  in
+            $sections.observe(observer: self, on: .main, syncIfPossible: false).didSet { mediator, changes  in
                 guard let table = mediator.view else { return }
                 let newSection = changes.new
                 table.registerNewCell(from: newSection)
@@ -97,13 +97,15 @@ extension UITableView {
     }
     
     open class Section: Identifiable, Equatable {
+        public var index: String?
         public var cells: [TableCellMediator]
         public var cellCount: Int { cells.count }
         public var identifier: AnyHashable
         
-        public init(identifier: AnyHashable = String.randomString(), cells: [TableCellMediator] = []) {
+        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [TableCellMediator] = []) {
             self.identifier = identifier
             self.cells = cells
+            self.index = index
         }
         
         public func add(cell: TableCellMediator) {
@@ -143,9 +145,9 @@ extension UITableView {
         
         public var title: String
         
-        public init(title: String, identifier: AnyHashable = String.randomString(), cells: [TableCellMediator] = []) {
+        public init(title: String, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [TableCellMediator] = []) {
             self.title = title
-            super.init(identifier: identifier, cells: cells)
+            super.init(identifier: identifier, index: index, cells: cells)
         }
         
         public override func copy() -> Section {
@@ -211,7 +213,7 @@ extension UITableView.Mediator: UITableViewDataSource {
         var titles: [String] = []
         var titleCount: Int = 0
         self.applicableSections.forEach {
-            if let index = ($0 as? UITableView.TitledSection)?.title.first {
+            if let index = $0.index {
                 titleCount += 1
                 titles.append(String(index))
             } else {

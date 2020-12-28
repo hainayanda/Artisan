@@ -7,7 +7,6 @@
 
 import Foundation
 
-@dynamicMemberLookup
 public class LayoutPlaner<View: UIView>: Planer {
     public typealias PropertyPlaner<Property> = ((Property) -> LayoutPlaner<View>)
     
@@ -32,13 +31,5 @@ public class LayoutPlaner<View: UIView>: Planer {
             plannedConstraints.append(contentsOf: layoutable.plannedConstraints)
         }
         return self
-    }
-    
-    public subscript<Property>(dynamicMember keyPath: WritableKeyPath<View, Property>) -> PropertyPlaner<Property> {
-        // retained on purpose
-        return { value in
-            self.view[keyPath: keyPath] = value
-            return self
-        }
     }
 }

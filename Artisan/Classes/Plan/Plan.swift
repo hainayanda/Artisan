@@ -43,6 +43,10 @@ public protocol Planer: Plan {
     @discardableResult
     func centerY(_ relation: LayoutRelation<CGFloat>, to anchor: AnonymousRelation, priority: UILayoutPriority) -> Self
     @discardableResult
+    func height(_ relation: InterRelation<AnonymousRelation>, _ dimension: LayoutDimension, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self
+    @discardableResult
+    func width(_ relation: InterRelation<AnonymousRelation>, _ dimension: LayoutDimension, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self
+    @discardableResult
     func height(_ relation: InterRelation<NSLayoutDimension>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self
     @discardableResult
     func width(_ relation: InterRelation<NSLayoutDimension>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self

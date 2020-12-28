@@ -32,6 +32,7 @@ public protocol CollectionCellMediator: CellMediator {
 }
 
 public protocol TableCellMediator: CellMediator {
+    var index: String? { get }
     func apply(cell: UITableViewCell)
 }
 
@@ -42,6 +43,7 @@ open class TableViewCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, Tab
         return "artisan_managed_cell_\(camelCaseName)"
     }
     
+    public var index: String?
     public var animateInteraction: Bool = false
     public var cellIdentifier: AnyHashable  = String.randomString()
     public var identifier: AnyHashable { cellIdentifier }

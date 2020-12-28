@@ -36,9 +36,24 @@ class EventSearchScreenMediator: ViewMediator<EventSearchScreen> {
 
 extension EventSearchScreenMediator: EventSearchScreenObserver {
     func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath) {
-        if let mediator = cell.getMediator() as? KeywordCellMediator {
-            searchPhrase = mediator.keyword
+        guard let mediator = cell.getMediator() else { return }
+        if let keywordMediator = mediator as? KeywordCellMediator {
+            searchPhrase = keywordMediator.keyword
+        } else if let eventMediator = mediator as? EventCellMediator {
+            let detailsScreen = EventDetailsScreen()
+            let detailScreenMediator = EventDetailScreenMediator()
+            detailScreenMediator.event = eventMediator.event
+            detailScreenMediator.apply(to: detailsScreen)
+            view?.navigationController?.pushViewController(detailsScreen, animated: true)
         }
+    }
+}
+
+extension EventSearchScreenMediator: KeywordCellMediatorDelegate {
+    func keywordCellDidTapClear(_ mediator: KeywordCellMediator) {
+        var currentHistory = history
+        currentHistory.removeAll { $0 == mediator.keyword }
+        history = currentHistory
     }
 }
 
@@ -83,15 +98,10 @@ extension EventSearchScreenMediator {
             .next(mediatorType: KeywordCellMediator.self, fromItems: histories) { mediator, history in
                 mediator.cellIdentifier = history
                 mediator.keyword = history
+                mediator.delegate = self
             }.nextSection(UITableView.TitledSection(title: "Search Results", identifier: "results"))
             .next(mediatorType: EventCellMediator.self, fromItems: events) { mediator, event in
-                mediator.cellIdentifier = event.name
-                mediator.bannerImage = event.image
-                mediator.eventName = event.name
-                mediator.eventDetails = event.details
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "dd MMM yyyy"
-                mediator.eventDate = dateFormatter.string(from: event.date)
+                mediator.event = event
             }.build()
     }
 }
