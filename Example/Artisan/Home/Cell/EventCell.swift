@@ -12,7 +12,7 @@ import UIKit
 
 class EventCell: TableFragmentCell {
     lazy var bannerBackground: UIView = build {
-        $0.layer.cornerRadius = .x8
+        $0.layer.cornerRadius = .x4
         $0.backgroundColor = .white
         $0.layer.shadowColor = UIColor.inactive.cgColor
         $0.layer.shadowOpacity = 1
@@ -20,36 +20,36 @@ class EventCell: TableFragmentCell {
         $0.layer.shadowRadius = 4
     }
     lazy var banner: UIImageView = build {
-        $0.layer.cornerRadius = .x8
+        $0.layer.cornerRadius = .x4
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
     }
     lazy var title = build(UILabel.self)
-        .font(.boldSystemFont(ofSize: .x16))
+        .font(titleFont)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.secondary)
         .build()
     lazy var subTitle = build(UILabel.self)
-        .font(.systemFont(ofSize: .x12))
+        .font(subTitleFont)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.main)
         .build()
     lazy var date = build(UILabel.self)
-        .font(.systemFont(ofSize: .x12))
+        .font(dateFont)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.text)
         .build()
     
     // MARK: Dimensions
-    var bannerWidthToHeightMultiplier: CGFloat = .x2
-    var margin: UIEdgeInsets = .init(insets: .x16)
-    var spacing: CGFloat = .x6
-    var titleFont: UIFont = .boldSystemFont(ofSize: .x16)
-    var subTitleFont: UIFont = .systemFont(ofSize: .x12)
-    var dateFont: UIFont = .systemFont(ofSize: .x12)
+    var bannerWidthToHeightMultiplier: CGFloat = 2
+    var margin: UIEdgeInsets = .init(insets: .x8)
+    var spacing: CGFloat = .x3
+    var titleFont: UIFont = .title
+    var subTitleFont: UIFont = .content
+    var dateFont: UIFont = .content
     
     override func fragmentWillPlanContent() {
         contentView.backgroundColor = .background

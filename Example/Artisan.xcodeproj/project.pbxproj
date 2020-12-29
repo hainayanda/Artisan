@@ -27,6 +27,8 @@
 		BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */; };
 		BB1170B025919BD100C2D13D /* PlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170AF25919BD100C2D13D /* PlanerSpec.swift */; };
 		BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */; };
+		BBE69CD9259B0DD500F2BEE3 /* EventCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */; };
+		BBE69CDD259B686A00F2BEE3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE69CDC259B686A00F2BEE3 /* Router.swift */; };
 		BBED3C0425911F81004DF5F1 /* PlanContextSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */; };
 		BBED3C0825911FAE004DF5F1 /* InsertableViewPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */; };
 		BBED3C0E259120FD004DF5F1 /* InsertableScrollPlanSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBED3C0D259120FD004DF5F1 /* InsertableScrollPlanSpec.swift */; };
@@ -83,6 +85,8 @@
 		BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStateSpec.swift; sourceTree = "<group>"; };
 		BB1170AF25919BD100C2D13D /* PlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanerSpec.swift; sourceTree = "<group>"; };
 		BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarEventCell.swift; sourceTree = "<group>"; };
+		BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCell.swift; sourceTree = "<group>"; };
+		BBE69CDC259B686A00F2BEE3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Artisan_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		BBED3C0325911F81004DF5F1 /* PlanContextSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanContextSpec.swift; sourceTree = "<group>"; };
 		BBED3C0725911FAE004DF5F1 /* InsertableViewPlanSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertableViewPlanSpec.swift; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 			children = (
 				BB0D09862591C45300C209E1 /* Constants.swift */,
 				BB0D09A02591E99700C209E1 /* MockEventService.swift */,
+				BBE69CDC259B686A00F2BEE3 /* Router.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 			children = (
 				BBF98C492593C68B002AF568 /* EventHeaderCell.swift */,
 				BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */,
+				BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -514,11 +520,13 @@
 				BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */,
 				BB0D09872591C45300C209E1 /* Constants.swift in Sources */,
 				BBF98C452593C5EA002AF568 /* EventDetailScreenVM.swift in Sources */,
+				BBE69CD9259B0DD500F2BEE3 /* EventCollectionCell.swift in Sources */,
 				BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */,
 				BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */,
 				BB0D098D2591C4DA00C209E1 /* EventSearchScreenVM.swift in Sources */,
+				BBE69CDD259B686A00F2BEE3 /* Router.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

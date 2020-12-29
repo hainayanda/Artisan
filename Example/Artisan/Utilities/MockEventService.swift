@@ -10,6 +10,7 @@ import Foundation
 
 protocol EventService {
     func searchEvent(withSearchPhrase searchPhrase: String, then: @escaping ([Event]) -> Void)
+    func similarEvent(with event: Event, then: @escaping ([Event]) -> Void)
 }
 
 class MockEventService: EventService {

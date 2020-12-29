@@ -47,7 +47,7 @@ class EventSearchScreen: UIViewController, ObservableView {
         super.viewWillAppear(animated)
         setupNavigation()
     }
-
+    
 }
 
 extension EventSearchScreen {

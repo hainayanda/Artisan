@@ -12,7 +12,7 @@ import UIKit
 
 class KeywordCell: TableFragmentCell {
     lazy var keywordLabel = build(UILabel.self)
-        .font(.systemFont(ofSize: .x12, weight: .medium))
+        .font(.mediumContent)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.text)
@@ -28,12 +28,12 @@ class KeywordCell: TableFragmentCell {
     
     override func planContent(_ plan: InsertablePlan) {
         plan.fit(keywordLabel)
-            .at(.fullLeft, .equalTo(CGFloat.x16), to: .safeArea)
-            .right(.moreThanTo(.x8), to: clearButton.leftAnchor)
+            .at(.fullLeft, .equalTo(CGFloat.x8), to: .safeArea)
+            .right(.moreThanTo(.x4), to: clearButton.leftAnchor)
         plan.fit(clearButton)
-            .right(.equalTo(CGFloat.x16), to: .safeArea)
+            .right(.equalTo(CGFloat.x8), to: .safeArea)
             .centerY(.equal, to: .parent)
-            .size(.equalTo(.init(width: .x16, height: .x16)))
+            .size(.equalTo(.init(width: .x8, height: .x8)))
     }
 }
 

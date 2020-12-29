@@ -18,6 +18,7 @@ class EventDetailsScreen: UIViewController, ObservableView {
         $0.backgroundColor = .clear
         $0.separatorStyle = .none
         $0.allowsSelection = false
+        $0.delegate = self
         if #available(iOS 11.0, *) {
             $0.contentInset = view.safeAreaInsets
         } else {
@@ -41,5 +42,14 @@ extension EventDetailsScreen {
             plan.fit(tableView)
                 .edges(.equal, to: .safeArea)
         }
+    }
+}
+
+extension EventDetailsScreen: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = .background
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.textColor = .secondary
     }
 }

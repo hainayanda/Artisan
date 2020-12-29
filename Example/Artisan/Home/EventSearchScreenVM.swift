@@ -13,6 +13,7 @@ import Artisan
 class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
     
     var service: EventService = MockEventService()
+    var router: Router = ExampleRouter()
     
     @ViewState var searchPhrase: String?
     @ObservableState var results: [Event] = []
@@ -36,15 +37,11 @@ class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
 
 extension EventSearchScreenVM: EventSearchScreenObserver {
     func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath) {
-        guard let mediator = cell.getMediator() else { return }
+        guard let view = self.view, let mediator = cell.getMediator() else { return }
         if let keywordMediator = mediator as? KeywordCellVM {
             searchPhrase = keywordMediator.keyword
         } else if let eventMediator = mediator as? EventCellVM {
-            let detailsScreen = EventDetailsScreen()
-            let detailScreenMediator = EventDetailScreenVM()
-            detailScreenMediator.event = eventMediator.event
-            detailScreenMediator.apply(to: detailsScreen)
-            view?.navigationController?.pushViewController(detailsScreen, animated: true)
+            router.routeToDetails(of: eventMediator.event, from: view)
         }
     }
 }
