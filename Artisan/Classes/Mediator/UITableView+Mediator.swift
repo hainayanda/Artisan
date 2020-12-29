@@ -68,10 +68,10 @@ extension UITableView {
         public let deleteSectionAnimation: UITableView.RowAnimation
         
         public init(insertRowAnimation: UITableView.RowAnimation = .left,
-             reloadRowAnimation: UITableView.RowAnimation = .fade,
-             deleteRowAnimation: UITableView.RowAnimation = .left,
-             insertSectionAnimation: UITableView.RowAnimation = .top,
-             deleteSectionAnimation: UITableView.RowAnimation = .top) {
+                    reloadRowAnimation: UITableView.RowAnimation = .fade,
+                    deleteRowAnimation: UITableView.RowAnimation = .left,
+                    insertSectionAnimation: UITableView.RowAnimation = .top,
+                    deleteSectionAnimation: UITableView.RowAnimation = .top) {
             self.insertRowAnimation = insertRowAnimation
             self.reloadRowAnimation = reloadRowAnimation
             self.deleteRowAnimation = deleteRowAnimation
@@ -80,8 +80,8 @@ extension UITableView {
         }
         
         public init(insertAnimation: UITableView.RowAnimation,
-             reloadAnimation: UITableView.RowAnimation,
-             deleteAnimation: UITableView.RowAnimation) {
+                    reloadAnimation: UITableView.RowAnimation,
+                    deleteAnimation: UITableView.RowAnimation) {
             self.insertRowAnimation = insertAnimation
             self.reloadRowAnimation = reloadAnimation
             self.deleteRowAnimation = deleteAnimation

@@ -270,7 +270,7 @@ extension UICollectionView.Mediator: UICollectionViewDataSource {
             let sectionInset: UIEdgeInsets = (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?
                 .sectionInset ?? .zero
             let collectionContentWidth = contentWidth - contentInset.left -
-                contentInset.right - sectionInset.left - sectionInset.left
+                contentInset.right - sectionInset.left - sectionInset.right
             let collectionContentHeight = contentHeight - contentInset.top -
                 contentInset.bottom - sectionInset.top - sectionInset.bottom
             cellLayoutable.collectionContentSize = CGSize(width: collectionContentWidth, height: collectionContentHeight)

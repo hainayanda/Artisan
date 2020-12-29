@@ -80,8 +80,8 @@ public struct CollectionMediatorSectionReloader: DiffReloaderWorker {
     
     public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
         for (index, pair) in identifiables {
-            guard let oldSection = pair.old as? UITableView.Section,
-                  let newSection = pair.new as? UITableView.Section else {
+            guard let oldSection = pair.old as? UICollectionView.Section,
+                  let newSection = pair.new as? UICollectionView.Section else {
                 continue
             }
             let cellReloader = CollectionMediatorCellReloader(section: index, collection: collection, forceRefresh: forceRefresh)
