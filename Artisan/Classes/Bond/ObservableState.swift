@@ -9,7 +9,7 @@ import Foundation
 
 @propertyWrapper
 open class ObservableState<Wrapped>: StateObservable {
-    private var observers: [WrappedPropertyObserver<Wrapped>] = []
+    var observers: [WrappedPropertyObserver<Wrapped>] = []
     var _wrappedValue: Wrapped
     public var wrappedValue: Wrapped {
         get {
@@ -17,6 +17,37 @@ open class ObservableState<Wrapped>: StateObservable {
         }
         set {
             observedSet(value: newValue, from: .state)
+        }
+    }
+    
+    public var projectedValue: ObservableState<Wrapped> { self }
+    
+    public init(wrappedValue: Wrapped) {
+        self._wrappedValue = wrappedValue
+    }
+    
+    public func observe<Observer: AnyObject>(
+        observer: Observer,
+        on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main,
+        syncIfPossible: Bool = true) -> PropertyObservers<Observer, Wrapped> {
+        remove(observer: observer)
+        let newObserver = PropertyObservers<Observer, Wrapped>(obsever: observer, dispatcher: dispatcher, syncIfPossible: syncIfPossible)
+        self.observers.append(newObserver)
+        return newObserver
+    }
+    
+    public func remove<Observer: AnyObject>(observer: Observer) {
+        self.observers.removeAll { ($0 as? PropertyObservers<Observer, Wrapped>)?.observer === observer }
+    }
+    
+    public func removeAllObservers() {
+        observers.removeAll()
+    }
+    
+    public func invokeWithCurrentValue() {
+        observers.forEach { observer in
+            let changes: Changes = .init(new: _wrappedValue, old: _wrappedValue, trigger: .invoked)
+            observer.triggerDidSet(with: changes)
         }
     }
     
@@ -48,37 +79,6 @@ open class ObservableState<Wrapped>: StateObservable {
     func setAndObserve(changes: Changes<Wrapped>, from: Changes<Wrapped>.Trigger) {
         _wrappedValue = changes.new
         observers.forEach { observer in
-            observer.triggerDidSet(with: changes)
-        }
-    }
-    
-    public var projectedValue: ObservableState<Wrapped> { self }
-    
-    public init(wrappedValue: Wrapped) {
-        self._wrappedValue = wrappedValue
-    }
-    
-    public func observe<Observer: AnyObject>(
-        observer: Observer,
-        on dispatcher: DispatchQueue = OperationQueue.current?.underlyingQueue ?? .main,
-        syncIfPossible: Bool = true) -> PropertyObservers<Observer, Wrapped> {
-        remove(observer: observer)
-        let newObserver = PropertyObservers<Observer, Wrapped>(obsever: observer, dispatcher: dispatcher, syncIfPossible: syncIfPossible)
-        self.observers.append(newObserver)
-        return newObserver
-    }
-    
-    public func remove<Observer: AnyObject>(observer: Observer) {
-        self.observers.removeAll { ($0 as? PropertyObservers<Observer, Wrapped>)?.observer === observer }
-    }
-    
-    public func removeAllObservers() {
-        observers.removeAll()
-    }
-    
-    public func invokeWithCurrentValue() {
-        observers.forEach { observer in
-            let changes: Changes = .init(new: _wrappedValue, old: _wrappedValue, trigger: .invoked)
             observer.triggerDidSet(with: changes)
         }
     }

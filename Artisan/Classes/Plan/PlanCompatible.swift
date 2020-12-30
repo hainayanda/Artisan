@@ -22,7 +22,7 @@ public extension PlanCompatible where Self: UIView {
         }
     }
     
-    private func planing(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlaner<Self>) -> Void) {
+    internal func planing(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlaner<Self>) -> Void) {
         if options.shouldRemoveOldPlannedConstraints {
             removeAllPlannedConstraints()
         }

@@ -10,7 +10,7 @@ import UIKit
 
 extension StatedMediator {
     
-    private func extractBondings(from mirror: Mirror, into states: inout [ViewBondingState]) {
+    func extractBondings(from mirror: Mirror, into states: inout [ViewBondingState]) {
         for child in mirror.children {
             if let bondings = child.value as? ViewBondingState {
                 states.append(bondings)
@@ -34,7 +34,7 @@ extension StatedMediator {
         return states
     }
     
-    private func extractObservables(from mirror: Mirror, into states: inout [StateObservable]) {
+    func extractObservables(from mirror: Mirror, into states: inout [StateObservable]) {
         for child in mirror.children {
             if let stateObservable = child.value as? StateObservable {
                 states.append(stateObservable)
@@ -69,7 +69,7 @@ extension StatedMediator {
 }
 
 open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
-    weak public private(set) var view: View?
+    weak public internal(set) var view: View?
     required public override init() {
         super.init()
         didInit()

@@ -16,8 +16,8 @@ public protocol FragmentCell: Fragment {
 }
 
 open class TableFragmentCell: UITableViewCell, FragmentCell {
-    private var _layoutPhase: CellLayoutingPhase = .firstLoad
-    public private(set) var layoutPhase: CellLayoutingPhase {
+    var _layoutPhase: CellLayoutingPhase = .firstLoad
+    public internal(set) var layoutPhase: CellLayoutingPhase {
         get {
             layouted ? _layoutPhase : .firstLoad
         }
@@ -27,7 +27,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
     }
     var mediator: StatedMediator?
     
-    private(set) var layouted: Bool = false
+    var layouted: Bool = false
     
     open var planningBehavior: CellPlanningBehavior { .planOnce }
     
@@ -111,8 +111,8 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
 }
 
 open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
-    private var _layoutPhase: CellLayoutingPhase = .firstLoad
-    public private(set) var layoutPhase: CellLayoutingPhase {
+    var _layoutPhase: CellLayoutingPhase = .firstLoad
+    public internal(set) var layoutPhase: CellLayoutingPhase {
         get {
             layouted ? _layoutPhase : .firstLoad
         }
@@ -122,7 +122,7 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
     }
     var mediator: StatedMediator?
     
-    private(set) var layouted: Bool = false
+    var layouted: Bool = false
     
     open var planningBehavior: CellPlanningBehavior { .planOnce }
     

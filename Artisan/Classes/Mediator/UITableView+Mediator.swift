@@ -95,7 +95,7 @@ extension UITableView {
         @ObservableState public var sections: [Section] = []
         public var animationSet: UITableView.AnimationSet = .init()
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
-        private var didReloadAction: ((Bool) -> Void)?
+        var didReloadAction: ((Bool) -> Void)?
         
         public override func bonding(with view: UITableView) {
             super.bonding(with: view)
@@ -194,7 +194,7 @@ extension UITableView {
 
 extension UITableView {
     
-    private func registerNewCell(from sections: [UITableView.Section]) {
+    func registerNewCell(from sections: [UITableView.Section]) {
         var registeredCells: [String] = []
         for section in sections {
             for cell in section.cells where !registeredCells.contains(cell.reuseIdentifier) {

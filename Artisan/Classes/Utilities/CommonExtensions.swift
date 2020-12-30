@@ -17,13 +17,13 @@ extension String {
             .processCamelCase(pattern: normalPattern)?.lowercased() ?? self.lowercased()
     }
     
-    private func processCamelCase(pattern: String) -> String? {
+    func processCamelCase(pattern: String) -> String? {
         let regex = try? NSRegularExpression(pattern: pattern, options: [])
         let range = NSRange(location: 0, length: count)
         return regex?.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "$1_$2")
     }
     
-    public static func randomString(length: Int = 9) -> String {
+    static func randomString(length: Int = 9) -> String {
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let len = UInt32(letters.length)
         var randomString = ""
