@@ -48,12 +48,12 @@ Want to layout tableView to fill UIViewController?
 override func viewDidLoad() {
     super.viewDidLoad()
     tableView.translatesAutoresizingMaskIntoConstraints = false
-    tableView.addSubview(myView)
+    view.addSubview(tableView)
     NSLayoutConstraint.activate([
-        myView.topAnchor.constraint(equalTo: view.topAnchor),
-        myView.leftAnchor.constraint(equalTo: view.leftAnchor),
-        myView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        myView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        tableView.topAnchor.constraint(equalTo: view.topAnchor),
+        tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
     ])
 }
 ```
@@ -64,7 +64,7 @@ override func viewDidLoad() {
 override func viewDidLoad() {
     super.viewDidLoad()
     planContent { plan in
-        plan.fit(myView)
+        plan.fit(tableView)
             .edges(.equal, to: .parent)
     }
 }
