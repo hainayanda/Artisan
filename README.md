@@ -1,6 +1,9 @@
 # Artisan
 
-[![CI Status](https://img.shields.io/travis/24823437/Artisan.svg?style=flat)](https://travis-ci.org/24823437/Artisan)
+Artisan is a DSL, MVVM and Data Binding framework for Swift.
+
+![build](https://github.com/nayanda1/Artisan/workflows/build/badge.svg)
+![test](https://github.com/nayanda1/Artisan/workflows/test/badge.svg)
 [![Version](https://img.shields.io/cocoapods/v/Artisan.svg?style=flat)](https://cocoapods.org/pods/Artisan)
 [![License](https://img.shields.io/cocoapods/l/Artisan.svg?style=flat)](https://cocoapods.org/pods/Artisan)
 [![Platform](https://img.shields.io/cocoapods/p/Artisan.svg?style=flat)](https://cocoapods.org/pods/Artisan)
@@ -124,7 +127,10 @@ class MyViewController: UIViewController {
 }
 ```
 
-Its better to read [wiki](https://github.com/nayanda1/Artisan/wiki) for more or just look and experimenting with Example project.
+Want to update cell in tableView?
+Want to create iOS Application with MVVM framework?
+
+Artisan have all of those feature in one pack. read [wiki](https://github.com/nayanda1/Artisan/wiki) for more or just look and experimenting with Example project.
 
 ## Contribute
 

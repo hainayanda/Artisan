@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'Artisan'
   s.version          = '1.0.0'
-  s.summary          = 'A short description of Artisan.'
+  s.summary          = 'Artisan is a DSL, MVVM and Data Binding framework for Swift'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+  Artisan is a DSL, MVVM and Data Binding framework for Swift. But its more than that.
                        DESC
 
   s.homepage         = 'https://github.com/nayanda1/Artisan'
