@@ -30,3 +30,102 @@ Nayanda Haberty, nayanda1@outlook.com
 ## License
 
 Artisan is available under the MIT license. See the LICENSE file for more info.
+
+## Usage
+
+Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed information
+
+### Basic Usage
+
+Want to layout tableView to fill UIViewController? 
+
+**old way**
+
+```swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    tableView.addSubview(myView)
+    NSLayoutConstraint.activate([
+        myView.topAnchor.constraint(equalTo: view.topAnchor),
+        myView.leftAnchor.constraint(equalTo: view.leftAnchor),
+        myView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        myView.rightAnchor.constraint(equalTo: view.rightAnchor)
+    ])
+}
+```
+
+**Artisan way**
+
+```swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+    planContent { plan in
+        plan.fit(myView)
+            .edges(.equal, to: .parent)
+    }
+}
+```
+
+Want to bind and observe text in UISearchBar?
+
+**old way**
+
+```swift
+class MyViewController: UIViewController {
+    lazy var searchBar: UISearchBar = .init()
+    
+    var searchPhrase: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        searchBar.delegate = self
+        ...
+        ...
+    }
+    
+    func set(searchPhrase: String?) {
+        searchBar.text = searchPhrase
+        self.searchPhrase = searchPhrase
+    }
+    ...
+    ...
+    ...
+}
+
+extension MyViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchPhrase = searchText
+        // do something with text
+    }
+}
+```
+
+**Artisan way**
+
+```swift
+class MyViewController: UIViewController {
+    lazy var searchBar: UISearchBar = .init()
+
+    @ViewState var searchPhrase: String?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        $searchPhrase.bonding(with: searchBar, \.text)
+            .viewDidSet(then: { searchBar, changes in
+                // do something with changes
+            })
+        ...
+        ...
+    }
+    ...
+    ...
+    ...
+}
+```
+
+Its better to read [wiki](https://github.com/nayanda1/Artisan/wiki) for more or just look and experimenting with Example project.
+
+## Contribute
+
+You know how, just clone and do pull request

@@ -101,11 +101,11 @@ class ObservableStateSpec: QuickSpec {
                     }.delayMultipleSetTrigger(by: 0.5)
                     observables.wrappedValue = newValue1
                     expect(willSetCount).to(equal(1))
-                    expect(didSetCount).to(beLessThan(1))
+                    expect(didSetCount).to(equal(1))
                     expect(didSetCount).toEventually(equal(1))
                     observables.wrappedValue = newValue2
                     expect(willSetCount).to(equal(2))
-                    expect(didSetCount).to(beLessThan(2))
+                    expect(didSetCount).to(equal(1))
                     expect(didSetCount).toEventually(equal(2), pollInterval: .milliseconds(50))
                 }
             }

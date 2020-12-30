@@ -20,6 +20,8 @@ class SimilarEventCell: TableFragmentCell {
         collectionView.allowsSelection = true
         collectionLayout.scrollDirection = .horizontal
         collectionLayout.itemSize = .init(width: .x64, height: .x48)
+        collectionLayout.minimumInteritemSpacing = .zero
+        collectionLayout.minimumLineSpacing = .zero
     }
     
     override func planContent(_ plan: InsertablePlan) {

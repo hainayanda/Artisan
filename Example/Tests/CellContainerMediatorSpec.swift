@@ -108,7 +108,7 @@ class CellContainerMediatorSpec: QuickSpec {
                     if titled {
                         let title: String = .randomString()
                         expectedResult.append(String(title.first!))
-                        sections.append(UITableView.TitledSection(title: title, identifier: index))
+                        sections.append(UITableView.TitledSection(title: title, identifier: index, index: String(title.first!)))
                     } else {
                         expectedResult.append("")
                         sections.append(UITableView.Section(identifier: index))
