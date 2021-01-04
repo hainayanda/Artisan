@@ -61,6 +61,12 @@ public enum AnonymousRelation {
     }
 }
 
+@objc public enum AfterPlanningRoutine: Int {
+    case autoApply
+    case autoMapped
+    case none
+}
+
 public enum PlanningOption {
     case append
     case renew

@@ -7,7 +7,9 @@
 
 import Foundation
 
-public protocol PlanCompatible { }
+public protocol PlanCompatible {
+    var afterPlanningRoutine: AfterPlanningRoutine { get }
+}
 
 public extension PlanCompatible where Self: UIView {
     
@@ -40,6 +42,17 @@ public extension PlanCompatible where Self: UIView {
             break
         }
         NSLayoutConstraint.activate(constraints)
+        guard let mediator = getMediator() as? ViewMediator<Self> else {
+            return
+        }
+        switch afterPlanningRoutine {
+        case .autoApply:
+            mediator.apply(to: self)
+        case .autoMapped:
+            mediator.map(from: self)
+        default:
+            return
+        }
     }
     
 }
@@ -47,13 +60,43 @@ public extension PlanCompatible where Self: UIView {
 public extension PlanCompatible where Self: UIViewController {
     func plan(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlaner<UIView>) -> Void) {
         view.plan(withDelegate: delegate, options, layouter)
+        guard let mediator = getMediator() as? ViewMediator<Self> else {
+            return
+        }
+        switch afterPlanningRoutine {
+        case .autoApply:
+            mediator.apply(to: self)
+        case .autoMapped:
+            mediator.map(from: self)
+        default:
+            return
+        }
     }
     
     func planContent(withDelegate delegate: PlanDelegate? = nil, _ options: PlanningOption = .append, _ layouter: (LayoutPlan<UIView>) -> Void) {
         view.planContent(withDelegate: delegate, options, layouter)
+        guard let mediator = getMediator() as? ViewMediator<Self> else {
+            return
+        }
+        switch afterPlanningRoutine {
+        case .autoApply:
+            mediator.apply(to: self)
+        case .autoMapped:
+            mediator.map(from: self)
+        default:
+            return
+        }
     }
 }
 
-extension UIView: PlanCompatible { }
+extension UIView: PlanCompatible {
+    
+    @objc open var afterPlanningRoutine: AfterPlanningRoutine { .none }
+    
+}
 
-extension UIViewController: PlanCompatible { }
+extension UIViewController: PlanCompatible {
+    
+    @objc open var afterPlanningRoutine: AfterPlanningRoutine { .autoApply }
+    
+}

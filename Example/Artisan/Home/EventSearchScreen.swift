@@ -9,7 +9,7 @@
 import UIKit
 import Artisan
 
-protocol EventSearchScreenObserver: ObservingMediator {
+protocol EventSearchScreenObserver {
     func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath)
 }
 
@@ -40,7 +40,6 @@ class EventSearchScreen: UIViewController, ObservableView {
         super.viewDidLoad()
         view.backgroundColor = .background
         planViewContent()
-        observer?.viewDidLayouted(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {

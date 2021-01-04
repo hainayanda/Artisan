@@ -10,9 +10,7 @@ import Foundation
 import UIKit
 import Artisan
 
-class EventDetailsScreen: UIViewController, ObservableView {
-    typealias Observer = ObservingMediator
-    
+class EventDetailsScreen: UIViewController {
     lazy var tableView: UITableView = build {
         $0.animationSet =  .init(insertAnimation: .right, reloadAnimation: .fade, deleteAnimation: .right)
         $0.backgroundColor = .clear
@@ -31,7 +29,6 @@ class EventDetailsScreen: UIViewController, ObservableView {
         view.backgroundColor = .background
         navigationController?.navigationBar.tintColor = .main
         planViewContent()
-        observer?.viewDidLayouted(self)
     }
 }
 

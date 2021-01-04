@@ -30,6 +30,17 @@ public class LayoutPlaner<View: UIView>: Planer {
         for layoutable in container.fittedPlans {
             plannedConstraints.append(contentsOf: layoutable.plannedConstraints)
         }
+        guard let mediator = view.getMediator() as? ViewMediator<View> else {
+            return self
+        }
+        switch view.afterPlanningRoutine {
+        case .autoApply:
+            mediator.apply(to: view)
+        case .autoMapped:
+            mediator.map(from: view)
+        default:
+            return self
+        }
         return self
     }
 }
