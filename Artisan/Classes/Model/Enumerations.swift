@@ -86,7 +86,7 @@ public enum PlanningOption {
     }
 }
 
-public enum CellLayoutingPhase {
+public enum CellLayoutingPhase: CaseIterable {
     case firstLoad
     case setNeedsLayout
     case reused
@@ -98,6 +98,19 @@ public enum CellPlanningBehavior {
     case planOn(CellLayoutingPhase)
     case planOnEach([CellLayoutingPhase])
     case planIfPossible
+    
+    var whitelistedPhases: [CellLayoutingPhase] {
+        switch self {
+        case .planOnce:
+            return [.firstLoad]
+        case .planOn(let phase):
+            return [phase]
+        case .planOnEach(let phases):
+            return phases
+        default:
+            return CellLayoutingPhase.allCases
+        }
+    }
 }
 
 public enum LayoutEdge {
