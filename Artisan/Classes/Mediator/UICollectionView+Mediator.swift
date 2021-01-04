@@ -55,7 +55,7 @@ extension UICollectionView {
         var applicableSections: [Section] = []
         @ObservableState public var sections: [Section] = []
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
-        private var didReloadAction: ((Bool) -> Void)?
+        var didReloadAction: ((Bool) -> Void)?
         
         public override func bonding(with view: UICollectionView) {
             super.bonding(with: view)
@@ -193,7 +193,7 @@ extension UICollectionView {
 
 extension UICollectionView {
     
-    private func registerNewCell(from sections: [UICollectionView.Section]) {
+    func registerNewCell(from sections: [UICollectionView.Section]) {
         self.register(
             UICollectionViewCell.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,

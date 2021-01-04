@@ -144,7 +144,7 @@
 		BAE453A15CC93D9864577A1FEDE4E0E7 /* Contain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D92466A0F94C7542C1D7368BB099E07 /* Contain.swift */; settings = {COMPILER_FLAGS = "-DPRODUCT_NAME=Nimble/Nimble"; }; };
 		BB6FAD952590EFD300B6BB9D /* UICollectionView+ReloadStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD8E2590EFD300B6BB9D /* UICollectionView+ReloadStrategy.swift */; };
 		BB6FAD962590EFD300B6BB9D /* UITableView+Mediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD8F2590EFD300B6BB9D /* UITableView+Mediator.swift */; };
-		BB6FAD972590EFD300B6BB9D /* GenericCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD902590EFD300B6BB9D /* GenericCellViewModel.swift */; };
+		BB6FAD972590EFD300B6BB9D /* GenericCellMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD902590EFD300B6BB9D /* GenericCellMediator.swift */; };
 		BB6FAD982590EFD300B6BB9D /* CellMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD912590EFD300B6BB9D /* CellMediator.swift */; };
 		BB6FAD992590EFD300B6BB9D /* ViewMediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD922590EFD300B6BB9D /* ViewMediator.swift */; };
 		BB6FAD9A2590EFD300B6BB9D /* UICollectionView+Mediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6FAD932590EFD300B6BB9D /* UICollectionView+Mediator.swift */; };
@@ -454,7 +454,7 @@
 		BAE263041362D074978BB3B577DF0A05 /* Nimble.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nimble.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB6FAD8E2590EFD300B6BB9D /* UICollectionView+ReloadStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+ReloadStrategy.swift"; sourceTree = "<group>"; };
 		BB6FAD8F2590EFD300B6BB9D /* UITableView+Mediator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+Mediator.swift"; sourceTree = "<group>"; };
-		BB6FAD902590EFD300B6BB9D /* GenericCellViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCellViewModel.swift; sourceTree = "<group>"; };
+		BB6FAD902590EFD300B6BB9D /* GenericCellMediator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericCellMediator.swift; sourceTree = "<group>"; };
 		BB6FAD912590EFD300B6BB9D /* CellMediator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellMediator.swift; sourceTree = "<group>"; };
 		BB6FAD922590EFD300B6BB9D /* ViewMediator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewMediator.swift; sourceTree = "<group>"; };
 		BB6FAD932590EFD300B6BB9D /* UICollectionView+Mediator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Mediator.swift"; sourceTree = "<group>"; };
@@ -910,7 +910,7 @@
 			isa = PBXGroup;
 			children = (
 				BB6FAD912590EFD300B6BB9D /* CellMediator.swift */,
-				BB6FAD902590EFD300B6BB9D /* GenericCellViewModel.swift */,
+				BB6FAD902590EFD300B6BB9D /* GenericCellMediator.swift */,
 				BB6FAD932590EFD300B6BB9D /* UICollectionView+Mediator.swift */,
 				BB6FAD8E2590EFD300B6BB9D /* UICollectionView+ReloadStrategy.swift */,
 				BB6FAD8F2590EFD300B6BB9D /* UITableView+Mediator.swift */,
@@ -1732,7 +1732,7 @@
 				BBF98C1B25936736002AF568 /* DiffReloader.swift in Sources */,
 				BB6FADFF2590F17500B6BB9D /* UIView+Artisan.swift in Sources */,
 				BB6FAE072590F17500B6BB9D /* Planable+Dimensions.swift in Sources */,
-				BB6FAD972590EFD300B6BB9D /* GenericCellViewModel.swift in Sources */,
+				BB6FAD972590EFD300B6BB9D /* GenericCellMediator.swift in Sources */,
 				BB6FADB62590EFEB00B6BB9D /* CellModelBuilder.swift in Sources */,
 				BB6FAD992590EFD300B6BB9D /* ViewMediator.swift in Sources */,
 				851D07C1E22DFD4EACF59E47175B1E63 /* Artisan-dummy.m in Sources */,

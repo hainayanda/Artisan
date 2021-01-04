@@ -12,10 +12,3 @@ extension ObservableView where Self: NSObject {
         getMediator() as? Observer
     }
 }
-
-extension ViewMediator: ObservingMediator {
-    public func viewDidLayouted(_ view: Any) {
-        guard let view = view as? View else { return }
-        apply(to: view)
-    }
-}

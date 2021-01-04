@@ -36,10 +36,6 @@ public protocol ViewBondingState {
     func removeBonding()
 }
 
-public protocol ObservingMediator {
-    func viewDidLayouted(_ view: Any)
-}
-
 public protocol ObservableView {
     associatedtype Observer
     var observer: Observer? { get }
