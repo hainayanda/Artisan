@@ -1,5 +1,5 @@
 //
-//  GenericCellViewModel.swift
+//  GenericCellMediator.swift
 //  Artisan
 //
 //  Created by Nayanda Haberty (ID) on 24/09/20.

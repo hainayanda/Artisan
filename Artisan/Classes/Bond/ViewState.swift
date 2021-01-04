@@ -12,7 +12,6 @@ import UIKit
 open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
     public var bondingState: BondingState = .none
     var linker: AnyLinker?
-    var observers: [WrappedPropertyObserver<Wrapped>] = []
     var tokens: [NSObjectProtocol] = []
     var ignoreViewListener: Bool = false
     public override var wrappedValue: Wrapped {

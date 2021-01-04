@@ -9,11 +9,11 @@ import Foundation
 
 public protocol Identifiable {
     var identifier: AnyHashable { get }
-    func haveSameIdentifiable(with other: Identifiable) -> Bool
+    func haveSameIdentifier(with other: Identifiable) -> Bool
 }
 
 public extension Identifiable {
-    func haveSameIdentifiable(with other: Identifiable) -> Bool {
+    func haveSameIdentifier(with other: Identifiable) -> Bool {
         identifier == other.identifier
     }
 }
@@ -44,7 +44,7 @@ public struct DiffReloader {
         var removedIndex: [Int: Identifiable] = [:]
         var mutableIndex: Int = 0
         for (identityIndex, oldIdentifiable) in oldIdentities.enumerated() {
-            guard newIdentities.contains(where: { $0.haveSameIdentifiable(with: oldIdentifiable)} ) else {
+            guard newIdentities.contains(where: { $0.haveSameIdentifier(with: oldIdentifiable)} ) else {
                 mutableIdentities.remove(at: mutableIndex)
                 removedIndex[identityIndex] = oldIdentifiable
                 continue
@@ -62,9 +62,9 @@ public struct DiffReloader {
         var reloadedIndex: [Int: (old: Identifiable, new: Identifiable)] = [:]
         for (identityIndex, identity) in newIdentities.enumerated() {
             if let oldIdentifiable = mutableIdentities[safe: identityIndex],
-               oldIdentifiable.haveSameIdentifiable(with: identity) {
+               oldIdentifiable.haveSameIdentifier(with: identity) {
                 reloadedIndex[identityIndex] = (old: oldIdentifiable, new: identity)
-            } else if let oldIndex = mutableIdentities.firstIndex(where: { $0.haveSameIdentifiable(with: identity)}) {
+            } else if let oldIndex = mutableIdentities.firstIndex(where: { $0.haveSameIdentifier(with: identity)}) {
                 let removedIdentifiable = mutableIdentities.remove(at: oldIndex)
                 mutableIdentities.insert(removedIdentifiable, at: identityIndex)
                 worker.diffReloader(self, shouldMove: removedIdentifiable, from: oldIndex, to: identityIndex)

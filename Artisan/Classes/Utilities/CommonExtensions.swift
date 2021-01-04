@@ -23,7 +23,7 @@ extension String {
         return regex?.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "$1_$2")
     }
     
-    static func randomString(length: Int = 9) -> String {
+    public static func randomString(length: Int = 9) -> String {
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let len = UInt32(letters.length)
         var randomString = ""

@@ -11,7 +11,6 @@ import UIKit
 public protocol FragmentCell: Fragment {
     var layoutPhase: CellLayoutingPhase { get }
     var planningBehavior: CellPlanningBehavior { get }
-    
     func planningOption(on phase: CellLayoutingPhase) -> PlanningOption
 }
 
@@ -42,19 +41,8 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         defer {
             layouted = true
         }
-        switch planningBehavior {
-        case .planOn(let phase):
-            if layoutPhase != .firstLoad && phase != layoutPhase {
-                return false
-            }
-        case .planOnEach(let phases):
-            if layoutPhase != .firstLoad && !phases.contains(where: { $0 == layoutPhase }) {
-                return false
-            }
-        case .planOnce:
-            guard layoutPhase == .firstLoad else { return false }
-        default:
-            break
+        guard planningBehavior.whitelistedPhases.contains(layoutPhase) else {
+            return false
         }
         fragmentWillPlanContent()
         contentView.planContent(planningOption(on: layoutPhase)) { content in
@@ -139,19 +127,8 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
         defer {
             layouted = true
         }
-        switch planningBehavior {
-        case .planOn(let phase):
-            if layoutPhase != .firstLoad && phase != layoutPhase {
-                return false
-            }
-        case .planOnEach(let phases):
-            if layoutPhase != .firstLoad && !phases.contains(where: { $0 == layoutPhase }) {
-                return false
-            }
-        case .planOnce:
-            guard layoutPhase == .firstLoad else { return false }
-        default:
-            break
+        guard planningBehavior.whitelistedPhases.contains(layoutPhase) else {
+            return false
         }
         fragmentWillPlanContent()
         contentView.planContent(planningOption(on: layoutPhase)) { content in

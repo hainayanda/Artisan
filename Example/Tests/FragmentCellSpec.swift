@@ -298,13 +298,13 @@ class FragmentCellSpec: QuickSpec {
 }
 
 class TestableTableCell: TableFragmentCell {
-    private var _layoutPhase: CellLayoutingPhase = .firstLoad
+    private var mockLayoutPhase: CellLayoutingPhase = .firstLoad
     public override var layoutPhase: CellLayoutingPhase {
         get {
-            _layoutPhase
+            mockLayoutPhase
         }
         set {
-            _layoutPhase = newValue
+            mockLayoutPhase = newValue
         }
     }
     private var _planBehaviour: CellPlanningBehavior = .planOnce
@@ -341,13 +341,13 @@ class TestableTableCell: TableFragmentCell {
 }
 
 class TestableCollectionCell: CollectionFragmentCell {
-    private var _layoutPhase: CellLayoutingPhase = .firstLoad
+    private var mockLayoutPhase: CellLayoutingPhase = .firstLoad
     public override var layoutPhase: CellLayoutingPhase {
         get {
-            _layoutPhase
+            mockLayoutPhase
         }
         set {
-            _layoutPhase = newValue
+            mockLayoutPhase = newValue
         }
     }
     private var _planningBehavior: CellPlanningBehavior = .planOnce
