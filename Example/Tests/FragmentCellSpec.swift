@@ -42,7 +42,7 @@ class FragmentCellSpec: QuickSpec {
                     tableCell.layoutSubviews()
                     expect(planed).to(beFalse())
                 }
-                it("should plan content only on reused and first load") {
+                it("should plan content only on reused") {
                     var planed: Bool = false
                     tableCell.layoutPhase = .firstLoad
                     tableCell.planningBehavior = .planOn(.reused)
@@ -52,7 +52,7 @@ class FragmentCellSpec: QuickSpec {
                         planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(planed).to(beTrue())
+                    expect(planed).to(beFalse())
                     planed = false
                     tableCell.layoutPhase = .reused
                     tableCell.layoutSubviews()
@@ -65,7 +65,7 @@ class FragmentCellSpec: QuickSpec {
                     tableCell.layoutSubviews()
                     expect(planed).to(beFalse())
                 }
-                it("should plan content only on setNeedsLayout and first load") {
+                it("should plan content only on setNeedsLayout") {
                     var planed: Bool = false
                     tableCell.layoutPhase = .firstLoad
                     tableCell.planningBehavior = .planOn(.setNeedsLayout)
@@ -75,7 +75,7 @@ class FragmentCellSpec: QuickSpec {
                         planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(planed).to(beTrue())
+                    expect(planed).to(beFalse())
                     planed = false
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
@@ -98,7 +98,7 @@ class FragmentCellSpec: QuickSpec {
                         planed = true
                     }
                     tableCell.layoutSubviews()
-                    expect(planed).to(beTrue())
+                    expect(planed).to(beFalse())
                     planed = false
                     tableCell.layoutPhase = .setNeedsLayout
                     tableCell.layoutSubviews()
@@ -193,7 +193,7 @@ class FragmentCellSpec: QuickSpec {
                     collectionCell.layoutSubviews()
                     expect(planed).to(beFalse())
                 }
-                it("should plan content only on reused and first load") {
+                it("should plan content only on reused") {
                     var planed: Bool = false
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.planningBehavior = .planOn(.reused)
@@ -203,7 +203,7 @@ class FragmentCellSpec: QuickSpec {
                         planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(planed).to(beTrue())
+                    expect(planed).to(beFalse())
                     planed = false
                     collectionCell.layoutPhase = .reused
                     collectionCell.layoutSubviews()
@@ -216,7 +216,7 @@ class FragmentCellSpec: QuickSpec {
                     collectionCell.layoutSubviews()
                     expect(planed).to(beFalse())
                 }
-                it("should plan content only on setNeedsLayout and first load") {
+                it("should plan content only on setNeedsLayout") {
                     var planed: Bool = false
                     collectionCell.layoutPhase = .firstLoad
                     collectionCell.planningBehavior = .planOn(.setNeedsLayout)
@@ -226,7 +226,7 @@ class FragmentCellSpec: QuickSpec {
                         planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(planed).to(beTrue())
+                    expect(planed).to(beFalse())
                     planed = false
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
@@ -249,7 +249,7 @@ class FragmentCellSpec: QuickSpec {
                         planed = true
                     }
                     collectionCell.layoutSubviews()
-                    expect(planed).to(beTrue())
+                    expect(planed).to(beFalse())
                     planed = false
                     collectionCell.layoutPhase = .setNeedsLayout
                     collectionCell.layoutSubviews()
