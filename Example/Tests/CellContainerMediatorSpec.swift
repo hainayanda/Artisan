@@ -52,7 +52,7 @@ class CellContainerMediatorSpec: QuickSpec {
                     if titled {
                         let title: String = .randomString()
                         expectedResult.append(title)
-                        sections.append(UICollectionView.IndexedSection(indexTitle: title, identifier: index))
+                        sections.append(UICollectionView.Section(identifier: index, index: title))
                     } else {
                         expectedResult.append("")
                         sections.append(UICollectionView.Section(identifier: index))

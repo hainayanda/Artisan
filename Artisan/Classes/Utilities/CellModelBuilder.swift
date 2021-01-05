@@ -80,7 +80,8 @@ public class TableCellBuilder {
         return self
     }
     
-    public func nextEmptyCell(with preferedHeight: CGFloat, _ builder: ((UITableViewCell) -> Void)?) {
+    @discardableResult
+    public func nextEmptyCell(with preferedHeight: CGFloat, _ builder: ((UITableViewCell) -> Void)?) -> TableCellBuilder {
         next(cellType: EmptyTableCell.self, count: 1) { cell, _ in
             cell.preferedHeight = preferedHeight
             builder?(cell)
@@ -177,7 +178,8 @@ public class CollectionCellBuilder {
         return self
     }
     
-    public func nextEmptyCell(with preferedSize: CGSize, _ builder: ((UICollectionViewCell) -> Void)?) {
+    @discardableResult
+    public func nextEmptyCell(with preferedSize: CGSize, _ builder: ((UICollectionViewCell) -> Void)?) -> CollectionCellBuilder {
         next(cellType: EmptyCollectionCell.self, count: 1) { cell, _ in
             cell.preferedSize = preferedSize
             builder?(cell)

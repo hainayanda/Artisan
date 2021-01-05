@@ -79,13 +79,15 @@ extension UICollectionView {
     }
     
     open class Section: Identifiable, Equatable {
+        public var index: String?
         public var cells: [CollectionCellMediator]
         public var cellCount: Int { cells.count }
         public var identifier: AnyHashable
         
-        public init(identifier: AnyHashable = String.randomString(), cells: [CollectionCellMediator] = []) {
+        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [CollectionCellMediator] = []) {
             self.identifier = identifier
             self.cells = cells
+            self.index = index
         }
         
         public func add(cell: CollectionCellMediator) {
@@ -121,43 +123,15 @@ extension UICollectionView {
         }
     }
     
-    public class IndexedSection: Section {
-        
-        public var indexTitle: String
-        
-        public init(indexTitle: String, identifier: AnyHashable = String.randomString(), cells: [CollectionCellMediator] = []) {
-            self.indexTitle = indexTitle
-            super.init(identifier: identifier, cells: cells)
-        }
-        
-        public override func copy() -> Section {
-            return IndexedSection(indexTitle: indexTitle, identifier: identifier, cells: cells)
-        }
-        
-        public static func == (lhs: UICollectionView.IndexedSection, rhs: UICollectionView.IndexedSection) -> Bool {
-            guard let left = lhs.copy() as? UICollectionView.IndexedSection,
-                  let right = rhs.copy() as? UICollectionView.IndexedSection else {
-                return false
-            }
-            guard left.identifier == right.identifier,
-                  left.indexTitle == right.indexTitle,
-                  left.cells.count == right.cells.count else { return false }
-            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
-                return false
-            }
-            return true
-        }
-    }
-    
     public class SupplementedSection: Section {
         
         public var header: CollectionCellMediator?
         public var footer: CollectionCellMediator?
         
-        public init(header: CollectionCellMediator? = nil, footer: CollectionCellMediator? = nil, identifier: AnyHashable = String.randomString(), cells: [CollectionCellMediator] = []) {
+        public init(header: CollectionCellMediator? = nil, footer: CollectionCellMediator? = nil, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [CollectionCellMediator] = []) {
             self.header = header
             self.footer = footer
-            super.init(identifier: identifier, cells: cells)
+            super.init(identifier: identifier, index: index, cells: cells)
         }
         
         public override func copy() -> Section {
@@ -283,7 +257,7 @@ extension UICollectionView.Mediator: UICollectionViewDataSource {
         var titles: [String] = []
         var titleCount: Int = 0
         self.applicableSections.forEach {
-            if let title = ($0 as? UICollectionView.IndexedSection)?.indexTitle {
+            if let title = $0.index {
                 titleCount += 1
                 titles.append(title)
             } else {
