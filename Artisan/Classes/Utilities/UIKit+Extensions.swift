@@ -39,7 +39,6 @@ public protocol TextCompatible {
 
 extension String: TextCompatible {
     public var text: String { self }
-    
     public var attributedText: NSAttributedString { .init(string: self) }
 }
 extension NSAttributedString: TextCompatible {
@@ -51,7 +50,12 @@ extension UIImageView {
     
     public var imageCompat: ImageCompatible? {
         set {
-            if let animation = newValue as? Animation {
+            guard let value = newValue else {
+                self.image = nil
+                self.animationImages = nil
+                return
+            }
+            if let animation = value.animation {
                 assignIfDifferent(into: &animationImages, value: animation.images)
                 assignIfDifferent(into: &animationDuration, value: animation.duration)
                 assignIfDifferent(into: &animationRepeatCount, value: animation.repeatCount)
@@ -61,9 +65,13 @@ extension UIImageView {
                     self.stopAnimating()
                 }
                 self.image = nil
-            } else if let image = newValue as? UIImage {
+            } else if let image = value.image {
                 self.image = image
                 self.animationImages = nil
+            } else if value.isAsync {
+                value.getAsync { [weak self] image in
+                    self?.imageCompat = image
+                }
             } else {
                 self.image = nil
                 self.animationImages = nil
@@ -102,14 +110,41 @@ extension UIImageView {
             lhs.images == rhs.images && lhs.duration == rhs.duration
                 && lhs.animating == rhs.animating && lhs.repeatCount == rhs.repeatCount
         }
-        
     }
 }
 
-public protocol ImageCompatible { }
+public protocol ImageCompatible {
+    var animation: UIImageView.Animation? { get }
+    var image: UIImage? { get }
+    var isAsync: Bool { get }
+    func getAsync(_ completion: (ImageCompatible?) -> Void)
+}
 
-extension UIImage: ImageCompatible { }
-extension UIImageView.Animation: ImageCompatible { }
+extension UIImage: ImageCompatible {
+    public var animation: UIImageView.Animation? { nil }
+    public var image: UIImage? { self }
+    public var isAsync: Bool { false }
+    public func getAsync(_ completion: (ImageCompatible?) -> Void) {
+        completion(self)
+    }
+}
+extension UIImageView.Animation: ImageCompatible {
+    public var animation: UIImageView.Animation? { self }
+    public var image: UIImage? { nil }
+    public var isAsync: Bool { false }
+    public func getAsync(_ completion: (ImageCompatible?) -> Void) {
+        completion(self)
+    }
+}
+
+extension Data: ImageCompatible {
+    public var animation: UIImageView.Animation? { nil }
+    public var image: UIImage? { UIImage(data: self) }
+    public var isAsync: Bool { false }
+    public func getAsync(_ completion: (ImageCompatible?) -> Void) {
+        completion(self.image)
+    }
+}
 
 extension UIButton {
     
