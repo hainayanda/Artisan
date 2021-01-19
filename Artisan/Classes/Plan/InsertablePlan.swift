@@ -30,7 +30,9 @@ public extension InsertableViewPlan where View: UIStackView {
         let plan = LayoutPlaner(view: view, context: context)
         fittedPlans.append(plan)
         if let molecule = view as? Fragment {
+            molecule.fragmentWillPlanContent()
             plan.planContent(molecule.planContent(_:))
+            molecule.fragmentDidPlanContent()
         }
         return plan
     }
@@ -61,7 +63,9 @@ public extension InsertableViewPlan {
         let plan = LayoutPlaner(view: view, context: context)
         fittedPlans.append(plan)
         if let molecule = view as? Fragment {
+            molecule.fragmentWillPlanContent()
             plan.planContent(molecule.planContent(_:))
+            molecule.fragmentDidPlanContent()
         }
         return plan
     }
