@@ -48,6 +48,10 @@ open class TableViewCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, Tab
     public var cellIdentifier: AnyHashable  = String.randomString()
     public var identifier: AnyHashable { cellIdentifier }
     
+    open override func didInit() {
+        super.didInit()
+    }
+    
     public func apply(cell: UITableViewCell) {
         guard let cell = cell as? Cell else {
             fatalError("UITableViewCell type is different with Mediator")
@@ -100,6 +104,10 @@ open class CollectionViewCellMediator<Cell: UICollectionViewCell>: ViewMediator<
     
     public var cellIdentifier: AnyHashable  = String.randomString()
     public var identifier: AnyHashable { cellIdentifier }
+    
+    open override func didInit() {
+        super.didInit()
+    }
     
     public func apply(cell: UICollectionReusableView) {
         guard let cell = cell as? Cell else {
