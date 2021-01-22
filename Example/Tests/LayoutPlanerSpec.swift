@@ -38,14 +38,34 @@ class LayoutPlanerSpec: QuickSpec {
                         expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.equal))
                         expect(layoutPlanerForTest.plannedConstraints.last?.constant).to(equal(multiplier * space))
                     case .lessThan:
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        }
                     case .lessThanTo(let space):
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        }
                         expect(layoutPlanerForTest.plannedConstraints.last?.constant).to(equal(multiplier * space))
                     case .moreThan:
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        }
                     case .moreThanTo(let space):
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        }
                         expect(layoutPlanerForTest.plannedConstraints.last?.constant).to(equal(multiplier * space))
                     }
                 }
@@ -143,14 +163,34 @@ class LayoutPlanerSpec: QuickSpec {
                         expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.equal))
                         expect(layoutPlanerForTest.plannedConstraints.last?.constant).to(equal(multiplier * space))
                     case .lessThan:
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        }
                     case .lessThanTo(let space):
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        }
                         expect(layoutPlanerForTest.plannedConstraints.last?.constant).to(equal(multiplier * space))
                     case .moreThan:
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        }
                     case .moreThanTo(let space):
-                        expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        let attribute = layoutPlanerForTest.plannedConstraints.last?.firstAttribute
+                        if attribute == .right || attribute == .bottom {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.lessThanOrEqual))
+                        } else {
+                            expect(layoutPlanerForTest.plannedConstraints.last?.relation).to(equal(.greaterThanOrEqual))
+                        }
                         expect(layoutPlanerForTest.plannedConstraints.last?.constant).to(equal(multiplier * space))
                     }
                 }
