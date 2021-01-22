@@ -91,15 +91,15 @@ public extension Planer {
         let constraint: NSLayoutConstraint
         switch relation {
         case .moreThanTo(let space):
-            constraint = view.bottomAnchor.constraint(greaterThanOrEqualTo: anchor, constant: -space)
-        case .lessThanTo(let space):
             constraint = view.bottomAnchor.constraint(lessThanOrEqualTo: anchor, constant: -space)
+        case .lessThanTo(let space):
+            constraint = view.bottomAnchor.constraint(greaterThanOrEqualTo: anchor, constant: -space)
         case .equalTo(let space):
             constraint = view.bottomAnchor.constraint(equalTo: anchor, constant: -space)
         case .moreThan:
-            constraint = view.bottomAnchor.constraint(greaterThanOrEqualTo: anchor)
-        case .lessThan:
             constraint = view.bottomAnchor.constraint(lessThanOrEqualTo: anchor)
+        case .lessThan:
+            constraint = view.bottomAnchor.constraint(greaterThanOrEqualTo: anchor)
         case .equal:
             constraint = view.bottomAnchor.constraint(equalTo: anchor)
         }
@@ -243,15 +243,15 @@ public extension Planer {
         let constraint: NSLayoutConstraint
         switch relation {
         case .moreThanTo(let space):
-            constraint = view.rightAnchor.constraint(greaterThanOrEqualTo: anchor, constant: -space)
-        case .lessThanTo(let space):
             constraint = view.rightAnchor.constraint(lessThanOrEqualTo: anchor, constant: -space)
+        case .lessThanTo(let space):
+            constraint = view.rightAnchor.constraint(greaterThanOrEqualTo: anchor, constant: -space)
         case .equalTo(let space):
             constraint = view.rightAnchor.constraint(equalTo: anchor, constant: -space)
         case .moreThan:
-            constraint = view.rightAnchor.constraint(greaterThanOrEqualTo: anchor)
-        case .lessThan:
             constraint = view.rightAnchor.constraint(lessThanOrEqualTo: anchor)
+        case .lessThan:
+            constraint = view.rightAnchor.constraint(greaterThanOrEqualTo: anchor)
         case .equal:
             constraint = view.rightAnchor.constraint(equalTo: anchor)
         }
