@@ -12,7 +12,19 @@ import UIKit
 open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
     public var bondingState: BondingState = .none
     var linker: AnyLinker?
-    var tokens: [NSObjectProtocol] = []
+    
+    // MARK: Tokens
+    
+    var mainToken: NSObjectProtocol?
+    var secondaryToken: NSObjectProtocol?
+    var tertiaryToken: NSObjectProtocol?
+    var notificationCenterToken: NSObjectProtocol? {
+        didSet {
+            guard let oldToken = oldValue else { return }
+            NotificationCenter.default.removeObserver(oldToken)
+        }
+    }
+    
     var ignoreViewListener: Bool = false
     public override var wrappedValue: Wrapped {
         get {
@@ -115,10 +127,10 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
     
     public func removeBonding() {
         ignoreViewListener = false
-        for token in tokens {
-            NotificationCenter.default.removeObserver(token)
-        }
-        tokens.removeAll()
+        mainToken = nil
+        secondaryToken = nil
+        tertiaryToken = nil
+        notificationCenterToken = nil
         linker = nil
     }
     
@@ -142,25 +154,27 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
             let textKeypath: KeyPath<UITextView, String?> = \.text
             let fieldKeypath: KeyPath<UITextField, String?> = \.text
             if textKeypath == keyPath || fieldKeypath == keyPath {
-                tokens.append(addTextInputObserver(for: view, field))
+                mainToken = addTextInputObserver(for: view, field)
             }
+            observed = true
         } else if let searchBar = view as? UISearchBar {
             let textKeypath: KeyPath<UISearchBar, String?> = \.text
             if textKeypath == keyPath {
-                tokens.append(addTextInputObserver(for: searchBar, searchBar.textField))
+                mainToken = addTextInputObserver(for: searchBar, searchBar.textField)
             }
+            observed = true
         }
         if let imageView = view as? UIImageView {
-            observed = observeImageCompatible(forImage: imageView, keyPath: keyPath)
+            observed = observed || observeImageCompatible(forImage: imageView, keyPath: keyPath)
         } else if let label = view as? UILabel {
-            observed = observeTextCompatible(forLabel: label, keyPath: keyPath)
+            observed = observed || observeTextCompatible(forLabel: label, keyPath: keyPath)
         } else if let textView = view as? UITextView {
-            observed = observeTextCompatible(forTextView: textView, keyPath: keyPath)
+            observed = observed || observeTextCompatible(forTextView: textView, keyPath: keyPath)
         } else if let textField = view as? UITextField {
-            observed = observeTextCompatible(forTextField: textField, keyPath: keyPath)
+            observed = observed || observeTextCompatible(forTextField: textField, keyPath: keyPath)
         }
         guard !observed else { return }
-        tokens.append(observeChange(view: view, keyPath: keyPath))
+        mainToken = observeChange(view: view, keyPath: keyPath)
     }
     
     //MARK: Custom View Observer
@@ -170,8 +184,8 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
         guard textCompatPath == keyPath else {
             return false
         }
-        tokens.append(observeChange(view: imageView, keyPath: \.image))
-        tokens.append(observeChange(view: imageView, keyPath: \.animationImages))
+        secondaryToken = observeChange(view: imageView, keyPath: \.image)
+        tertiaryToken = observeChange(view: imageView, keyPath: \.animationImages)
         return true
     }
     
@@ -180,8 +194,8 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
         guard textCompatPath == keyPath else {
             return false
         }
-        tokens.append(observeChange(view: label, keyPath: \.text))
-        tokens.append(observeChange(view: label, keyPath: \.attributedText))
+        secondaryToken = observeChange(view: label, keyPath: \.text)
+        tertiaryToken = observeChange(view: label, keyPath: \.attributedText)
         return true
     }
     
@@ -189,13 +203,13 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
         let textCompatPath: KeyPath<UITextField, TextCompatible?> = \.textCompat
         let placeholderPath: KeyPath<UITextField, TextCompatible?> = \.placeholderCompat
         if textCompatPath == keyPath {
-            tokens.append(observeChange(view: textField, keyPath: \.text))
-            tokens.append(observeChange(view: textField, keyPath: \.attributedText))
-            tokens.append(addTextInputObserver(for: textField, textField))
+            secondaryToken = observeChange(view: textField, keyPath: \.text)
+            tertiaryToken = observeChange(view: textField, keyPath: \.attributedText)
+            notificationCenterToken = addTextInputObserver(for: textField, textField)
             return true
         } else if placeholderPath == keyPath {
-            tokens.append(observeChange(view: textField, keyPath: \.placeholder))
-            tokens.append(observeChange(view: textField, keyPath: \.attributedPlaceholder))
+            secondaryToken = observeChange(view: textField, keyPath: \.text)
+            tertiaryToken = observeChange(view: textField, keyPath: \.attributedText)
             return true
         }
         return false
@@ -206,9 +220,9 @@ open class ViewState<Wrapped>: ObservableState<Wrapped>, ViewBondingState {
         guard textCompatPath == keyPath else {
             return false
         }
-        tokens.append(observeChange(view: textView, keyPath: \.text))
-        tokens.append(observeChange(view: textView, keyPath: \.attributedText))
-        tokens.append(addTextInputObserver(for: textView, textView))
+        secondaryToken = observeChange(view: textView, keyPath: \.text)
+        tertiaryToken = observeChange(view: textView, keyPath: \.attributedText)
+        notificationCenterToken = addTextInputObserver(for: textView, textView)
         return true
     }
     
