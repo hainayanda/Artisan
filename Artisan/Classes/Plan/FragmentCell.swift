@@ -24,7 +24,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
             _layoutPhase = newValue
         }
     }
-    var mediator: StatedMediator?
+    var mediator: AnyMediator?
     
     var layouted: Bool = false
     
@@ -108,7 +108,7 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
             _layoutPhase = newValue
         }
     }
-    var mediator: StatedMediator?
+    var mediator: AnyMediator?
     
     var layouted: Bool = false
     

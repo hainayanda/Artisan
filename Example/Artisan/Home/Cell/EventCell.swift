@@ -76,7 +76,7 @@ class EventCell: TableFragmentCell {
     }
 }
 
-class EventCellVM<Cell: EventCell>: TableViewCellMediator<Cell> {
+class EventCellVM<Cell: EventCell>: TableCellMediator<Cell> {
     @ObservableState var event: Event?
     @ViewState var bannerImage: UIImage?
     @ViewState var eventName: String?

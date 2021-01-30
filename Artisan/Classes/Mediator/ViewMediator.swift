@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 
-extension StatedMediator {
+extension AnyMediator {
     
     func extractBondings(from mirror: Mirror, into states: inout [ViewBondingState]) {
         for child in mirror.children {
             if let bondings = child.value as? ViewBondingState {
                 states.append(bondings)
-            } else if let mediator = child.value as? StatedMediator {
+            } else if let mediator = child.value as? AnyMediator {
                 states.append(contentsOf: mediator.bondingStates)
             }
         }
@@ -38,7 +38,7 @@ extension StatedMediator {
         for child in mirror.children {
             if let stateObservable = child.value as? StateObservable {
                 states.append(stateObservable)
-            } else if let mediator = child.value as? StatedMediator {
+            } else if let mediator = child.value as? AnyMediator {
                 states.append(contentsOf: mediator.observables)
             }
         }
@@ -126,7 +126,7 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     open func didLoosingBond(with view: View?) { }
     
     open func bonding(with view: View) {
-        (view.getMediator() as? StatedMediator)?.removeBond()
+        (view.getMediator() as? AnyMediator)?.removeBond()
         if let cell = view as? TableFragmentCell {
             cell.mediator = self
         } else if let cell = view as? CollectionFragmentCell {

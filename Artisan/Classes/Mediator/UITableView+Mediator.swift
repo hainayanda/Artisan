@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 
+public typealias TableSection = UITableView.Section
+public typealias TableTitledSection = UITableView.TitledSection
+
 extension UITableView {
     
     public var mediator: UITableView.Mediator {
@@ -28,7 +31,7 @@ extension UITableView {
         }
     }
     
-    public var cells: [TableCellMediator] {
+    public var cells: [AnyTableCellMediator] {
         get {
             mediator.sections.first?.cells ?? []
         }
@@ -54,6 +57,26 @@ extension UITableView {
         set {
             mediator.reloadStrategy = newValue
         }
+    }
+    
+    public func appendWithCell(_ builder: (TableCellBuilder) -> Void) {
+        guard !sections.isEmpty else {
+            buildWithCells(builder)
+            return
+        }
+        let collectionBuilder = TableCellBuilder(sections: sections)
+        builder(collectionBuilder)
+        sections = collectionBuilder.build()
+    }
+    
+    public func buildWithCells(withFirstSectionId firstSection: String, _ builder: (TableCellBuilder) -> Void) {
+        buildWithCells(withFirstSection: Section(identifier: firstSection), builder)
+    }
+    
+    public func buildWithCells(withFirstSection firstSection: UITableView.Section? = nil, _ builder: (TableCellBuilder) -> Void) {
+        let collectionBuilder = TableCellBuilder(section: firstSection ?? Section(identifier: "first_section"))
+        builder(collectionBuilder)
+        sections = collectionBuilder.build()
     }
     
     public func whenDidReloadCells(then: ((Bool) -> Void)?) {
@@ -120,21 +143,21 @@ extension UITableView {
     
     open class Section: Identifiable, Equatable {
         public var index: String?
-        public var cells: [TableCellMediator]
+        public var cells: [AnyTableCellMediator]
         public var cellCount: Int { cells.count }
         public var identifier: AnyHashable
         
-        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [TableCellMediator] = []) {
+        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
             self.identifier = identifier
             self.cells = cells
             self.index = index
         }
         
-        public func add(cell: TableCellMediator) {
+        public func add(cell: AnyTableCellMediator) {
             cells.append(cell)
         }
         
-        public func add(cells: [TableCellMediator]) {
+        public func add(cells: [AnyTableCellMediator]) {
             self.cells.append(contentsOf: cells)
         }
         
@@ -167,7 +190,7 @@ extension UITableView {
         
         public var title: String
         
-        public init(title: String, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [TableCellMediator] = []) {
+        public init(title: String, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
             self.title = title
             super.init(identifier: identifier, index: index, cells: cells)
         }

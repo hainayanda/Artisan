@@ -37,7 +37,7 @@ class KeywordCell: TableFragmentCell {
     }
 }
 
-class KeywordCellVM: TableViewCellMediator<KeywordCell> {
+class KeywordCellVM: TableCellMediator<KeywordCell> {
     @ViewState var keyword: String?
     var delegate: KeywordCellMediatorDelegate?
     override func bonding(with view: KeywordCell) {

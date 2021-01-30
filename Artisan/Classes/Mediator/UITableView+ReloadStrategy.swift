@@ -42,9 +42,13 @@ extension UITableView.Mediator {
         with sections: [UITableView.Section],
         oldSections: [UITableView.Section],
         completion: ((Bool) -> Void)?) {
+        var canceled: Bool = false
         tableView.beginUpdates()
         defer {
             tableView.endUpdates()
+            if canceled {
+                tableView.reloadData()
+            }
             completion?(true)
         }
         let sectionReloader = TableMediatorSectionReloader(
@@ -54,6 +58,7 @@ extension UITableView.Mediator {
         )
         let diffReloader = DiffReloader(worker: sectionReloader)
         diffReloader.reloadDifference(oldIdentities: oldSections, newIdentities: sections)
+        canceled = sectionReloader.canceled
     }
     
     func dataIsValid(_ tableView: UITableView, oldData: [UITableView.Section]) -> Bool {
@@ -65,10 +70,11 @@ extension UITableView.Mediator {
     }
 }
 
-public struct TableMediatorSectionReloader: DiffReloaderWorker {
+public class TableMediatorSectionReloader: DiffReloaderWorker {
     let table: UITableView
     let animationSet: UITableView.AnimationSet
     let forceRefresh: Bool
+    var canceled: Bool = false
     
     init(table: UITableView, forceRefresh: Bool, animationSet: UITableView.AnimationSet) {
         self.table = table
@@ -93,19 +99,33 @@ public struct TableMediatorSectionReloader: DiffReloaderWorker {
             let cellReloader = TableMediatorCellReloader(section: index, table: table, forceRefresh: forceRefresh, animationSet: animationSet)
             let diffReloader = DiffReloader(worker: cellReloader)
             diffReloader.reloadDifference(oldIdentities: oldSection.cells, newIdentities: newSection.cells)
+            if cellReloader.canceled {
+                table.reloadSections(IndexSet([index]), with: .fade)
+            }
         }
     }
     
     public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
         table.moveSection(index, toSection: destIndex)
     }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError) {
+        if let errorDescription = error.errorDescription {
+            debugPrint(errorDescription)
+            if let failureReason = error.failureReason {
+                debugPrint(failureReason)
+            }
+        }
+        canceled = true
+    }
 }
 
-public struct TableMediatorCellReloader: DiffReloaderWorker {
+public class TableMediatorCellReloader: DiffReloaderWorker {
     let table: UITableView
     let animationSet: UITableView.AnimationSet
     let section: Int
     let forceRefresh: Bool
+    var canceled: Bool = false
     
     init(section: Int, table: UITableView, forceRefresh: Bool, animationSet: UITableView.AnimationSet) {
         self.section = section
@@ -131,5 +151,15 @@ public struct TableMediatorCellReloader: DiffReloaderWorker {
     
     public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
         table.moveRow(at: .init(row: index, section: section), to: .init(row: destIndex, section: section))
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError) {
+        if let errorDescription = error.errorDescription {
+            debugPrint(errorDescription)
+            if let failureReason = error.failureReason {
+                debugPrint(failureReason)
+            }
+        }
+        canceled = true
     }
 }

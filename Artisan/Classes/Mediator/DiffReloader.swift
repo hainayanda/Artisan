@@ -23,10 +23,12 @@ public protocol DiffReloaderWorker {
     func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int)
     func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int: (old: Identifiable, new: Identifiable)])
     func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int)
+    func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError)
 }
 
-public struct DiffReloader {
+public class DiffReloader {
     let worker: DiffReloaderWorker
+    var sequenceLoader: [() -> Void] = []
     
     public init(worker: DiffReloaderWorker) {
         self.worker = worker
@@ -36,7 +38,8 @@ public struct DiffReloader {
         oldIdentities: [Identifiable],
         newIdentities: [Identifiable]) {
         let oldIdentitiesAfterRemoved = removeFrom(oldIdentities: oldIdentities, notIn: newIdentities)
-        insert(newIdentities: newIdentities, notIn: oldIdentitiesAfterRemoved)
+        reloadChanges(in: oldIdentitiesAfterRemoved, to: newIdentities)
+        runQueue()
     }
     
     func removeFrom(oldIdentities: [Identifiable], notIn newIdentities: [Identifiable]) -> [Identifiable] {
@@ -52,12 +55,14 @@ public struct DiffReloader {
             mutableIndex += 1
         }
         if !removedIndex.isEmpty {
-            worker.diffReloader(self, shouldRemove: removedIndex)
+            queueLoad {
+                $0.worker.diffReloader($0, shouldRemove: removedIndex)
+            }
         }
         return mutableIdentities
     }
     
-    func insert(newIdentities: [Identifiable], notIn oldIdentities: [Identifiable]) {
+    func reloadChanges(in oldIdentities: [Identifiable], to newIdentities: [Identifiable]) {
         var mutableIdentities = oldIdentities
         var reloadedIndex: [Int: (old: Identifiable, new: Identifiable)] = [:]
         for (identityIndex, identity) in newIdentities.enumerated() {
@@ -66,16 +71,48 @@ public struct DiffReloader {
                 reloadedIndex[identityIndex] = (old: oldIdentifiable, new: identity)
             } else if let oldIndex = mutableIdentities.firstIndex(where: { $0.haveSameIdentifier(with: identity)}) {
                 let removedIdentifiable = mutableIdentities.remove(at: oldIndex)
+                guard mutableIdentities.count >= identityIndex else {
+                    fail(reason: "Fail move cell from \(oldIndex) to \(identityIndex)")
+                    return
+                }
                 mutableIdentities.insert(removedIdentifiable, at: identityIndex)
-                worker.diffReloader(self, shouldMove: removedIdentifiable, from: oldIndex, to: identityIndex)
+                queueLoad {
+                    $0.worker.diffReloader($0, shouldMove: removedIdentifiable, from: oldIndex, to: identityIndex)
+                }
                 reloadedIndex[identityIndex] = (old: removedIdentifiable, new: identity)
             } else {
+                guard mutableIdentities.count >= identityIndex else {
+                    fail(reason: "Fail add cell to \(identityIndex)")
+                    return
+                }
                 mutableIdentities.insert(identity, at: identityIndex)
-                worker.diffReloader(self, shouldInsert: identity, at: identityIndex)
+                queueLoad {
+                    $0.worker.diffReloader($0, shouldInsert: identity, at: identityIndex)
+                }
             }
         }
         if !reloadedIndex.isEmpty {
-            worker.diffReloader(self, shouldReload: reloadedIndex)
+            queueLoad {
+                $0.worker.diffReloader($0, shouldReload: reloadedIndex)
+            }
+        }
+    }
+    
+    func fail(reason: String) {
+        sequenceLoader.removeAll()
+        worker.diffReloader(self, failWith: .whenDiffReloading(failureReason: reason))
+    }
+    
+    func runQueue() {
+        sequenceLoader.forEach {
+            $0()
+        }
+    }
+    
+    func queueLoad(_ loader: @escaping (DiffReloader) -> Void) {
+        sequenceLoader.append { [weak self] in
+            guard let self = self else { return }
+            loader(self)
         }
     }
 }

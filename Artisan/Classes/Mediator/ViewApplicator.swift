@@ -1,30 +1,30 @@
 //
-//  GenericCellMediator.swift
+//  GenericMediator.swift
 //  Artisan
 //
-//  Created by Nayanda Haberty (ID) on 24/09/20.
+//  Created by Nayanda Haberty on 29/01/21.
 //
 
 import Foundation
-import UIKit
 
-public class EmptyTableCell: TableFragmentCell {
-    var preferedHeight: CGFloat = .automatic
+public class ViewApplicator<View: UIView>: ViewMediator<View> {
+    var applicator: (View) -> Void
     
-    public override func calculatedCellHeight(for cellWidth: CGFloat) -> CGFloat {
-        return preferedHeight
+    public init(_ applicator: @escaping (View) -> Void) {
+        self.applicator = applicator
+    }
+    
+    required init() {
+        self.applicator = { _ in }
+    }
+    
+    open override func willApplying(_ view: View) {
+        super.willApplying(view)
+        applicator(view)
     }
 }
 
-public class EmptyCollectionCell: CollectionFragmentCell {
-    var preferedSize: CGSize = .automatic
-    
-    public override func calculatedCellSize(for collectionContentSize: CGSize) -> CGSize {
-        return preferedSize
-    }
-}
-
-public class GenericTableCellMediator<Cell: UITableViewCell>: TableViewCellMediator<Cell> {
+public class TableCellApplicator<Cell: UITableViewCell>: TableCellMediator<Cell> {
     var applicator: (Cell) -> Void
     
     public init(_ applicator: @escaping (Cell) -> Void) {
@@ -41,7 +41,7 @@ public class GenericTableCellMediator<Cell: UITableViewCell>: TableViewCellMedia
     }
 }
 
-public class GenericCollectionCellMediator<Cell: UICollectionViewCell>: CollectionViewCellMediator<Cell> {
+public class CollectionCellApplicator<Cell: UICollectionViewCell>: CollectionCellMediator<Cell> {
     var applicator: (Cell) -> Void
     
     public init(_ applicator: @escaping (Cell) -> Void) {

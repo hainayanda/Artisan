@@ -7,13 +7,13 @@
 
 import Foundation
 
-public protocol StatedMediator {
+public protocol AnyMediator {
     var bondingStates: [ViewBondingState] { get }
     var observables: [StateObservable] { get }
     func removeBond()
 }
 
-public protocol BondableMediator: class, Buildable, StatedMediator {
+public protocol BondableMediator: class, Buildable, AnyMediator {
     associatedtype View: NSObject
     var view: View? { get }
     func map(from view: View)
