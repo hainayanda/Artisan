@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 
+public typealias CollectionSection = UICollectionView.Section
+public typealias SupplementedCollectionSection = UICollectionView.SupplementedSection
+
 extension UICollectionView {
     
     public var mediator: UICollectionView.Mediator {
@@ -45,6 +48,26 @@ extension UICollectionView {
         set {
             mediator.reloadStrategy = newValue
         }
+    }
+    
+    public func appendWithCell(_ builder: (CollectionCellBuilder) -> Void) {
+        guard !sections.isEmpty else {
+            buildWithCells(builder)
+            return
+        }
+        let collectionBuilder = CollectionCellBuilder(sections: sections)
+        builder(collectionBuilder)
+        sections = collectionBuilder.build()
+    }
+    
+    public func buildWithCells(withFirstSectionId firstSection: String, _ builder: (CollectionCellBuilder) -> Void) {
+        buildWithCells(withFirstSection: Section(identifier: firstSection), builder)
+    }
+    
+    public func buildWithCells(withFirstSection firstSection: UICollectionView.Section? = nil, _ builder: (CollectionCellBuilder) -> Void) {
+        let collectionBuilder = CollectionCellBuilder(section: firstSection ?? Section(identifier: "first_section"))
+        builder(collectionBuilder)
+        sections = collectionBuilder.build()
     }
     
     public func whenDidReloadCells(then: ((Bool) -> Void)?) {
