@@ -42,6 +42,7 @@ extension UICollectionView.Mediator {
         with sections: [UICollectionView.Section],
         oldSections: [UICollectionView.Section],
         completion: ((Bool) -> Void)?) {
+        var canceled = false
         collectionView.performBatchUpdates({
             let sectionReloader = CollectionMediatorSectionReloader(
                 collection: collectionView,
@@ -49,7 +50,13 @@ extension UICollectionView.Mediator {
             )
             let diffReloader = DiffReloader(worker: sectionReloader)
             diffReloader.reloadDifference(oldIdentities: oldSections, newIdentities: sections)
-        }, completion: completion)
+            canceled = sectionReloader.canceled
+        }, completion: { succeed in
+            if canceled {
+                collectionView.reloadData()
+            }
+            completion?(succeed)
+        })
     }
     
     func dataIsValid(_ collectionView: UICollectionView, oldData: [UICollectionView.Section]) -> Bool {
@@ -61,9 +68,10 @@ extension UICollectionView.Mediator {
     }
 }
 
-public struct CollectionMediatorSectionReloader: DiffReloaderWorker {
+public class CollectionMediatorSectionReloader: DiffReloaderWorker {
     let collection: UICollectionView
     let forceRefresh: Bool
+    var canceled: Bool = false
     
     init(collection: UICollectionView, forceRefresh: Bool) {
         self.collection = collection
@@ -87,18 +95,32 @@ public struct CollectionMediatorSectionReloader: DiffReloaderWorker {
             let cellReloader = CollectionMediatorCellReloader(section: index, collection: collection, forceRefresh: forceRefresh)
             let diffReloader = DiffReloader(worker: cellReloader)
             diffReloader.reloadDifference(oldIdentities: oldSection.cells, newIdentities: newSection.cells)
+            if cellReloader.canceled {
+                collection.reloadSections(IndexSet([index]))
+            }
         }
     }
     
     public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
         collection.moveSection(index, toSection: destIndex)
     }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError) {
+        if let errorDescription = error.errorDescription {
+            debugPrint(errorDescription)
+            if let failureReason = error.failureReason {
+                debugPrint(failureReason)
+            }
+        }
+        canceled = true
+    }
 }
 
-public struct CollectionMediatorCellReloader: DiffReloaderWorker {
+public class CollectionMediatorCellReloader: DiffReloaderWorker {
     let collection: UICollectionView
     let section: Int
     let forceRefresh: Bool
+    var canceled: Bool = false
     
     init(section: Int, collection: UICollectionView, forceRefresh: Bool) {
         self.section = section
@@ -123,5 +145,15 @@ public struct CollectionMediatorCellReloader: DiffReloaderWorker {
     
     public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
         collection.moveItem(at: .init(item: index, section: section), to: .init(item: destIndex, section: section))
+    }
+    
+    public func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError) {
+        if let errorDescription = error.errorDescription {
+            debugPrint(errorDescription)
+            if let failureReason = error.failureReason {
+                debugPrint(failureReason)
+            }
+        }
+        canceled = true
     }
 }
