@@ -28,7 +28,7 @@ extension UITableView {
         }
     }
     
-    public var cells: [TableCellMediator] {
+    public var cells: [AnyTableCellMediator] {
         get {
             mediator.sections.first?.cells ?? []
         }
@@ -120,21 +120,21 @@ extension UITableView {
     
     open class Section: Identifiable, Equatable {
         public var index: String?
-        public var cells: [TableCellMediator]
+        public var cells: [AnyTableCellMediator]
         public var cellCount: Int { cells.count }
         public var identifier: AnyHashable
         
-        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [TableCellMediator] = []) {
+        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
             self.identifier = identifier
             self.cells = cells
             self.index = index
         }
         
-        public func add(cell: TableCellMediator) {
+        public func add(cell: AnyTableCellMediator) {
             cells.append(cell)
         }
         
-        public func add(cells: [TableCellMediator]) {
+        public func add(cells: [AnyTableCellMediator]) {
             self.cells.append(contentsOf: cells)
         }
         
@@ -167,7 +167,7 @@ extension UITableView {
         
         public var title: String
         
-        public init(title: String, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [TableCellMediator] = []) {
+        public init(title: String, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
             self.title = title
             super.init(identifier: identifier, index: index, cells: cells)
         }

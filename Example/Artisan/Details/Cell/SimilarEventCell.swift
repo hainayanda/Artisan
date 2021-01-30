@@ -35,7 +35,7 @@ class SimilarEventCell: TableFragmentCell {
     }
 }
 
-class SimilarEventCellVM: TableViewCellMediator<SimilarEventCell> {
+class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     typealias TapAction = (SimilarEventCellVM, Event) -> Void
     var service: EventService = MockEventService()
     

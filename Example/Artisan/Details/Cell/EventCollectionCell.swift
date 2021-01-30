@@ -38,7 +38,7 @@ class EventCollectionCell: CollectionFragmentCell {
     }
 }
 
-class EventCollectionCellVM: CollectionViewCellMediator<EventCollectionCell> {
+class EventCollectionCellVM: CollectionCellMediator<EventCollectionCell> {
     @ObservableState var event: Event?
     @ViewState var bannerImage: UIImage?
     @ViewState var eventName: String?

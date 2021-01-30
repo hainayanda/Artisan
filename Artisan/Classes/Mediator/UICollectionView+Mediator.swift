@@ -28,7 +28,7 @@ extension UICollectionView {
         }
     }
     
-    public var cells: [CollectionCellMediator] {
+    public var cells: [AnyCollectionCellMediator] {
         get {
             mediator.sections.first?.cells ?? []
         }
@@ -80,21 +80,21 @@ extension UICollectionView {
     
     open class Section: Identifiable, Equatable {
         public var index: String?
-        public var cells: [CollectionCellMediator]
+        public var cells: [AnyCollectionCellMediator]
         public var cellCount: Int { cells.count }
         public var identifier: AnyHashable
         
-        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [CollectionCellMediator] = []) {
+        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
             self.identifier = identifier
             self.cells = cells
             self.index = index
         }
         
-        public func add(cell: CollectionCellMediator) {
+        public func add(cell: AnyCollectionCellMediator) {
             cells.append(cell)
         }
         
-        public func add(cells: [CollectionCellMediator]) {
+        public func add(cells: [AnyCollectionCellMediator]) {
             self.cells.append(contentsOf: cells)
         }
         
@@ -125,10 +125,10 @@ extension UICollectionView {
     
     public class SupplementedSection: Section {
         
-        public var header: CollectionCellMediator?
-        public var footer: CollectionCellMediator?
+        public var header: AnyCollectionCellMediator?
+        public var footer: AnyCollectionCellMediator?
         
-        public init(header: CollectionCellMediator? = nil, footer: CollectionCellMediator? = nil, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [CollectionCellMediator] = []) {
+        public init(header: AnyCollectionCellMediator? = nil, footer: AnyCollectionCellMediator? = nil, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
             self.header = header
             self.footer = footer
             super.init(identifier: identifier, index: index, cells: cells)

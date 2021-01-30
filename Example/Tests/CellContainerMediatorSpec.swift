@@ -129,7 +129,7 @@ class CellContainerMediatorSpec: QuickSpec {
     }
 }
 
-class DummyCollectionCellMediator: CollectionCellMediator {
+class DummyCollectionCellMediator: AnyCollectionCellMediator {
     var id: String = .randomString()
     var identifier: AnyHashable { id }
     static var cellViewClass: AnyClass = UICollectionReusableView.self
@@ -148,7 +148,7 @@ class DummyCollectionCellMediator: CollectionCellMediator {
     }
 }
 
-class DummyTableCell: TableCellMediator {
+class DummyTableCell: AnyTableCellMediator {
     var id: String = .randomString()
     var index: String?
     var identifier: AnyHashable { id }

@@ -35,4 +35,11 @@ extension ArtisanError {
             failureReason: failureReason
         )
     }
+    
+    static func whenDiffReloading(failureReason: String? = nil) -> ArtisanError {
+        .init(
+            errorDescription: "Artisan Error: Error when reload by difference",
+            failureReason: failureReason
+        )
+    }
 }

@@ -91,10 +91,10 @@ class CellMediatorBuilderSpec: QuickSpec {
     }
 }
 
-class DummyCollectionMediator: CollectionViewCellMediator<UICollectionViewCell> {
+class DummyCollectionMediator: CollectionCellMediator<UICollectionViewCell> {
     var id: String?
 }
 
-class DummyTableMediator: TableViewCellMediator<UITableViewCell> {
+class DummyTableMediator: TableCellMediator<UITableViewCell> {
     var id: String?
 }

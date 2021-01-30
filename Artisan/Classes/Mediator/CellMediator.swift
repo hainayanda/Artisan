@@ -27,16 +27,16 @@ public extension CellMediator {
     }
 }
 
-public protocol CollectionCellMediator: CellMediator {
+public protocol AnyCollectionCellMediator: CellMediator {
     func apply(cell: UICollectionReusableView)
 }
 
-public protocol TableCellMediator: CellMediator {
+public protocol AnyTableCellMediator: CellMediator {
     var index: String? { get }
     func apply(cell: UITableViewCell)
 }
 
-open class TableViewCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, TableCellMediator {
+open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTableCellMediator {
     public static var cellViewClass: AnyClass { Cell.self }
     public static var cellReuseIdentifier: String {
         let camelCaseName = String(describing: Cell.self).filter { $0.isLetter || $0.isNumber }.camelCaseToSnakeCase()
@@ -94,7 +94,7 @@ open class TableViewCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, Tab
     }
 }
 
-open class CollectionViewCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell>, CollectionCellMediator {
+open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell>, AnyCollectionCellMediator {
     
     public static var cellViewClass: AnyClass { Cell.self }
     public static var cellReuseIdentifier: String {

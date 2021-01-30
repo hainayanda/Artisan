@@ -31,7 +31,7 @@ public class TableCellBuilder {
     }
     
     @discardableResult
-    public func next<Cell: TableCellMediator, Item>(mediatorType: Cell.Type, fromItems items: [Item], _ builder: (inout Cell, Item) -> Void) -> TableCellBuilder {
+    public func next<Cell: AnyTableCellMediator, Item>(mediatorType: Cell.Type, fromItems items: [Item], _ builder: (inout Cell, Item) -> Void) -> TableCellBuilder {
         for item in items {
             var cell = Cell.init()
             builder(&cell, item)
@@ -41,12 +41,12 @@ public class TableCellBuilder {
     }
     
     @discardableResult
-    public func next<Cell: TableCellMediator, Item>(mediatorType: Cell.Type, fromItem item: Item, _ builder: (inout Cell, Item) -> Void) -> TableCellBuilder {
+    public func next<Cell: AnyTableCellMediator, Item>(mediatorType: Cell.Type, fromItem item: Item, _ builder: (inout Cell, Item) -> Void) -> TableCellBuilder {
         return next(mediatorType: mediatorType, fromItems: [item], builder)
     }
     
     @discardableResult
-    public func next<Cell: TableCellMediator>(mediatorType: Cell.Type, count: Int, _ builder: (inout Cell, Int) -> Void) -> TableCellBuilder {
+    public func next<Cell: AnyTableCellMediator>(mediatorType: Cell.Type, count: Int, _ builder: (inout Cell, Int) -> Void) -> TableCellBuilder {
         for index in 0..<count {
             var cell = Cell.init()
             builder(&cell, index)
@@ -58,7 +58,7 @@ public class TableCellBuilder {
     @discardableResult
     public func next<Cell: UITableViewCell, Item>(cellType: Cell.Type, fromItems items: [Item], _ builder: @escaping (Cell, Item) -> Void) -> TableCellBuilder {
         for item in items {
-            lastSection.add(cell: GenericTableCellMediator<Cell> {
+            lastSection.add(cell: TableCellApplicator<Cell> {
                 builder($0, item)
             })
         }
@@ -73,7 +73,7 @@ public class TableCellBuilder {
     @discardableResult
     public func next<Cell: UITableViewCell>(cellType: Cell.Type, count: Int, _ builder: @escaping (Cell, Int) -> Void) -> TableCellBuilder {
         for index in 0..<count {
-            lastSection.add(cell: GenericTableCellMediator<Cell> {
+            lastSection.add(cell: TableCellApplicator<Cell> {
                 builder($0, index)
             })
         }
@@ -129,7 +129,7 @@ public class CollectionCellBuilder {
     }
     
     @discardableResult
-    public func next<Cell: CollectionCellMediator, Item>(mediatorType: Cell.Type, fromItems items: [Item], _ builder: (inout Cell, Item) -> Void) -> CollectionCellBuilder {
+    public func next<Cell: AnyCollectionCellMediator, Item>(mediatorType: Cell.Type, fromItems items: [Item], _ builder: (inout Cell, Item) -> Void) -> CollectionCellBuilder {
         for item in items {
             var cell = Cell.init()
             builder(&cell, item)
@@ -139,12 +139,12 @@ public class CollectionCellBuilder {
     }
     
     @discardableResult
-    public func next<Cell: CollectionCellMediator, Item>(mediatorType: Cell.Type, fromItem item: Item, _ builder: (inout Cell, Item) -> Void) -> CollectionCellBuilder {
+    public func next<Cell: AnyCollectionCellMediator, Item>(mediatorType: Cell.Type, fromItem item: Item, _ builder: (inout Cell, Item) -> Void) -> CollectionCellBuilder {
         return next(mediatorType: mediatorType, fromItems: [item], builder)
     }
     
     @discardableResult
-    public func next<Cell: CollectionCellMediator>(mediatorType: Cell.Type, count: Int, _ builder: (inout Cell, Int) -> Void) -> CollectionCellBuilder {
+    public func next<Cell: AnyCollectionCellMediator>(mediatorType: Cell.Type, count: Int, _ builder: (inout Cell, Int) -> Void) -> CollectionCellBuilder {
         for index in 0..<count {
             var cell = Cell.init()
             builder(&cell, index)
@@ -156,7 +156,7 @@ public class CollectionCellBuilder {
     @discardableResult
     public func next<Cell: UICollectionViewCell, Item>(cellType: Cell.Type, fromItems items: [Item], _ builder: @escaping (Cell, Item) -> Void) -> CollectionCellBuilder {
         for item in items {
-            lastSection.add(cell: GenericCollectionCellMediator<Cell> {
+            lastSection.add(cell: CollectionCellApplicator<Cell> {
                 builder($0, item)
             })
         }
@@ -171,7 +171,7 @@ public class CollectionCellBuilder {
     @discardableResult
     public func next<Cell: UICollectionViewCell>(cellType: Cell.Type, count: Int, _ builder: @escaping (Cell, Int) -> Void) -> CollectionCellBuilder {
         for index in 0..<count {
-            lastSection.add(cell: GenericCollectionCellMediator<Cell> {
+            lastSection.add(cell: CollectionCellApplicator<Cell> {
                 builder($0, index)
             })
         }
