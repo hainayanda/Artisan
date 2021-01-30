@@ -1,10 +1,8 @@
-# Artisan
-
-
 <p align="center">
   <img width="256" height="256" src="Artisan.png"/>
 </p>
 
+# Artisan
 
 Artisan is a DSL, MVVM and Data Binding framework for Swift.
 
