@@ -148,8 +148,10 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
         let calculatedSize = calculatedCellSize(for: collectionContentSize)
         let automatedSize = contentView.systemLayoutSizeFitting(layoutAttributes.size)
         let size: CGSize = .init(
-            width: calculatedSize.width == .automatic ? automatedSize.width : calculatedSize.width,
-            height: calculatedSize.height == .automatic ? automatedSize.height : calculatedSize.height
+            width: calculatedSize.width == .automatic || calculatedSize == .automatic ?
+                automatedSize.width : calculatedSize.width,
+            height: calculatedSize.height == .automatic || calculatedSize == .automatic ?
+                automatedSize.height : calculatedSize.height
         )
         var newFrame = layoutAttributes.frame
         newFrame.size = size

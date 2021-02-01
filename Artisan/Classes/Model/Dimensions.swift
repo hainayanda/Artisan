@@ -236,11 +236,11 @@ public struct CoordinateOffsets {
 // MARK: Auto
 
 extension CGFloat {
-    public static var automatic: CGFloat { -(.greatestFiniteMagnitude) }
+    public static var automatic: CGFloat { UITableView.automaticDimension }
 }
 
 extension CGSize {
-    public static var automatic: CGSize { .init(width: .automatic, height: .automatic)}
+    public static var automatic: CGSize { UICollectionViewFlowLayout.automaticSize }
 }
 
 public func hInsets(_ insets: CGFloat) -> InsetsConvertible {
