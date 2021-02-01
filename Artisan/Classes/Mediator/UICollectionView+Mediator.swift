@@ -50,6 +50,17 @@ extension UICollectionView {
         }
     }
     
+    public func cellSizeFromMediator(at indexPath: IndexPath) -> CGSize {
+        let sectionInset: UIEdgeInsets = (collectionViewLayout as? UICollectionViewFlowLayout)?.sectionInset ?? .zero
+        let width: CGFloat = contentSize.width - contentInset.horizontal.both - sectionInset.horizontal.both
+        let height: CGFloat = contentSize.height - contentInset.vertical.both - sectionInset.vertical.both
+        let contentSize: CGSize = .init(width: width, height: height)
+        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return .automatic }
+        let customCellSize = cell.customCellSize(for: contentSize)
+        let defaultSize = cell.defaultCellSize(for: contentSize)
+        return customCellSize.isCalculated ? customCellSize : defaultSize
+    }
+    
     public func appendWithCell(_ builder: (CollectionCellBuilder) -> Void) {
         guard !sections.isEmpty else {
             buildWithCells(builder)
@@ -75,6 +86,11 @@ extension UICollectionView {
     }
     
     public class Mediator: ViewMediator<UICollectionView> {
+        var tapGestureRecognizer: UITapGestureRecognizer = build(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
+            $0.numberOfTouchesRequired = 1
+            $0.isEnabled = true
+            $0.cancelsTouchesInView = false
+        }
         var applicableSections: [Section] = []
         @ObservableState public var sections: [Section] = []
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
@@ -98,6 +114,18 @@ extension UICollectionView {
         
         public override func didApplying(_ view: UICollectionView) {
             view.dataSource = self
+            view.addGestureRecognizer(tapGestureRecognizer)
+        }
+        
+        @objc public func didTap(_ gesture: UITapGestureRecognizer) {
+            guard let collection = view else { return }
+            let location = gesture.location(in: collection)
+            guard let indexPath = collection.indexPathForItem(at: location),
+                  let cell = collection.cellForItem(at: indexPath),
+                  let mediator = cell.getMediator() as? AnyCollectionCellMediator else {
+                return
+            }
+            mediator.didTap(cell: cell)
         }
     }
     

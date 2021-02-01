@@ -29,11 +29,17 @@ public extension CellMediator {
 
 public protocol AnyCollectionCellMediator: CellMediator {
     func apply(cell: UICollectionReusableView)
+    func customCellSize(for collectionContentSize: CGSize) -> CGSize
+    func defaultCellSize(for collectionContentSize: CGSize) -> CGSize
+    func didTap(cell: UICollectionReusableView)
 }
 
 public protocol AnyTableCellMediator: CellMediator {
     var index: String? { get }
     func apply(cell: UITableViewCell)
+    func customCellHeight(for cellWidth: CGFloat) -> CGFloat
+    func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat
+    func didTap(cell: UITableViewCell)
 }
 
 open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTableCellMediator {
@@ -87,15 +93,22 @@ open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTabl
         super.didLoosingBond(with: view)
     }
     
+    open func customCellHeight(for cellWidth: CGFloat) -> CGFloat { .automatic }
+    
+    open func didTap(cell: UITableViewCell) { }
+    
     public func isSameMediator(with other: CellMediator) -> Bool {
         guard let otherAsSelf = other as? Self else { return false }
         if otherAsSelf === self { return true }
         return otherAsSelf.cellIdentifier == cellIdentifier
     }
+    
+    public func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat {
+        Cell.defaultCellHeight(for: cellWidth)
+    }
 }
 
 open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell>, AnyCollectionCellMediator {
-    
     public static var cellViewClass: AnyClass { Cell.self }
     public static var cellReuseIdentifier: String {
         let camelCaseName = String(describing: Cell.self).filter { $0.isLetter || $0.isNumber }.camelCaseToSnakeCase()
@@ -144,10 +157,18 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
         super.didLoosingBond(with: view)
     }
     
+    open func customCellSize(for collectionContentSize: CGSize) -> CGSize { .automatic }
+    
+    open func didTap(cell: UICollectionReusableView) { }
+    
     public func isSameMediator(with other: CellMediator) -> Bool {
         guard let otherAsSelf = other as? Self else { return false }
         if otherAsSelf === self { return true }
         return otherAsSelf.cellIdentifier == cellIdentifier
+    }
+    
+    public func defaultCellSize(for collectionContentSize: CGSize) -> CGSize {
+        Cell.defaultCellSize(for: collectionContentSize)
     }
 }
 
