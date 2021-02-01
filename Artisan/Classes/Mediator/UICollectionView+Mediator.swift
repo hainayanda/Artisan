@@ -59,7 +59,7 @@ extension UICollectionView {
         let collectionCell = cellForItem(at: indexPath)
         let currentSize = collectionCell?.bounds.size ?? .zero
         let calculatedSize = collectionCell?.sizeThatFits(sizeOfContent) ?? .zero
-        let actualSizeFromCell = !calculatedSize.isNotVisible ? calculatedSize : (!currentSize.isNotVisible ? currentSize : .zero)
+        let actualSizeFromCell = calculatedSize.isVisible ? calculatedSize : (currentSize.isVisible ? currentSize : .zero)
         guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else {
             return flowSize.isCalculated ? flowSize : actualSizeFromCell
         }
