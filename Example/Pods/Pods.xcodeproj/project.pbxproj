@@ -912,13 +912,13 @@
 			isa = PBXGroup;
 			children = (
 				BB6FAD912590EFD300B6BB9D /* CellMediator.swift */,
-				BBBE0B7325C395BA0051C3E0 /* ViewApplicator.swift */,
 				BBF98C1A25936736002AF568 /* DiffReloader.swift */,
 				BB6FAD902590EFD300B6BB9D /* EmptyCell.swift */,
 				BB6FAD932590EFD300B6BB9D /* UICollectionView+Mediator.swift */,
 				BB6FAD8E2590EFD300B6BB9D /* UICollectionView+ReloadStrategy.swift */,
 				BB6FAD8F2590EFD300B6BB9D /* UITableView+Mediator.swift */,
 				BB6FAD942590EFD300B6BB9D /* UITableView+ReloadStrategy.swift */,
+				BBBE0B7325C395BA0051C3E0 /* ViewApplicator.swift */,
 				BB6FAD922590EFD300B6BB9D /* ViewMediator.swift */,
 			);
 			path = Mediator;

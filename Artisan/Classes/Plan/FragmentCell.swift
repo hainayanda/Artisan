@@ -14,6 +14,12 @@ public protocol FragmentCell: Fragment {
     func planningOption(on phase: CellLayoutingPhase) -> PlanningOption
 }
 
+extension UITableViewCell {
+    
+    @objc open class func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat { .automatic }
+    
+}
+
 open class TableFragmentCell: UITableViewCell, FragmentCell {
     var _layoutPhase: CellLayoutingPhase = .firstLoad
     public internal(set) var layoutPhase: CellLayoutingPhase {
@@ -52,7 +58,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         return true
     }
     
-    open class func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat { .automatic }
+    open override class func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat { .automatic }
     
     open func calculatedCellHeight(for cellWidth: CGFloat) -> CGFloat { .automatic }
     
@@ -74,7 +80,8 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
     func getHeight(for cellWidth: CGFloat) -> CGFloat {
         let defaultHeight = Self.defaultCellHeight(for: cellWidth)
         let calculatedHeight = calculatedCellHeight(for: cellWidth)
-        return calculatedHeight.isCalculated ? calculatedHeight : defaultHeight
+        let mediatorHeight = (mediator as? AnyTableCellMediator)?.customCellHeight(for: cellWidth) ?? .automatic
+        return mediatorHeight.isCalculated ? mediatorHeight : (calculatedHeight.isCalculated ? calculatedHeight : defaultHeight)
     }
     
     open func planningOption(on phase: CellLayoutingPhase) -> PlanningOption {
@@ -104,6 +111,12 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         layoutContentIfNeeded()
         layoutPhase = .none
     }
+}
+
+extension UICollectionViewCell {
+    
+    @objc open class func defaultCellSize(for collectionContentSize: CGSize) -> CGSize { .automatic }
+    
 }
 
 open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
@@ -146,7 +159,7 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
         return true
     }
     
-    open class func defaultCellSize(for collectionContentSize: CGSize) -> CGSize { .automatic }
+    open override class func defaultCellSize(for collectionContentSize: CGSize) -> CGSize { .automatic }
     
     open func calculatedCellSize(for collectionContentSize: CGSize) -> CGSize { .automatic }
     
@@ -172,7 +185,8 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
     func getSize(for collectionContentSize: CGSize) -> CGSize {
         let defaultSize = Self.defaultCellSize(for: collectionContentSize)
         let calculatedSize = calculatedCellSize(for: collectionContentSize)
-        return calculatedSize.isCalculated ? calculatedSize : defaultSize
+        let mediatorSize = (mediator as? AnyCollectionCellMediator)?.customCellSize(for: collectionContentSize) ?? .automatic
+        return mediatorSize.isCalculated ? mediatorSize : (calculatedSize.isCalculated ? calculatedSize : defaultSize)
     }
     
     open func planningOption(on phase: CellLayoutingPhase) -> PlanningOption {

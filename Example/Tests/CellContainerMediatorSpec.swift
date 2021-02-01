@@ -146,6 +146,18 @@ class DummyCollectionCellMediator: AnyCollectionCellMediator {
     func isSameMediator(with other: CellMediator) -> Bool {
         id == (other as? DummyCollectionCellMediator)?.id
     }
+
+
+    func customCellSize(for collectionContentSize: CGSize) -> CGSize {
+        .automatic
+    }
+
+    func defaultCellSize(for collectionContentSize: CGSize) -> CGSize {
+        .automatic
+    }
+
+    func didTap(cell: UICollectionReusableView) { }
+
 }
 
 class DummyTableCell: AnyTableCellMediator {
@@ -166,4 +178,15 @@ class DummyTableCell: AnyTableCellMediator {
     func isSameMediator(with other: CellMediator) -> Bool {
         id == (other as? DummyCollectionCellMediator)?.id
     }
+    
+    func customCellHeight(for cellWidth: CGFloat) -> CGFloat {
+        .automatic
+    }
+    
+    func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat {
+        .automatic
+    }
+    
+    func didTap(cell: UITableViewCell) { }
+    
 }

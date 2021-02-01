@@ -59,6 +59,14 @@ extension UITableView {
         }
     }
     
+    public func cellHeightFromMediator(at indexPath: IndexPath) -> CGFloat {
+        let width: CGFloat = contentSize.width - contentInset.horizontal.both
+        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return .automatic }
+        let customCellHeight = cell.customCellHeight(for: width)
+        let defaultHeight = cell.defaultCellHeight(for: width)
+        return customCellHeight.isCalculated ? customCellHeight : defaultHeight
+    }
+    
     public func appendWithCell(_ builder: (TableCellBuilder) -> Void) {
         guard !sections.isEmpty else {
             buildWithCells(builder)
@@ -114,6 +122,11 @@ extension UITableView {
     }
     
     public class Mediator: ViewMediator<UITableView> {
+        var tapGestureRecognizer: UITapGestureRecognizer = build(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
+            $0.numberOfTouchesRequired = 1
+            $0.isEnabled = true
+            $0.cancelsTouchesInView = false
+        }
         var applicableSections: [Section] = []
         @ObservableState public var sections: [Section] = []
         public var animationSet: UITableView.AnimationSet = .init()
@@ -138,6 +151,18 @@ extension UITableView {
         
         public override func didApplying(_ view: UITableView) {
             view.dataSource = self
+            view.addGestureRecognizer(tapGestureRecognizer)
+        }
+        
+        @objc public func didTap(_ gesture: UITapGestureRecognizer) {
+            guard let table = view else { return }
+            let location = gesture.location(in: table)
+            guard let indexPath = table.indexPathForRow(at: location),
+                  let cell = table.cellForRow(at: indexPath),
+                  let mediator = cell.getMediator() as? AnyTableCellMediator else {
+                return
+            }
+            mediator.didTap(cell: cell)
         }
     }
     
