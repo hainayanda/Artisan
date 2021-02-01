@@ -240,6 +240,7 @@ extension CGFloat {
     
     public var isAutomatic: Bool { self == .automatic }
     public var isCalculated: Bool { !isAutomatic }
+    public var isNotVisible: Bool { self <= .zero }
 }
 
 extension CGSize {
@@ -247,6 +248,7 @@ extension CGSize {
     
     public var isAutomatic: Bool { self == .automatic || (self.height.isAutomatic && self.width.isAutomatic) }
     public var isCalculated: Bool { !isAutomatic }
+    public var isNotVisible: Bool { width.isNotVisible || height.isNotVisible }
 }
 
 public func hInsets(_ insets: CGFloat) -> InsetsConvertible {

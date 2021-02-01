@@ -60,12 +60,15 @@ extension UITableView {
     }
     
     public func cellHeightFromMediator(at indexPath: IndexPath) -> CGFloat {
-        let currentHeight = cellForRow(at: indexPath)?.bounds.height ?? .zero
-        let width: CGFloat = contentSize.width - contentInset.horizontal.both
-        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return currentHeight }
-        let customCellHeight = cell.customCellHeight(for: width)
-        let defaultHeight = cell.defaultCellHeight(for: width)
-        return customCellHeight.isCalculated ? customCellHeight : (defaultHeight.isCalculated ? defaultHeight : currentHeight)
+        let contentSize = sizeOfContent
+        let currentCell = cellForRow(at: indexPath)
+        let currentHeight = currentCell?.bounds.height ?? .zero
+        let calculatedHeight = currentCell?.sizeThatFits(contentSize).height ?? .zero
+        let heightFromActualCell = calculatedHeight > .zero ? calculatedHeight : currentHeight
+        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return heightFromActualCell }
+        let customCellHeight = cell.customCellHeight(for: contentSize.width)
+        let defaultHeight = cell.defaultCellHeight(for: contentSize.width)
+        return customCellHeight.isCalculated ? customCellHeight : (defaultHeight.isCalculated ? defaultHeight : heightFromActualCell)
     }
     
     public func appendWithCell(_ builder: (TableCellBuilder) -> Void) {
@@ -251,6 +254,12 @@ extension UITableView {
                 registeredCells.append(cell.reuseIdentifier)
             }
         }
+    }
+    
+    var sizeOfContent: CGSize {
+        let width: CGFloat = contentSize.width - contentInset.horizontal.both
+        let height: CGFloat = contentSize.height - contentInset.vertical.both
+        return .init(width: width, height: height)
     }
 }
 

@@ -56,14 +56,17 @@ extension UICollectionView {
         let estimatedSize = collectionFlow?.estimatedItemSize
         let itemSize = collectionFlow?.itemSize
         let flowSize = (itemSize ?? estimatedSize) ?? .automatic
-        let currentSize = cellForItem(at: indexPath)?.bounds.size ?? .zero
+        let collectionCell = cellForItem(at: indexPath)
+        let currentSize = collectionCell?.bounds.size ?? .zero
+        let calculatedSize = collectionCell?.sizeThatFits(sizeOfContent) ?? .zero
+        let actualSizeFromCell = !calculatedSize.isNotVisible ? calculatedSize : (!currentSize.isNotVisible ? currentSize : .zero)
         guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else {
-            return flowSize.isCalculated ? flowSize : currentSize
+            return flowSize.isCalculated ? flowSize : actualSizeFromCell
         }
         let customCellSize = cell.customCellSize(for: contentSize)
         let defaultSize = cell.defaultCellSize(for: contentSize)
         let artisanSize = customCellSize.isCalculated ? customCellSize : defaultSize
-        return artisanSize.isCalculated ? artisanSize : (flowSize.isCalculated ? flowSize : currentSize)
+        return artisanSize.isCalculated ? artisanSize : (flowSize.isCalculated ? flowSize : actualSizeFromCell)
     }
     
     public func appendWithCell(_ builder: (CollectionCellBuilder) -> Void) {
