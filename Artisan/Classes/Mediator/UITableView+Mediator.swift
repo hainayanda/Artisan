@@ -64,7 +64,7 @@ extension UITableView {
         let currentCell = cellForRow(at: indexPath)
         let currentHeight = currentCell?.bounds.height ?? .zero
         let calculatedHeight = currentCell?.sizeThatFits(contentSize).height ?? .zero
-        let heightFromActualCell = calculatedHeight > .zero ? calculatedHeight : currentHeight
+        let heightFromActualCell = currentHeight > .zero ? currentHeight : calculatedHeight
         guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return heightFromActualCell }
         let customCellHeight = cell.customCellHeight(for: contentSize.width)
         let defaultHeight = cell.defaultCellHeight(for: contentSize.width)
