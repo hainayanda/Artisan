@@ -237,10 +237,16 @@ public struct CoordinateOffsets {
 
 extension CGFloat {
     public static var automatic: CGFloat { UITableView.automaticDimension }
+    
+    public var isAutomatic: Bool { self == .automatic }
+    public var isCalculated: Bool { !isAutomatic }
 }
 
 extension CGSize {
     public static var automatic: CGSize { UICollectionViewFlowLayout.automaticSize }
+    
+    public var isAutomatic: Bool { self == .automatic || (self.height.isAutomatic && self.width.isAutomatic) }
+    public var isCalculated: Bool { !isAutomatic }
 }
 
 public func hInsets(_ insets: CGFloat) -> InsetsConvertible {
