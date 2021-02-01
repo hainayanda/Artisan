@@ -61,7 +61,7 @@ extension UITableView {
     
     public func cellHeightFromMediator(at indexPath: IndexPath) -> CGFloat {
         let width: CGFloat = contentSize.width - contentInset.horizontal.both
-        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return .automatic }
+        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return .zero }
         let customCellHeight = cell.customCellHeight(for: width)
         let defaultHeight = cell.defaultCellHeight(for: width)
         return customCellHeight.isCalculated ? customCellHeight : defaultHeight
