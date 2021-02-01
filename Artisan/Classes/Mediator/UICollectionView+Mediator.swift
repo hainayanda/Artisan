@@ -51,14 +51,22 @@ extension UICollectionView {
     }
     
     public func cellSizeFromMediator(at indexPath: IndexPath) -> CGSize {
-        let sectionInset: UIEdgeInsets = (collectionViewLayout as? UICollectionViewFlowLayout)?.sectionInset ?? .zero
-        let width: CGFloat = contentSize.width - contentInset.horizontal.both - sectionInset.horizontal.both
-        let height: CGFloat = contentSize.height - contentInset.vertical.both - sectionInset.vertical.both
-        let contentSize: CGSize = .init(width: width, height: height)
-        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return .automatic }
+        let contentSize: CGSize = sizeOfContent
+        let collectionFlow = collectionViewLayout as? UICollectionViewFlowLayout
+        let estimatedSize = collectionFlow?.estimatedItemSize
+        let itemSize = collectionFlow?.itemSize
+        let flowSize = (itemSize ?? estimatedSize) ?? .automatic
+        let collectionCell = cellForItem(at: indexPath)
+        let currentSize = collectionCell?.bounds.size ?? .zero
+        let calculatedSize = collectionCell?.sizeThatFits(sizeOfContent) ?? .zero
+        let actualSizeFromCell = currentSize.isVisible ? currentSize : (calculatedSize.isVisible ? calculatedSize : .zero)
+        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else {
+            return flowSize.isCalculated ? flowSize : actualSizeFromCell
+        }
         let customCellSize = cell.customCellSize(for: contentSize)
         let defaultSize = cell.defaultCellSize(for: contentSize)
-        return customCellSize.isCalculated ? customCellSize : defaultSize
+        let artisanSize = customCellSize.isCalculated ? customCellSize : defaultSize
+        return artisanSize.isCalculated ? artisanSize : (flowSize.isCalculated ? flowSize : actualSizeFromCell)
     }
     
     public func appendWithCell(_ builder: (CollectionCellBuilder) -> Void) {
@@ -263,6 +271,23 @@ extension UICollectionView {
             }
         }
     }
+    
+    var sizeOfContent: CGSize {
+        let contentWidth: CGFloat = min(
+            self.contentSize.width,
+            self.collectionViewLayout.collectionViewContentSize.width
+        )
+        let contentHeight: CGFloat = min(
+            self.contentSize.height,
+            self.collectionViewLayout.collectionViewContentSize.height
+        )
+        let contentInset: UIEdgeInsets = self.contentInset
+        let sectionInset: UIEdgeInsets = (self.collectionViewLayout as? UICollectionViewFlowLayout)?
+            .sectionInset ?? .zero
+        let collectionContentWidth = contentWidth - contentInset.horizontal.both - sectionInset.horizontal.both
+        let collectionContentHeight = contentHeight - contentInset.vertical.both - sectionInset.vertical.both
+        return .init(width: collectionContentWidth, height: collectionContentHeight)
+    }
 }
 
 extension UICollectionView.Mediator: UICollectionViewDataSource {
@@ -283,22 +308,7 @@ extension UICollectionView.Mediator: UICollectionViewDataSource {
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellMediator.reuseIdentifier, for: indexPath)
         if let cellLayoutable = cell as? CollectionFragmentCell {
-            let contentWidth: CGFloat = min(
-                collectionView.contentSize.width,
-                collectionView.collectionViewLayout.collectionViewContentSize.width
-            )
-            let contentHeight: CGFloat = min(
-                collectionView.contentSize.height,
-                collectionView.collectionViewLayout.collectionViewContentSize.height
-            )
-            let contentInset: UIEdgeInsets = collectionView.contentInset
-            let sectionInset: UIEdgeInsets = (collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?
-                .sectionInset ?? .zero
-            let collectionContentWidth = contentWidth - contentInset.left -
-                contentInset.right - sectionInset.left - sectionInset.right
-            let collectionContentHeight = contentHeight - contentInset.top -
-                contentInset.bottom - sectionInset.top - sectionInset.bottom
-            cellLayoutable.collectionContentSize = CGSize(width: collectionContentWidth, height: collectionContentHeight)
+            cellLayoutable.collectionContentSize = collectionView.sizeOfContent
         }
         cellMediator.apply(cell: cell)
         return cell
