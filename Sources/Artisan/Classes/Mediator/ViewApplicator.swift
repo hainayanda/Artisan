@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public class ViewApplicator<View: UIView>: ViewMediator<View> {
     var applicator: (View) -> Void
     

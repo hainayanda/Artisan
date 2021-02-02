@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 @dynamicMemberLookup
 public struct Anchor<LayoutAnchor: AnyObject> {
     var related: AnonymousRelation

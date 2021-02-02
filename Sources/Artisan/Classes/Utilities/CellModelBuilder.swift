@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public class TableCellBuilder {
     var sections: [UITableView.Section]
     var lastSection: UITableView.Section {

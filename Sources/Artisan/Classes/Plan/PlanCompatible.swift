@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public protocol PlanCompatible {
     var afterPlanningRoutine: AfterPlanningRoutine { get }
 }

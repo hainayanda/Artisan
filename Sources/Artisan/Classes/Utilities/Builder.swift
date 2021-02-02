@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public func build<B: Buildable>(_ builder: (inout B) -> Void) -> B {
     var buildable = B.init()
     builder(&buildable)

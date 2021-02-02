@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public protocol AnyMediator {
     var bondingStates: [ViewBondingState] { get }
     var observables: [StateObservable] { get }

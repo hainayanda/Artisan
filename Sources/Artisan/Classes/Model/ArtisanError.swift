@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public struct ArtisanError: LocalizedError {
     
     /// Description of error
