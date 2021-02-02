@@ -1,5 +1,5 @@
 PODS:
-  - Artisan (0.1.0)
+  - Artisan (1.1.2)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -38,7 +38,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Artisan: ea20e965027776fa918fb4539f058e17f5285a25
+  Artisan: 24b495c648c85fa9d59abc89f8b5a8d95ef3d5e6
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
@@ -47,4 +47,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: bf98c60241da09bafce67c75d9f7efeb70d43978
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
