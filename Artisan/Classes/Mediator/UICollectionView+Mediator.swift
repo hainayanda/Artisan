@@ -273,16 +273,10 @@ extension UICollectionView {
     }
     
     var sizeOfContent: CGSize {
-        let contentWidth: CGFloat = min(
-            self.contentSize.width,
-            self.collectionViewLayout.collectionViewContentSize.width
-        )
-        let contentHeight: CGFloat = min(
-            self.contentSize.height,
-            self.collectionViewLayout.collectionViewContentSize.height
-        )
+        let contentWidth: CGFloat = contentSize.width
+        let contentHeight: CGFloat = contentSize.height
         let contentInset: UIEdgeInsets = self.contentInset
-        let sectionInset: UIEdgeInsets = (self.collectionViewLayout as? UICollectionViewFlowLayout)?
+        let sectionInset: UIEdgeInsets = (collectionViewLayout as? UICollectionViewFlowLayout)?
             .sectionInset ?? .zero
         let collectionContentWidth = contentWidth - contentInset.horizontal.both - sectionInset.horizontal.both
         let collectionContentHeight = contentHeight - contentInset.vertical.both - sectionInset.vertical.both
