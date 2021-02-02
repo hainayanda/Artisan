@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 @propertyWrapper
 open class ObservableState<Wrapped>: StateObservable {
     var observers: [WrappedPropertyObserver<Wrapped>] = []

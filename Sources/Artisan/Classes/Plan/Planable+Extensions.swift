@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 extension Planer {
     
     func identifier(ofSecondItemIn constraint: NSLayoutConstraint) -> String {

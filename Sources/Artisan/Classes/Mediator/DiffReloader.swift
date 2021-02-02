@@ -6,8 +6,9 @@
 //
 
 import Foundation
-
 #if canImport(UIKit)
+import UIKit
+
 public protocol Identifiable {
     var identifier: AnyHashable { get }
     func haveSameIdentifier(with other: Identifiable) -> Bool
