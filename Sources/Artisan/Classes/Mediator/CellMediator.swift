@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol CellMediator: Buildable, Identifiable {
@@ -171,4 +172,4 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
         Cell.defaultCellSize(for: collectionContentSize)
     }
 }
-
+#endif

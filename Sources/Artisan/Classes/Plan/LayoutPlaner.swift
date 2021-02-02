@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public class LayoutPlaner<View: UIView>: Planer {
     public typealias PropertyPlaner<Property> = ((Property) -> LayoutPlaner<View>)
     
@@ -44,3 +45,4 @@ public class LayoutPlaner<View: UIView>: Planer {
         return self
     }
 }
+#endif

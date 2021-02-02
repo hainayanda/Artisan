@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 extension UICollectionView.Mediator {
@@ -157,3 +158,4 @@ public class CollectionMediatorCellReloader: DiffReloaderWorker {
         canceled = true
     }
 }
+#endif

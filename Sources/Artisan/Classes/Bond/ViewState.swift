@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 @propertyWrapper
@@ -309,3 +310,4 @@ public class WeakViewState<Wrapped: AnyObject>: ViewState<Wrapped?> {
         super.removeAllObservers()
     }
 }
+#endif

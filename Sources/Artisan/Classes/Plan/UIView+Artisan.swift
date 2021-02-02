@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public extension UIView {
@@ -60,3 +61,4 @@ public extension UIView {
         return currentParent
     }
 }
+#endif

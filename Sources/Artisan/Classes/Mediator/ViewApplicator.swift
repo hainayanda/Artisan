@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public class ViewApplicator<View: UIView>: ViewMediator<View> {
     var applicator: (View) -> Void
     
@@ -57,3 +58,4 @@ public class CollectionCellApplicator<Cell: UICollectionViewCell>: CollectionCel
         applicator(view)
     }
 }
+#endif

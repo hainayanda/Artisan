@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public protocol AnyMediator {
     var bondingStates: [ViewBondingState] { get }
     var observables: [StateObservable] { get }
@@ -52,3 +53,4 @@ protocol AnyLinker {
     func signalStateListener(with newValue: Any, old oldValue: Any)
     func signalApplicator(with newValue: Any)
 }
+#endif

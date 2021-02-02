@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public extension LayoutRelation where Related == InsetsConvertible {
@@ -256,3 +257,4 @@ extension NSLayoutConstraint.Attribute {
         }
     }
 }
+#endif

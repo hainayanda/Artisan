@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public struct ArtisanError: LocalizedError {
     
     /// Description of error
@@ -43,3 +44,4 @@ extension ArtisanError {
         )
     }
 }
+#endif

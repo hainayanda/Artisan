@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public class PartialLinker<View: UIView, State>: AnyLinker {
@@ -353,3 +354,4 @@ public extension PropertyObservers where Wrapped: Equatable {
         return self
     }
 }
+#endif

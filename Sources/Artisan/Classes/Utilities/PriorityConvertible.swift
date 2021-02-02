@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 extension UILayoutPriority: ExpressibleByFloatLiteral {
@@ -26,3 +27,4 @@ extension UILayoutPriority: ExpressibleByIntegerLiteral {
     }
     
 }
+#endif

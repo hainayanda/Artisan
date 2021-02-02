@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 extension NSObject {
@@ -45,3 +46,4 @@ extension UIResponder {
         next as? UIViewController ?? next?.parentViewController
     }
 }
+#endif

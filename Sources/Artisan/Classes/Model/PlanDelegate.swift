@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol PlanDelegate: class {
@@ -25,3 +26,4 @@ public extension PlanDelegate {
         self as? UIViewController ?? (self as? UIView)?.parentViewController
     }
 }
+#endif

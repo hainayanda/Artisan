@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public class TableCellBuilder {
     var sections: [UITableView.Section]
     var lastSection: UITableView.Section {
@@ -230,3 +231,4 @@ public extension Array where Element == UITableView.Section {
         .init(sections: self)
     }
 }
+#endif

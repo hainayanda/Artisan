@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+#if canImport(UIKit)
 public extension Planer {
     
     // MARK: Top Anchor
@@ -312,3 +314,4 @@ public extension Planer {
         return right(relation, to: anchor, priority: context.mutatingPriority)
     }
 }
+#endif

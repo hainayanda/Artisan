@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public func build<B: Buildable>(_ builder: (inout B) -> Void) -> B {
     var buildable = B.init()
     builder(&buildable)
@@ -46,3 +47,4 @@ public class BuildableBuilder<Object> {
     
     public func build() -> Object { object }
 }
+#endif

@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public extension Planer {
     
     // MARK: Height Anchor
@@ -272,3 +273,4 @@ public extension Planer {
         return width(relation, priority: context.mutatingPriority)
     }
 }
+#endif

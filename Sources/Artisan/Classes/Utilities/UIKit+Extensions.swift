@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 fileprivate func assignIfDifferent<V: Equatable>(into: inout V, value: V) {
@@ -347,3 +348,4 @@ extension UIControl.Event: Hashable {
         hasher.combine(self.rawValue)
     }
 }
+#endif

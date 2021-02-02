@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public class EmptyTableCell: TableFragmentCell {
@@ -23,3 +24,4 @@ public class EmptyCollectionCell: CollectionFragmentCell {
         return preferedSize
     }
 }
+#endif

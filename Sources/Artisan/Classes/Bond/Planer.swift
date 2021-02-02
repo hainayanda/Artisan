@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public extension Planer {
@@ -85,3 +86,4 @@ public extension Planer {
         return self
     }
 }
+#endif
