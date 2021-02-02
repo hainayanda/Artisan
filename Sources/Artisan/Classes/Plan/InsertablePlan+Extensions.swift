@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 import WebKit
 
@@ -361,3 +362,4 @@ extension InsertablePlan {
         fit(.init())
     }
 }
+#endif

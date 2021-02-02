@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public extension InsertableViewPlan where View: UIScrollView {
@@ -52,3 +53,4 @@ public extension InsertableViewPlan where View: UIScrollView {
             .height(.equalTo(self.view.heightAnchor))
     }
 }
+#endif

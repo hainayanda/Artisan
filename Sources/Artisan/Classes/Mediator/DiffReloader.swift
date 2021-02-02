@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public protocol Identifiable {
     var identifier: AnyHashable { get }
     func haveSameIdentifier(with other: Identifiable) -> Bool
@@ -116,3 +117,4 @@ public class DiffReloader {
         }
     }
 }
+#endif

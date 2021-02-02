@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol InsertablePlan: class {
@@ -99,3 +100,4 @@ public class LayoutPlan<View: UIView>: InsertableViewPlan {
         self.context = context
     }
 }
+#endif

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol Plan: class {
@@ -59,3 +60,4 @@ public protocol Planer: Plan {
     @discardableResult
     func width(_ relation: InterRelation<AnonymousRelation>, multiplyBy multipier: CGFloat, constant: CGFloat, priority: UILayoutPriority) -> Self
 }
+#endif

@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 extension Planer {
     
     func identifier(ofSecondItemIn constraint: NSLayoutConstraint) -> String {
@@ -180,3 +181,4 @@ public extension Array where Element == LayoutEdge {
     static var fullTop: [Element] { [.top, .left, .right] }
     static var edges: [Element] { [.top, .bottom, .left, .right] }
 }
+#endif

@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public enum LayoutDimension {
     case height
     case width
@@ -172,3 +173,4 @@ public enum CellReloadStrategy {
         }
     }
 }
+#endif

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 extension UITableView.Mediator {
@@ -163,3 +164,4 @@ public class TableMediatorCellReloader: DiffReloaderWorker {
         canceled = true
     }
 }
+#endif

@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 public protocol PlanCompatible {
     var afterPlanningRoutine: AfterPlanningRoutine { get }
 }
@@ -100,3 +101,4 @@ extension UIViewController: PlanCompatible {
     @objc open var afterPlanningRoutine: AfterPlanningRoutine { .autoApply }
     
 }
+#endif

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 import WebKit
 
@@ -384,3 +385,4 @@ extension InsertableViewPlan where View: UIStackView {
         fitStacked(.init())
     }
 }
+#endif

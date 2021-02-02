@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public class PlanContext {
@@ -32,3 +33,4 @@ public class PlanContext {
         self.currentView = currentView
     }
 }
+#endif

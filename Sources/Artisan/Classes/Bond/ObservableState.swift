@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 @propertyWrapper
 open class ObservableState<Wrapped>: StateObservable {
     var observers: [WrappedPropertyObserver<Wrapped>] = []
@@ -124,3 +125,4 @@ public class WeakObservableState<Wrapped: AnyObject>: ObservableState<Wrapped?> 
         super.removeAllObservers()
     }
 }
+#endif

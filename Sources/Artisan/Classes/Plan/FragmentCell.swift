@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol FragmentCell: Fragment {
@@ -217,3 +218,4 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
         layoutPhase = .none
     }
 }
+#endif

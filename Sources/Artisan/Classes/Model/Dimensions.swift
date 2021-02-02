@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 //MARK: Insets
@@ -268,3 +269,4 @@ public func hInsets(left: CGFloat, right: CGFloat) -> InsetsConvertible {
 public func vInsets(top: CGFloat, bottom: CGFloat) -> InsetsConvertible {
     return UIVerticalInsets(top: top, bottom: bottom)
 }
+#endif

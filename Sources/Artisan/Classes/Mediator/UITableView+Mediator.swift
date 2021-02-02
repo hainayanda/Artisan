@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public typealias TableSection = UITableView.Section
@@ -304,4 +305,4 @@ extension UITableView.Mediator: UITableViewDataSource {
         return titles
     }
 }
-
+#endif

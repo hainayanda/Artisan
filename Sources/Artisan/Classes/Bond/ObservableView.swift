@@ -7,8 +7,10 @@
 
 import Foundation
 
+#if canImport(UIKit)
 extension ObservableView where Self: NSObject {
     public var observer: Observer? {
         getMediator() as? Observer
     }
 }
+#endif

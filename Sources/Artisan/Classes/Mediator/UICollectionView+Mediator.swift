@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public typealias CollectionSection = UICollectionView.Section
@@ -352,3 +353,4 @@ extension UICollectionView.Mediator: UICollectionViewDataSource {
         )
     }
 }
+#endif

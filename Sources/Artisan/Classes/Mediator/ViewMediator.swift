@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 extension AnyMediator {
@@ -179,3 +180,4 @@ public extension UIView {
         mediator.bonding(with: selfAsView)
     }
 }
+#endif

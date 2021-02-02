@@ -7,6 +7,7 @@
 
 import Foundation
 
+#if canImport(UIKit)
 @dynamicMemberLookup
 public struct Anchor<LayoutAnchor: AnyObject> {
     var related: AnonymousRelation
@@ -170,3 +171,4 @@ public extension UILayoutGuide {
         }
     }
 }
+#endif

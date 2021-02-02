@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public extension Planer {
@@ -156,3 +157,4 @@ public extension Planer {
         return centerY(relation, to: anchor, priority: context.mutatingPriority)
     }
 }
+#endif

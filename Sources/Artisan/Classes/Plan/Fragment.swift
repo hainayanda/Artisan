@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 public protocol Fragment {
@@ -34,3 +35,4 @@ public extension Fragment where Self: UIView {
         planFragment(delegate: delegate)
     }
 }
+#endif
