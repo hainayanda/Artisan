@@ -122,9 +122,9 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     
     open func mediatorDidMapped(from view: View) { }
     
-    open func willLoosingBond(with view: View?) { }
+    open func willLoosingBond(with view: View) { }
     
-    open func didLoosingBond(with view: View?) { }
+    open func didLoosingBond(with view: View) { }
     
     open func bonding(with view: View) {
         (view.getMediator() as? AnyMediator)?.removeBond()
@@ -140,16 +140,16 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     }
     
     final public func removeBond() {
-        let currentView = self.view
+        guard let currentView = self.view else { return }
         willLoosingBond(with: currentView)
         if let cell = view as? TableFragmentCell {
             cell.mediator = nil
         } else if let cell = view as? CollectionFragmentCell {
             cell.mediator = nil
-        } else if let view = self.view {
-            objc_setAssociatedObject(view,  &NSObject.AssociatedKey.mediator, nil, .OBJC_ASSOCIATION_RETAIN)
-            self.view = nil
+        } else {
+            objc_setAssociatedObject(currentView,  &NSObject.AssociatedKey.mediator, nil, .OBJC_ASSOCIATION_RETAIN)
         }
+        self.view = nil
         bondingStates.forEach {
             $0.removeBonding()
         }
