@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Artisan'
-  s.version          = '1.2.2'
+  s.version          = '1.2.3'
   s.summary          = 'Artisan is a DSL, MVVM and Data Binding framework for Swift'
 
 # This description is used to generate tags and improve search results.
