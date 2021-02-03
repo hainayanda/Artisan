@@ -25,8 +25,8 @@ public protocol BondableMediator: class, Buildable, AnyMediator {
     func didApplying(_ view: View)
     func mediatorWillMapped(from view: View)
     func mediatorDidMapped(from view: View)
-    func willLoosingBond(with view: View?)
-    func didLoosingBond(with view: View?)
+    func willLoosingBond(with view: View)
+    func didLoosingBond(with view: View)
 }
 
 public protocol Buildable {

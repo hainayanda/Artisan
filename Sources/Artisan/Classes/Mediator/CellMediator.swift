@@ -86,11 +86,11 @@ open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTabl
         super.mediatorDidMapped(from: view)
     }
     
-    open override func willLoosingBond(with view: View?) {
+    open override func willLoosingBond(with view: View) {
         super.willLoosingBond(with: view)
     }
     
-    open override func didLoosingBond(with view: View?) {
+    open override func didLoosingBond(with view: View) {
         super.didLoosingBond(with: view)
     }
     
@@ -150,11 +150,11 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
         super.mediatorDidMapped(from: view)
     }
     
-    open override func willLoosingBond(with view: View?) {
+    open override func willLoosingBond(with view: View) {
         super.willLoosingBond(with: view)
     }
     
-    open override func didLoosingBond(with view: View?) {
+    open override func didLoosingBond(with view: View) {
         super.didLoosingBond(with: view)
     }
     
