@@ -18,10 +18,12 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-- Swift 5.0 or higher
+- Swift 5.1 or higher
 - iOS 10.0 or higher
 
 ## Installation
+
+### Cocoapods
 
 Artisan is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
@@ -29,6 +31,18 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'Artisan'
 ```
+
+### Swift Package Manager
+
+First, create a Package.swift file and add this github url. It should look like:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/nayanda1/Artisan.git", from: "1.2.0")
+]
+```
+
+Then run swift build to build the dependency before you use it
 
 ## Author
 
