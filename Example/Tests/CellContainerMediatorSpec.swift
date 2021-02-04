@@ -132,6 +132,7 @@ class CellContainerMediatorSpec: QuickSpec {
 class DummyCollectionCellMediator: AnyCollectionCellMediator {
     var id: String = .randomString()
     var identifier: AnyHashable { id }
+    var compatible: Bool = true
     static var cellViewClass: AnyClass = UICollectionReusableView.self
     static var cellReuseIdentifier: String = .randomString()
     
@@ -158,12 +159,18 @@ class DummyCollectionCellMediator: AnyCollectionCellMediator {
 
     func didTap(cell: UICollectionReusableView) { }
 
+    func isCompatible<CellType>(with cell: CellType) -> Bool where CellType : UIView {
+        compatible
+    }
+    
+    func removeBond() { }
 }
 
 class DummyTableCell: AnyTableCellMediator {
     var id: String = .randomString()
     var index: String?
     var identifier: AnyHashable { id }
+    var compatible: Bool = true
     static var cellViewClass: AnyClass = UITableViewCell.self
     static var cellReuseIdentifier: String = .randomString()
     
@@ -188,5 +195,11 @@ class DummyTableCell: AnyTableCellMediator {
     }
     
     func didTap(cell: UITableViewCell) { }
+    
+    func isCompatible<CellType>(with cell: CellType) -> Bool where CellType : UIView {
+        compatible
+    }
+    
+    func removeBond() { }
     
 }

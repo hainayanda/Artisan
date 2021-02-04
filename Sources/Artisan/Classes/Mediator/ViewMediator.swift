@@ -127,8 +127,13 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     open func didLoosingBond(with view: View) { }
     
     open func bonding(with view: View) {
-        (view.getMediator() as? AnyMediator)?.removeBond()
-        if let cell = view as? TableFragmentCell {
+        defer {
+            self.view = view
+        }
+        let mediator = view.getMediator()
+        if self === (mediator as? ViewMediator<View>) {
+            return
+        } else if let cell = view as? TableFragmentCell {
             cell.mediator = self
         } else if let cell = view as? CollectionFragmentCell {
             cell.mediator = self
@@ -136,7 +141,6 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
             let mediatorWrapper = AssociatedWrapper(wrapped: self)
             objc_setAssociatedObject(view,  &NSObject.AssociatedKey.mediator, mediatorWrapper, .OBJC_ASSOCIATION_RETAIN)
         }
-        self.view = view
     }
     
     final public func removeBond() {
