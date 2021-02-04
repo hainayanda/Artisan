@@ -9,16 +9,18 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 
-public protocol CellMediator: Buildable, Identifiable {
+public protocol CellMediator: AnyMediator, Buildable, Identifiable {
     static var cellViewClass: AnyClass { get }
     static var cellReuseIdentifier: String { get }
     func isSameMediator(with other: CellMediator) -> Bool
+    func isCompatible<CellType: UIView>(with cell: CellType) -> Bool
 }
 
 public extension CellMediator {
     var reuseIdentifier: String {
         Self.cellReuseIdentifier
     }
+    
     var cellClass: AnyClass {
         Self.cellViewClass
     }
@@ -107,6 +109,10 @@ open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTabl
     public func defaultCellHeight(for cellWidth: CGFloat) -> CGFloat {
         Cell.defaultCellHeight(for: cellWidth)
     }
+    
+    public func isCompatible<CellType: UIView>(with cell: CellType) -> Bool {
+        cell is Cell
+    }
 }
 
 open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell>, AnyCollectionCellMediator {
@@ -170,6 +176,10 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
     
     public func defaultCellSize(for collectionContentSize: CGSize) -> CGSize {
         Cell.defaultCellSize(for: collectionContentSize)
+    }
+    
+    public func isCompatible<CellType: UIView>(with cell: CellType) -> Bool {
+        cell is Cell
     }
 }
 #endif
