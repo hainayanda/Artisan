@@ -87,38 +87,39 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
     
     final public func apply(to view: View) {
         willApplying(view)
-        let states = bondingStates
-        states.forEach {
-            var state = $0
-            state.removeBonding()
-            state.bondingState = .applying
-        }
+        removeBondAndAssign(bondingState: .applying)
         bonding(with: view)
         observables.forEach {
             $0.invokeWithCurrentValue()
         }
-        states.forEach {
-            var state = $0
-            state.bondingState = .none
-        }
+        neutralizeBond()
         didApplying(view)
     }
     
     final public func map(from view: View) {
         mediatorWillMapped(from: view)
+        removeBondAndAssign(bondingState: .mapping)
+        bonding(with: view)
+        neutralizeBond()
+        mediatorDidMapped(from: view)
+    }
+    
+    func removeBondAndAssign(bondingState: BondingState) {
         let states = bondingStates
         states.forEach {
             var state = $0
             state.removeBonding()
-            state.bondingState = .mapping
+            state.bondingState = bondingState
         }
         removeBond()
-        bonding(with: view)
+    }
+    
+    func neutralizeBond() {
+        let states = bondingStates
         states.forEach {
             var state = $0
             state.bondingState = .none
         }
-        mediatorDidMapped(from: view)
     }
     
     open func didInit() { }
