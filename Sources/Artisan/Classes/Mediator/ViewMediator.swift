@@ -61,6 +61,15 @@ extension AnyMediator {
     
 }
 
+public extension BondableMediator {
+    func createViewAndApply(_ builder: ((View) -> Void)? = nil) -> View {
+        let view = View.init()
+        builder?(view)
+        apply(to: view)
+        return view
+    }
+}
+
 @objc class AssociatedWrapper: NSObject {
     var wrapped: AnyObject
     
