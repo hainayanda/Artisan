@@ -48,6 +48,14 @@ public class TableCellBuilder {
     }
     
     @discardableResult
+    public func next<Cell: AnyTableCellMediator>(mediatorType: Cell.Type, _ builder: (inout Cell) -> Void) -> TableCellBuilder {
+        var cell = Cell.init()
+        builder(&cell)
+        lastSection.add(cell: cell)
+        return self
+    }
+    
+    @discardableResult
     public func next<Cell: AnyTableCellMediator>(mediatorType: Cell.Type, count: Int, _ builder: (inout Cell, Int) -> Void) -> TableCellBuilder {
         for index in 0..<count {
             var cell = Cell.init()
@@ -70,6 +78,14 @@ public class TableCellBuilder {
     @discardableResult
     public func next<Cell: UITableViewCell, Item>(cellType: Cell.Type, fromItem item: Item, _ builder: @escaping (Cell, Item) -> Void) -> TableCellBuilder {
         return next(cellType: cellType, fromItems: [item], builder)
+    }
+    
+    @discardableResult
+    public func next<Cell: UITableViewCell>(mediatorType: Cell.Type, _ builder: @escaping (Cell) -> Void) -> TableCellBuilder {
+        lastSection.add(cell: TableCellApplicator<Cell> {
+            builder($0)
+        })
+        return self
     }
     
     @discardableResult
@@ -146,6 +162,14 @@ public class CollectionCellBuilder {
     }
     
     @discardableResult
+    public func next<Cell: AnyCollectionCellMediator>(mediatorType: Cell.Type, _ builder: (inout Cell) -> Void) -> CollectionCellBuilder {
+        var cell = Cell.init()
+        builder(&cell)
+        lastSection.add(cell: cell)
+        return self
+    }
+    
+    @discardableResult
     public func next<Cell: AnyCollectionCellMediator>(mediatorType: Cell.Type, count: Int, _ builder: (inout Cell, Int) -> Void) -> CollectionCellBuilder {
         for index in 0..<count {
             var cell = Cell.init()
@@ -168,6 +192,14 @@ public class CollectionCellBuilder {
     @discardableResult
     public func next<Cell: UICollectionViewCell, Item>(cellType: Cell.Type, fromItem item: Item, _ builder: @escaping (Cell, Item) -> Void) -> CollectionCellBuilder {
         return next(cellType: cellType, fromItems: [item], builder)
+    }
+    
+    @discardableResult
+    public func next<Cell: UICollectionViewCell>(mediatorType: Cell.Type, _ builder: @escaping (Cell) -> Void) -> CollectionCellBuilder {
+        lastSection.add(cell: CollectionCellApplicator<Cell> {
+            builder($0)
+        })
+        return self
     }
     
     @discardableResult
