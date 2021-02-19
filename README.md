@@ -30,6 +30,7 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'Artisan'
+pod 'Draftsman ~> 1.0'
 ```
 
 ### Swift Package Manager

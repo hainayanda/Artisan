@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Artisan
+import Draftsman
 
 class EventCollectionCell: CollectionFragmentCell {
     lazy var banner: UIImageView = build {

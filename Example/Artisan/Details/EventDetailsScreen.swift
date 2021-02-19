@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Artisan
+import Draftsman
 
 class EventDetailsScreen: UIViewController {
     lazy var tableView: UITableView = build {

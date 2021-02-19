@@ -7,9 +7,11 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 import Quick
 import Nimble
+@testable import Draftsman
 @testable import Artisan
 
 class PlanerSpec: QuickSpec {
@@ -50,3 +52,4 @@ class PlanerSpec: QuickSpec {
         }
     }
 }
+#endif

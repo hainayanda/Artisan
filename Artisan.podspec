@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '10.0'
 
-  s.source_files = 'Sources/Artisan/Classes/**/*'
+  s.source_files = 'Artisan/Classes/**/*'
   
   # s.resource_bundles = {
   #   'Artisan' => ['Artisan/Assets/*.png']
@@ -38,6 +38,6 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'Draftsman', '~> 1.0.1'
   s.swift_version = '5.1'
 end

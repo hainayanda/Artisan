@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Artisan
+import Draftsman
 
 class SimilarEventCell: TableFragmentCell {
     lazy var collectionLayout: UICollectionViewFlowLayout = .init()

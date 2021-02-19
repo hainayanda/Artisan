@@ -7,6 +7,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 import Quick
 import Nimble
@@ -98,3 +99,4 @@ class DummyCollectionMediator: CollectionCellMediator<UICollectionViewCell> {
 class DummyTableMediator: TableCellMediator<UITableViewCell> {
     var id: String?
 }
+#endif
