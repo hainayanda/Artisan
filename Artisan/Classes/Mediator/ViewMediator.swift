@@ -149,8 +149,7 @@ open class ViewMediator<View: NSObject>: NSObject, BondableMediator {
         if self === (mediator as? ViewMediator<View>) {
             return
         } else {
-            let mediatorWrapper = AssociatedWrapper(wrapped: self)
-            objc_setAssociatedObject(view,  &NSObject.AssociatedKey.mediator, mediatorWrapper, .OBJC_ASSOCIATION_RETAIN)
+            view.setMediator(self)
         }
     }
     

@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow()
         let homeScreen = EventSearchScreen()
         let homeMediator = EventSearchScreenVM()
-        homeMediator.bonding(with: homeScreen)
+        homeMediator.apply(to: homeScreen)
         let navigationVC = UINavigationController(rootViewController: homeScreen)
         window.rootViewController = navigationVC
         window.makeKeyAndVisible()

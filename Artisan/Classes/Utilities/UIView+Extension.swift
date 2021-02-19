@@ -19,16 +19,25 @@ extension NSObject {
         guard let wrapper = objc_getAssociatedObject(self, &AssociatedKey.mediator) as? AssociatedWrapper else {
             if let cell = self as? UITableViewCell,
                let indexMediator = cell.getMediatorFromIndex() {
-                indexMediator.apply(cell: cell)
+                setMediator(indexMediator)
                 return indexMediator
             } else if let cell = self as? UICollectionViewCell,
                       let indexMediator = cell.getMediatorFromIndex() {
-                indexMediator.apply(cell: cell)
+                setMediator(indexMediator)
                 return indexMediator
             }
             return nil
         }
         return wrapper.wrapped as? AnyMediator
+    }
+    
+    public func setMediator(_ mediator: AnyMediator?) {
+        guard let mediator = mediator else {
+            objc_setAssociatedObject(self, &AssociatedKey.mediator, nil, .OBJC_ASSOCIATION_RETAIN)
+            return
+        }
+        let wrapper: AssociatedWrapper = .init(wrapped: mediator as AnyObject)
+        objc_setAssociatedObject(self, &AssociatedKey.mediator, wrapper, .OBJC_ASSOCIATION_RETAIN)
     }
 }
 

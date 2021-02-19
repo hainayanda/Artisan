@@ -19,19 +19,16 @@ class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
     @ObservableState var results: [Event] = []
     @ObservableState var history: [String] = []
     
-    override func didInit() {
-        $results.observe(observer: self)
-            .didSet(thenCall: EventSearchScreenVM.didGet(results:))
-        $history.observe(observer: self)
-            .didSet(thenCall: EventSearchScreenVM.didHistory(updated:))
-    }
-    
     override func bonding(with view: EventSearchScreen) {
         super.bonding(with: view)
         $searchPhrase.bonding(with: view.searchBar, \.text)
             .observe(observer: self)
             .delayMultipleSetTrigger(by: .fastest)
             .didSet(thenCall: EventSearchScreenVM.search(for:))
+        $results.observe(observer: self)
+            .didSet(thenCall: EventSearchScreenVM.didGet(results:))
+        $history.observe(observer: self)
+            .didSet(thenCall: EventSearchScreenVM.didHistory(updated:))
     }
 }
 
