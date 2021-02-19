@@ -9,6 +9,7 @@
 import Foundation
 import Artisan
 import UIKit
+import Draftsman
 
 class EventCell: TableFragmentCell {
     lazy var bannerBackground: UIView = build {

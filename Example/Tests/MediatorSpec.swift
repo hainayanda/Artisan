@@ -7,6 +7,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 import Quick
 import Nimble
@@ -129,3 +130,4 @@ class ExtendedTestableVM: TestableVM {
     @ViewState var alpha: CGFloat?
     @ObservableState var attrText: NSAttributedString?
 }
+#endif

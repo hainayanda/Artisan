@@ -8,6 +8,7 @@
 
 import UIKit
 import Artisan
+import Draftsman
 
 protocol EventSearchScreenObserver {
     func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath)

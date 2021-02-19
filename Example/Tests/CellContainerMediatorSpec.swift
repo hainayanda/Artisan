@@ -7,6 +7,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 import Quick
 import Nimble
@@ -203,3 +204,4 @@ class DummyTableCell: AnyTableCellMediator {
     func removeBond() { }
     
 }
+#endif

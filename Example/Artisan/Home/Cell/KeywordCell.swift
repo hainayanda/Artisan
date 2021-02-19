@@ -9,6 +9,7 @@
 import Foundation
 import Artisan
 import UIKit
+import Draftsman
 
 class KeywordCell: TableFragmentCell {
     lazy var keywordLabel = build(UILabel.self)
