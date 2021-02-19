@@ -8,6 +8,7 @@
 import Foundation
 #if canImport(UIKit)
 import UIKit
+import Draftsman
 
 public protocol CellMediator: AnyMediator, Buildable, Identifiable {
     static var cellViewClass: AnyClass { get }
@@ -64,6 +65,11 @@ open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTabl
     public func apply(cell: UITableViewCell) {
         guard let cell = cell as? Cell else {
             fatalError("UITableViewCell type is different with Mediator")
+        }
+        if let fragmentCell = cell as? TableFragmentCell {
+            fragmentCell.whenNeedCellHeight { [weak self] width in
+                return self?.defaultCellHeight(for: width) ?? .automatic
+            }
         }
         self.apply(to: cell)
     }
@@ -132,6 +138,11 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
     public func apply(cell: UICollectionReusableView) {
         guard let cell = cell as? Cell else {
             fatalError("UICollectionViewCell type is different with Mediator")
+        }
+        if let fragmentCell = cell as? CollectionFragmentCell {
+            fragmentCell.whenNeedCellSize { [weak self] size in
+                return self?.customCellSize(for: size) ?? .automatic
+            }
         }
         self.apply(to: cell)
     }

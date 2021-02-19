@@ -1,6 +1,6 @@
 {
   "name": "Artisan",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "summary": "Artisan is a DSL, MVVM and Data Binding framework for Swift",
   "description": "Artisan is a DSL, MVVM and Data Binding framework for Swift. But its more than that.",
   "homepage": "https://github.com/nayanda1/Artisan",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/nayanda1/Artisan.git",
-    "tag": "1.2.4"
+    "tag": "2.0.0"
   },
   "platforms": {
     "ios": "10.0"
