@@ -33,16 +33,30 @@ pod 'Artisan'
 pod 'Draftsman ~> 1.0'
 ```
 
-### Swift Package Manager
+### Swift Package Manager from XCode
 
-Artisan is available through [Swift Package Manager](https://swift.org/package-manager/). To install it, 
-simply go to File > Swift Package > Add Swift Package Dependency and add "https://github.com/nayanda1/Artisan.git" as Swift Package URL.
-Or add the following line to Package.swift:
+- Add it using xcode menu **File > Swift Package > Add Package Dependency**
+- Add **https://github.com/nayanda1/Artisan.git** as Swift Package url
+- Set rules at **version**, with **Up to Next Major** option and put **2.0.2** as its version
+- Click next and wait
+
+### Swift Package Manager from Package.swift
+
+Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Artisan.git", from: "2.0.2")
+    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "2.0.2"))
 ]
+```
+
+Use it in your target as `Artisan`
+
+```swift
+ .target(
+    name: "MyModule",
+    dependencies: ["Artisan"]
+)
 ```
 
 ## Author
