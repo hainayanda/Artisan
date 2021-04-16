@@ -38,6 +38,7 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'Draftsman', '~> 1.0.1'
+  s.dependency 'Draftsman', '~> 1.0.2'
+  s.dependency 'Pharos', '~> 1.1.1'
   s.swift_version = '5.1'
 end
