@@ -402,11 +402,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Artisan/Artisan.framework",
 				"${BUILT_PRODUCTS_DIR}/Draftsman/Draftsman.framework",
+				"${BUILT_PRODUCTS_DIR}/Pharos/Pharos.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Artisan.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Draftsman.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pharos.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
