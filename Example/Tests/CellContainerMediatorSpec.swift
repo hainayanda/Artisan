@@ -16,11 +16,14 @@ import Nimble
 class CellContainerMediatorSpec: QuickSpec {
     override func spec() {
         describe("collection view mediator behaviour") {
+            var superView: UIView!
             var collectionMediator: UICollectionView.Mediator!
             var collectionView: UICollectionView!
             beforeEach {
+                superView = .init()
                 collectionMediator = .init()
                 collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+                superView.addSubview(collectionView)
             }
             it("should assign itself as dataSource for UICollectionView") {
                 expect(collectionView.dataSource).to(beNil())
@@ -31,7 +34,7 @@ class CellContainerMediatorSpec: QuickSpec {
             it("should provide clean datasource") {
                 var sections: [UICollectionView.Section] = []
                 for index in 0 ..< Int.random(in: 5..<10) {
-                    let section = UICollectionView.Section(identifier: index)
+                    let section = UICollectionView.Section(distinctIdentifier: index)
                     for cellIndex in 0 ..< Int.random(in: 5..<10) {
                         section.add(cell: DummyCollectionCellMediator(id: cellIndex))
                     }
@@ -53,10 +56,10 @@ class CellContainerMediatorSpec: QuickSpec {
                     if titled {
                         let title: String = .randomString()
                         expectedResult.append(title)
-                        sections.append(UICollectionView.Section(identifier: index, index: title))
+                        sections.append(UICollectionView.Section(distinctIdentifier: index, index: title))
                     } else {
                         expectedResult.append("")
-                        sections.append(UICollectionView.Section(identifier: index))
+                        sections.append(UICollectionView.Section(distinctIdentifier: index))
                     }
                 }
                 collectionMediator.applicableSections = sections
@@ -65,18 +68,21 @@ class CellContainerMediatorSpec: QuickSpec {
             it("should return nil for titles if do not have any") {
                 var sections: [UICollectionView.Section] = []
                 for index in 0 ..< Int.random(in: 10..<20) {
-                    sections.append(UICollectionView.Section(identifier: index))
+                    sections.append(UICollectionView.Section(distinctIdentifier: index))
                 }
                 collectionMediator.applicableSections = sections
                 expect(collectionMediator.indexTitles(for: collectionView)).to(beNil())
             }
         }
         describe("table view mediator behaviour") {
+            var superView: UIView!
             var tableMediator: UITableView.Mediator!
             var tableView: UITableView!
             beforeEach {
+                superView = .init()
                 tableMediator = .init()
                 tableView = .init()
+                superView.addSubview(tableView)
             }
             it("should assign itself as dataSource for UICollectionView") {
                 expect(tableView.dataSource).to(beNil())
@@ -87,7 +93,7 @@ class CellContainerMediatorSpec: QuickSpec {
             it("should provide clean datasource") {
                 var sections: [UITableView.Section] = []
                 for index in 0 ..< Int.random(in: 5..<10) {
-                    let section = UITableView.Section(identifier: index)
+                    let section = UITableView.Section(distinctIdentifier: index)
                     for cellIndex in 0 ..< Int.random(in: 5..<10) {
                         section.add(cell: DummyTableCell(id: cellIndex))
                     }
@@ -109,10 +115,10 @@ class CellContainerMediatorSpec: QuickSpec {
                     if titled {
                         let title: String = .randomString()
                         expectedResult.append(String(title.first!))
-                        sections.append(UITableView.TitledSection(title: title, identifier: index, index: String(title.first!)))
+                        sections.append(UITableView.TitledSection(title: title, distinctIdentifier: index, index: String(title.first!)))
                     } else {
                         expectedResult.append("")
-                        sections.append(UITableView.Section(identifier: index))
+                        sections.append(UITableView.Section(distinctIdentifier: index))
                     }
                 }
                 tableMediator.applicableSections = sections
@@ -121,7 +127,7 @@ class CellContainerMediatorSpec: QuickSpec {
             it("should return nil for titles if do not have any") {
                 var sections: [UITableView.Section] = []
                 for index in 0 ..< Int.random(in: 10..<20) {
-                    sections.append(UITableView.Section(identifier: index))
+                    sections.append(UITableView.Section(distinctIdentifier: index))
                 }
                 tableMediator.applicableSections = sections
                 expect(tableMediator.sectionIndexTitles(for: tableView)).to(beNil())
@@ -132,7 +138,7 @@ class CellContainerMediatorSpec: QuickSpec {
 
 class DummyCollectionCellMediator: AnyCollectionCellMediator {
     var id: String = .randomString()
-    var identifier: AnyHashable { id }
+    var distinctIdentifier: AnyHashable { id }
     var compatible: Bool = true
     static var cellViewClass: AnyClass = UICollectionReusableView.self
     static var cellReuseIdentifier: String = .randomString()
@@ -145,7 +151,7 @@ class DummyCollectionCellMediator: AnyCollectionCellMediator {
     
     func apply(cell: UICollectionReusableView) { }
     
-    func isSameMediator(with other: CellMediator) -> Bool {
+    func isSame(with other: CellMediator) -> Bool {
         id == (other as? DummyCollectionCellMediator)?.id
     }
 
@@ -164,13 +170,18 @@ class DummyCollectionCellMediator: AnyCollectionCellMediator {
         compatible
     }
     
-    func removeBond() { }
+    func removeBond() {
+        bondDidRemoved()
+    }
+    
+    func bondDidRemoved() { }
 }
 
 class DummyTableCell: AnyTableCellMediator {
+    
     var id: String = .randomString()
     var index: String?
-    var identifier: AnyHashable { id }
+    var distinctIdentifier: AnyHashable { id }
     var compatible: Bool = true
     static var cellViewClass: AnyClass = UITableViewCell.self
     static var cellReuseIdentifier: String = .randomString()
@@ -183,7 +194,7 @@ class DummyTableCell: AnyTableCellMediator {
     
     func apply(cell: UITableViewCell) { }
     
-    func isSameMediator(with other: CellMediator) -> Bool {
+    func isSame(with other: CellMediator) -> Bool {
         id == (other as? DummyCollectionCellMediator)?.id
     }
     
@@ -201,7 +212,11 @@ class DummyTableCell: AnyTableCellMediator {
         compatible
     }
     
-    func removeBond() { }
+    func removeBond() {
+        bondDidRemoved()
+    }
+    
+    func bondDidRemoved() { }
     
 }
 #endif

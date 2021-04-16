@@ -31,13 +31,14 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'Artisan'
 pod 'Draftsman ~> 1.0'
+pod 'Pharos ~> 1.1'
 ```
 
 ### Swift Package Manager from XCode
 
 - Add it using xcode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Artisan.git** as Swift Package url
-- Set rules at **version**, with **Up to Next Major** option and put **2.0.2** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **3.0.0** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -46,7 +47,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "2.0.2"))
+    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.0.0"))
 ]
 ```
 
@@ -143,14 +144,14 @@ extension MyViewController: UISearchBarDelegate {
 class MyViewController: UIViewController {
     lazy var searchBar: UISearchBar = .init()
 
-    @ViewState var searchPhrase: String?
+    @Observable var searchPhrase: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        $searchPhrase.bonding(with: searchBar, \.text)
-            .viewDidSet(then: { searchBar, changes in
+        $searchPhrase.bonding(with: .relay(of: searchBar, \.text))
+            .whenDidSet { changes in
                 // do something with changes
-            })
+            }
         ...
         ...
     }

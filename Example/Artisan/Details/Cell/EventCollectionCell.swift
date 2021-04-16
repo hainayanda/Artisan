@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Artisan
 import Draftsman
+import Pharos
 
 class EventCollectionCell: CollectionFragmentCell {
     lazy var banner: UIImageView = build {
@@ -40,24 +41,19 @@ class EventCollectionCell: CollectionFragmentCell {
 }
 
 class EventCollectionCellVM: CollectionCellMediator<EventCollectionCell> {
-    @ObservableState var event: Event?
-    @ViewState var bannerImage: UIImage?
-    @ViewState var eventName: String?
-    
-    override func didInit() {
-        $event.observe(observer: self)
-            .didSet(thenCall: EventCollectionCellVM.set(eventChanges:))
-    }
+    @Observable var event: Event?
+    @Observable var bannerImage: UIImage?
+    @Observable var eventName: String?
     
     override func bonding(with view: EventCollectionCell) {
-        super.bonding(with: view)
-        $bannerImage.bonding(with: view.banner, \.image)
-        $eventName.bonding(with: view.title, \.text)
+        $event.whenDidSet(invoke: self, method: EventCollectionCellVM.set(eventChanges:))
+        $bannerImage.bonding(with: .relay(of: view.banner, \.image))
+        $eventName.bonding(with: .relay(of: view.title, \.text))
     }
     
     func set(eventChanges: Changes<Event?>) {
         let event = eventChanges.new
-        cellIdentifier = event?.name
+        distinctIdentifier = event?.name
         bannerImage = event?.image
         eventName = event?.name
     }

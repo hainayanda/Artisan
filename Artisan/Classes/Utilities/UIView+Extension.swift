@@ -8,64 +8,6 @@
 import Foundation
 #if canImport(UIKit)
 import UIKit
-import Draftsman
-
-extension NSObject {
-    struct AssociatedKey {
-        static var mediator: String = "Artisan_Mediator"
-    }
-    
-    public func getMediator() -> AnyMediator? {
-        guard let wrapper = objc_getAssociatedObject(self, &AssociatedKey.mediator) as? AssociatedWrapper else {
-            if let cell = self as? UITableViewCell,
-               let indexMediator = cell.getMediatorFromIndex() {
-                setMediator(indexMediator)
-                return indexMediator
-            } else if let cell = self as? UICollectionViewCell,
-                      let indexMediator = cell.getMediatorFromIndex() {
-                setMediator(indexMediator)
-                return indexMediator
-            }
-            return nil
-        }
-        return wrapper.wrapped as? AnyMediator
-    }
-    
-    public func setMediator(_ mediator: AnyMediator?) {
-        guard let mediator = mediator else {
-            objc_setAssociatedObject(self, &AssociatedKey.mediator, nil, .OBJC_ASSOCIATION_RETAIN)
-            return
-        }
-        let wrapper: AssociatedWrapper = .init(wrapped: mediator as AnyObject)
-        objc_setAssociatedObject(self, &AssociatedKey.mediator, wrapper, .OBJC_ASSOCIATION_RETAIN)
-    }
-}
-
-extension UITableViewCell {
-    public func getMediatorFromIndex() -> AnyTableCellMediator? {
-        guard let tableView = parentTableView,
-              let indexPath = tableView.indexPath(for: self),
-              let section = tableView.sections[safe: indexPath.section],
-              let cell = section.cells[safe: indexPath.item],
-              cell.isCompatible(with: self) else {
-            return nil
-        }
-        return cell
-    }
-}
-
-extension UICollectionViewCell {
-    public func getMediatorFromIndex() -> AnyCollectionCellMediator? {
-        guard let collectionView = parentCollectionView,
-              let indexPath = collectionView.indexPath(for: self),
-              let section = collectionView.sections[safe: indexPath.section],
-              let cell = section.cells[safe: indexPath.item],
-              cell.isCompatible(with: self) else {
-            return nil
-        }
-        return cell
-    }
-}
 
 extension UISearchBar {
     
@@ -76,12 +18,11 @@ extension UISearchBar {
             return self.value(forKey: "_searchField") as! UITextField
         }
     }
-    
 }
 
 extension UIResponder {
-    public var parentViewController: UIViewController? {
-        next as? UIViewController ?? next?.parentViewController
+    public var nextViewController: UIViewController? {
+        next as? UIViewController ?? next?.nextViewController
     }
 }
 
@@ -95,6 +36,7 @@ extension UIView {
 }
 
 extension UITableViewCell {
+    
     var parentTableView: UITableView? {
         guard let nearestTable = parentView(of: UITableView.self),
               let _ = nearestTable.indexPath(for: self) else {
@@ -102,15 +44,117 @@ extension UITableViewCell {
         }
         return nearestTable
     }
+    
+    public func getMediatorFromIndex() -> AnyTableCellMediator? {
+        guard let tableView = parentTableView,
+              let indexPath = tableView.indexPath(for: self),
+              let section = tableView.sections[safe: indexPath.section],
+              let cell = section.cells[safe: indexPath.item],
+              cell.isCompatible(with: self) else {
+            return nil
+        }
+        return cell
+    }
 }
 
 extension UICollectionViewCell {
+    
     var parentCollectionView: UICollectionView? {
         guard let nearestCollection = parentView(of: UICollectionView.self),
               let _ = nearestCollection.indexPath(for: self) else {
             return nil
         }
         return nearestCollection
+    }
+    
+    public func getMediatorFromIndex() -> AnyCollectionCellMediator? {
+        guard let collectionView = parentCollectionView,
+              let indexPath = collectionView.indexPath(for: self),
+              let section = collectionView.sections[safe: indexPath.section],
+              let cell = section.cells[safe: indexPath.item],
+              cell.isCompatible(with: self) else {
+            return nil
+        }
+        return cell
+    }
+}
+
+extension UITableView {
+    
+    func registerNewCell(from sections: [UITableView.Section]) {
+        var registeredCells: [String] = []
+        for section in sections {
+            for cell in section.cells where !registeredCells.contains(cell.reuseIdentifier) {
+                self.register(cell.cellClass, forCellReuseIdentifier: cell.reuseIdentifier)
+                registeredCells.append(cell.reuseIdentifier)
+            }
+        }
+    }
+    
+    var sizeOfContent: CGSize {
+        let width: CGFloat = contentSize.width - contentInset.horizontal.both
+        let height: CGFloat = contentSize.height - contentInset.vertical.both
+        return .init(width: width, height: height)
+    }
+}
+
+extension UICollectionView {
+    
+    func registerNewCell(from sections: [UICollectionView.Section]) {
+        self.register(
+            UICollectionViewCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "Artisan_Layout_plain_\(UICollectionView.elementKindSectionHeader)"
+        )
+        self.register(
+            UICollectionViewCell.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+            withReuseIdentifier: "Artisan_Layout_plain_\(UICollectionView.elementKindSectionFooter)"
+        )
+        self.register(
+            UICollectionViewCell.self,
+            forCellWithReuseIdentifier: "Artisan_Layout_plain_cell"
+        )
+        var registeredCells: [String] = []
+        var registeredHeaderSupplements: [String] = []
+        var registeredFooterSupplements: [String] = []
+        for section in sections {
+            for cell in section.cells where !registeredCells.contains(cell.reuseIdentifier) {
+                self.register(cell.cellClass, forCellWithReuseIdentifier: cell.reuseIdentifier)
+                registeredCells.append(cell.reuseIdentifier)
+            }
+            if let supplementSection = section as? UICollectionView.SupplementedSection {
+                if let header = supplementSection.header,
+                   !registeredHeaderSupplements.contains(header.reuseIdentifier) {
+                    self.register(
+                        header.cellClass,
+                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                        withReuseIdentifier: header.reuseIdentifier
+                    )
+                    registeredHeaderSupplements.append(header.reuseIdentifier)
+                }
+                if let footer = supplementSection.footer,
+                   !registeredFooterSupplements.contains(footer.reuseIdentifier) {
+                    self.register(
+                        footer.cellClass,
+                        forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                        withReuseIdentifier: footer.reuseIdentifier
+                    )
+                    registeredFooterSupplements.append(footer.reuseIdentifier)
+                }
+            }
+        }
+    }
+    
+    var sizeOfContent: CGSize {
+        let contentWidth: CGFloat = contentSize.width
+        let contentHeight: CGFloat = contentSize.height
+        let contentInset: UIEdgeInsets = self.contentInset
+        let sectionInset: UIEdgeInsets = (collectionViewLayout as? UICollectionViewFlowLayout)?
+            .sectionInset ?? .zero
+        let collectionContentWidth = contentWidth - contentInset.horizontal.both - sectionInset.horizontal.both
+        let collectionContentHeight = contentHeight - contentInset.vertical.both - sectionInset.vertical.both
+        return .init(width: collectionContentWidth, height: collectionContentHeight)
     }
 }
 #endif

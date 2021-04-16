@@ -1,15 +1,15 @@
 //
-//  GenericMediator.swift
+//  ClosureMediator.swift
 //  Artisan
 //
-//  Created by Nayanda Haberty on 29/01/21.
+//  Created by Nayanda Haberty on 16/04/21.
 //
 
 import Foundation
 #if canImport(UIKit)
 import UIKit
 
-public class ViewApplicator<View: UIView>: ViewMediator<View> {
+public class ClosureMediator<View: NSObject>: ViewMediator<View> {
     var applicator: (View) -> Void
     
     public init(_ applicator: @escaping (View) -> Void) {
@@ -26,7 +26,7 @@ public class ViewApplicator<View: UIView>: ViewMediator<View> {
     }
 }
 
-public class TableCellApplicator<Cell: UITableViewCell>: TableCellMediator<Cell> {
+public class TableClosureMediator<Cell: UITableViewCell>: TableCellMediator<Cell> {
     var applicator: (Cell) -> Void
     
     public init(_ applicator: @escaping (Cell) -> Void) {
@@ -43,7 +43,7 @@ public class TableCellApplicator<Cell: UITableViewCell>: TableCellMediator<Cell>
     }
 }
 
-public class CollectionCellApplicator<Cell: UICollectionViewCell>: CollectionCellMediator<Cell> {
+public class CollectionClosureMediator<Cell: UICollectionViewCell>: CollectionCellMediator<Cell> {
     var applicator: (Cell) -> Void
     
     public init(_ applicator: @escaping (Cell) -> Void) {

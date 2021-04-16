@@ -11,6 +11,7 @@ import Foundation
 import UIKit
 import Quick
 import Nimble
+import Pharos
 @testable import Draftsman
 @testable import Artisan
 
@@ -30,24 +31,6 @@ class PlanerSpec: QuickSpec {
                     applied = true
                 }
                 expect(applied).to(beTrue())
-            }
-            context("ViewState") {
-                var viewState: ViewState<UIColor?>!
-                beforeEach {
-                    viewState = .init(wrappedValue: nil)
-                }
-                it("should apply view state") {
-                    plan.apply(\.backgroundColor, from: viewState)
-                    expect(viewState.bondingState).to(equal(.applying))
-                }
-                it("should bind view state") {
-                    plan.link(\.backgroundColor, with: viewState)
-                    expect(viewState.bondingState).to(equal(BondingState.none))
-                }
-                it("should map view state") {
-                    plan.map(\.backgroundColor, into: viewState)
-                    expect(viewState.bondingState).to(equal(.mapping))
-                }
             }
         }
     }

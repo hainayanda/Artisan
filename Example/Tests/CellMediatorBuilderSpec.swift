@@ -19,7 +19,7 @@ class CellMediatorBuilderSpec: QuickSpec {
             var builder: CollectionCellBuilder!
             var firstSection: UICollectionView.Section!
             beforeEach {
-                firstSection = .init(identifier: String.randomString())
+                firstSection = .init(distinctIdentifier: String.randomString())
                 builder = .init(section: firstSection)
             }
             it("should add cell to current section") {
@@ -28,7 +28,7 @@ class CellMediatorBuilderSpec: QuickSpec {
                     dummyItems.append(.randomString())
                 }
                 let result = builder
-                    .next(mediatorType: DummyCollectionMediator.self, fromItems: dummyItems) { mediator, item in
+                    .next(mediator: DummyCollectionMediator.self, fromItems: dummyItems) { mediator, item in
                         mediator.id = item
                 }.build()
                 expect(result.count).to(equal(1))
@@ -45,18 +45,18 @@ class CellMediatorBuilderSpec: QuickSpec {
                 }
             }
             it("should append new section") {
-                let newSection = UICollectionView.Section(identifier: String.randomString())
+                let newSection = UICollectionView.Section(distinctIdentifier: String.randomString())
                 let result = builder.nextSection(newSection).build()
                 expect(result.count).to(equal(2))
-                expect(result.first?.identifier).to(equal(firstSection.identifier))
-                expect(result.last?.identifier).to(equal(newSection.identifier))
+                expect(result.first?.distinctIdentifier).to(equal(firstSection.distinctIdentifier))
+                expect(result.last?.distinctIdentifier).to(equal(newSection.distinctIdentifier))
             }
         }
         describe("table mediator builder") {
             var builder: TableCellBuilder!
             var firstSection: UITableView.Section!
             beforeEach {
-                firstSection = .init(identifier: String.randomString())
+                firstSection = .init(distinctIdentifier: String.randomString())
                 builder = .init(section: firstSection)
             }
             it("should add cell to current section") {
@@ -65,7 +65,7 @@ class CellMediatorBuilderSpec: QuickSpec {
                     dummyItems.append(.randomString())
                 }
                 let result = builder
-                    .next(mediatorType: DummyTableMediator.self, fromItems: dummyItems) { mediator, item in
+                    .next(mediator: DummyTableMediator.self, fromItems: dummyItems) { mediator, item in
                         mediator.id = item
                 }.build()
                 expect(result.count).to(equal(1))
@@ -82,11 +82,11 @@ class CellMediatorBuilderSpec: QuickSpec {
                 }
             }
             it("should append new section") {
-                let newSection = UITableView.Section(identifier: String.randomString())
+                let newSection = UITableView.Section(distinctIdentifier: String.randomString())
                 let result = builder.nextSection(newSection).build()
                 expect(result.count).to(equal(2))
-                expect(result.first?.identifier).to(equal(firstSection.identifier))
-                expect(result.last?.identifier).to(equal(newSection.identifier))
+                expect(result.first?.distinctIdentifier).to(equal(firstSection.distinctIdentifier))
+                expect(result.last?.distinctIdentifier).to(equal(newSection.distinctIdentifier))
             }
         }
     }

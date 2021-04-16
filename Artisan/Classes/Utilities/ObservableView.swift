@@ -7,7 +7,11 @@
 
 import Foundation
 #if canImport(UIKit)
-import UIKit
+
+public protocol ObservableView {
+    associatedtype Observer
+    var observer: Observer? { get }
+}
 
 extension ObservableView where Self: NSObject {
     public var observer: Observer? {

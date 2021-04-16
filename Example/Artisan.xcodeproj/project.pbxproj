@@ -12,7 +12,6 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		716D67B6E515B153412416D0 /* Pods_Artisan_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EFEDA3E99CC66FC0A60A05 /* Pods_Artisan_Example.framework */; };
-		BB0D09272591B30F00C209E1 /* ViewStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09262591B30F00C209E1 /* ViewStateSpec.swift */; };
 		BB0D092C2591B3B300C209E1 /* CellMediatorBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D092B2591B3B300C209E1 /* CellMediatorBuilderSpec.swift */; };
 		BB0D09332591B41C00C209E1 /* CommonSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09322591B41C00C209E1 /* CommonSpec.swift */; };
 		BB0D093C2591BB4F00C209E1 /* CellMediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */; };
@@ -23,9 +22,8 @@
 		BB0D098D2591C4DA00C209E1 /* EventSearchScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */; };
 		BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D099A2591DDB800C209E1 /* EventCell.swift */; };
 		BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09A02591E99700C209E1 /* MockEventService.swift */; };
-		BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */; };
-		BB1170B025919BD100C2D13D /* PlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1170AF25919BD100C2D13D /* PlanerSpec.swift */; };
 		BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */; };
+		BB8801662629FC770045E01D /* PlanerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8801652629FC770045E01D /* PlanerSpec.swift */; };
 		BBE69CD9259B0DD500F2BEE3 /* EventCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */; };
 		BBE69CDD259B686A00F2BEE3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE69CDC259B686A00F2BEE3 /* Router.swift */; };
 		BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C2425936AE2002AF568 /* KeywordCell.swift */; };
@@ -60,7 +58,6 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		707361EB6E824177FA9C301F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		879BE10A59B15D19AC963F2E /* Pods-Artisan_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		BB0D09262591B30F00C209E1 /* ViewStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewStateSpec.swift; sourceTree = "<group>"; };
 		BB0D092B2591B3B300C209E1 /* CellMediatorBuilderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellMediatorBuilderSpec.swift; sourceTree = "<group>"; };
 		BB0D09322591B41C00C209E1 /* CommonSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonSpec.swift; sourceTree = "<group>"; };
 		BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellMediatorSpec.swift; sourceTree = "<group>"; };
@@ -71,9 +68,8 @@
 		BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchScreenVM.swift; sourceTree = "<group>"; };
 		BB0D099A2591DDB800C209E1 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		BB0D09A02591E99700C209E1 /* MockEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventService.swift; sourceTree = "<group>"; };
-		BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableStateSpec.swift; sourceTree = "<group>"; };
-		BB1170AF25919BD100C2D13D /* PlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanerSpec.swift; sourceTree = "<group>"; };
 		BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarEventCell.swift; sourceTree = "<group>"; };
+		BB8801652629FC770045E01D /* PlanerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanerSpec.swift; sourceTree = "<group>"; };
 		BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCell.swift; sourceTree = "<group>"; };
 		BBE69CDC259B686A00F2BEE3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Artisan_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -154,7 +150,6 @@
 			isa = PBXGroup;
 			children = (
 				BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */,
-				BB1170A525919B3A00C2D13D /* Bond */,
 				BB0D093A2591BB2600C209E1 /* Mediator */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				BB0D092A2591B39300C209E1 /* Utilities */,
@@ -201,6 +196,7 @@
 		BB0D093A2591BB2600C209E1 /* Mediator */ = {
 			isa = PBXGroup;
 			children = (
+				BB8801652629FC770045E01D /* PlanerSpec.swift */,
 				BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */,
 				BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */,
 				BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */,
@@ -227,16 +223,6 @@
 				BBE69CDC259B686A00F2BEE3 /* Router.swift */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		BB1170A525919B3A00C2D13D /* Bond */ = {
-			isa = PBXGroup;
-			children = (
-				BB1170A625919B5000C2D13D /* ObservableStateSpec.swift */,
-				BB1170AF25919BD100C2D13D /* PlanerSpec.swift */,
-				BB0D09262591B30F00C209E1 /* ViewStateSpec.swift */,
-			);
-			name = Bond;
 			sourceTree = "<group>";
 		};
 		BBF98C3E2593C3E8002AF568 /* Details */ = {
@@ -416,11 +402,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Artisan/Artisan.framework",
 				"${BUILT_PRODUCTS_DIR}/Draftsman/Draftsman.framework",
+				"${BUILT_PRODUCTS_DIR}/Pharos/Pharos.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Artisan.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Draftsman.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pharos.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -498,12 +486,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB0D09272591B30F00C209E1 /* ViewStateSpec.swift in Sources */,
-				BB1170B025919BD100C2D13D /* PlanerSpec.swift in Sources */,
 				BB0D093C2591BB4F00C209E1 /* CellMediatorSpec.swift in Sources */,
-				BB1170AC25919B6E00C2D13D /* ObservableStateSpec.swift in Sources */,
 				BB0D092C2591B3B300C209E1 /* CellMediatorBuilderSpec.swift in Sources */,
 				BB0D09422591BBB800C209E1 /* CellContainerSpec.swift in Sources */,
+				BB8801662629FC770045E01D /* PlanerSpec.swift in Sources */,
 				BB0D094A2591BC5700C209E1 /* CellContainerMediatorSpec.swift in Sources */,
 				BB0D09502591BCAD00C209E1 /* MediatorSpec.swift in Sources */,
 				BB0D09332591B41C00C209E1 /* CommonSpec.swift in Sources */,

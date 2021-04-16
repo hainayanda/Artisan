@@ -2,12 +2,12 @@
 //  EmptyCell.swift
 //  Artisan
 //
-//  Created by Nayanda Haberty (ID) on 24/09/20.
+//  Created by Nayanda Haberty on 16/04/21.
 //
 
 import Foundation
-import Draftsman
 #if canImport(UIKit)
+import Draftsman
 import UIKit
 
 public class EmptyTableCell: TableFragmentCell {

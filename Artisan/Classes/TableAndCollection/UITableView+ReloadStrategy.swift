@@ -2,7 +2,7 @@
 //  UITableView+ReloadStrategy.swift
 //  Artisan
 //
-//  Created by Nayanda Haberty (ID) on 15/09/20.
+//  Created by Nayanda Haberty on 16/04/21.
 //
 
 import Foundation
@@ -83,16 +83,16 @@ public class TableMediatorSectionReloader: DiffReloaderWorker {
         self.forceRefresh = forceRefresh
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
-        table.deleteSections(.init(identifiables.keys), with: animationSet.deleteSectionAnimation)
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove distinctables: [Int : Distinctable]) {
+        table.deleteSections(.init(distinctables.keys), with: animationSet.deleteSectionAnimation)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert distinctable: Distinctable, at index: Int) {
         table.insertSections(.init(integer: index), with: animationSet.insertSectionAnimation)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
-        for (index, pair) in identifiables {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload distinctables: [Int : (old: Distinctable, new: Distinctable)]) {
+        for (index, pair) in distinctables {
             guard let oldSection = pair.old as? UITableView.Section,
                   let newSection = pair.new as? UITableView.Section else {
                 continue
@@ -106,7 +106,7 @@ public class TableMediatorSectionReloader: DiffReloaderWorker {
         }
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove distinctable: Distinctable, from index: Int, to destIndex: Int) {
         table.moveSection(index, toSection: destIndex)
     }
     
@@ -135,22 +135,22 @@ public class TableMediatorCellReloader: DiffReloaderWorker {
         self.forceRefresh = forceRefresh
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
-        let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(row: $0, section: section) }
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove distinctables: [Int : Distinctable]) {
+        let indexPaths: [IndexPath] = distinctables.keys.compactMap { IndexPath(row: $0, section: section) }
         table.deleteRows(at: indexPaths, with: animationSet.deleteRowAnimation)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert distinctable: Distinctable, at index: Int) {
         table.insertRows(at: [.init(row: index, section: section)], with: animationSet.insertRowAnimation)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload distinctables: [Int : (old: Distinctable, new: Distinctable)]) {
         guard forceRefresh else { return }
-        let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(row: $0, section: section) }
+        let indexPaths: [IndexPath] = distinctables.keys.compactMap { IndexPath(row: $0, section: section) }
         table.reloadRows(at: indexPaths, with: animationSet.reloadRowAnimation)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove distinctable: Distinctable, from index: Int, to destIndex: Int) {
         table.moveRow(at: .init(row: index, section: section), to: .init(row: destIndex, section: section))
     }
     

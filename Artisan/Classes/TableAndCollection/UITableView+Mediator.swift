@@ -2,13 +2,14 @@
 //  UITableView+Mediator.swift
 //  Artisan
 //
-//  Created by Nayanda Haberty (ID) on 12/08/20.
+//  Created by Nayanda Haberty on 16/04/21.
 //
 
 import Foundation
 #if canImport(UIKit)
 import UIKit
 import Draftsman
+import Pharos
 
 public typealias TableSection = UITableView.Section
 public typealias TableTitledSection = UITableView.TitledSection
@@ -38,7 +39,7 @@ extension UITableView {
             mediator.sections.first?.cells ?? []
         }
         set {
-            let section = Section(identifier: "single_section", cells: newValue)
+            let section = Section(distinctIdentifier: "single_section", cells: newValue)
             mediator.sections = [section]
         }
     }
@@ -69,8 +70,7 @@ extension UITableView {
         let heightFromActualCell = currentHeight > .zero ? currentHeight : calculatedHeight
         guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else { return heightFromActualCell }
         let customCellHeight = cell.customCellHeight(for: contentSize.width)
-        let defaultHeight = cell.defaultCellHeight(for: contentSize.width)
-        return customCellHeight.isCalculated ? customCellHeight : (defaultHeight.isCalculated ? defaultHeight : heightFromActualCell)
+        return customCellHeight.isCalculated ? customCellHeight : heightFromActualCell
     }
     
     public func appendWithCell(_ builder: (TableCellBuilder) -> Void) {
@@ -84,11 +84,11 @@ extension UITableView {
     }
     
     public func buildWithCells(withFirstSectionId firstSection: String, _ builder: (TableCellBuilder) -> Void) {
-        buildWithCells(withFirstSection: Section(identifier: firstSection), builder)
+        buildWithCells(withFirstSection: Section(distinctIdentifier: firstSection), builder)
     }
     
     public func buildWithCells(withFirstSection firstSection: UITableView.Section? = nil, _ builder: (TableCellBuilder) -> Void) {
-        let collectionBuilder = TableCellBuilder(section: firstSection ?? Section(identifier: "first_section"))
+        let collectionBuilder = TableCellBuilder(section: firstSection ?? Section(distinctIdentifier: "first_section"))
         builder(collectionBuilder)
         sections = collectionBuilder.build()
     }
@@ -134,20 +134,20 @@ extension UITableView {
             $0.cancelsTouchesInView = false
         }
         var applicableSections: [Section] = []
-        @ObservableState public var sections: [Section] = []
+        @Observable public var sections: [Section] = []
         public var animationSet: UITableView.AnimationSet = .init()
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
         
         public override func bonding(with view: UITableView) {
             super.bonding(with: view)
-            $sections.observe(observer: self, on: .main, syncIfPossible: false).didSet { mediator, changes  in
-                guard let table = mediator.view else { return }
+            $sections.observe(on: .main).whenDidSet { [weak self, weak view] changes in
+                guard let self = self, let view = view else { return }
                 let newSection = changes.new
-                table.registerNewCell(from: newSection)
-                let oldSection = mediator.applicableSections
-                mediator.applicableSections = newSection
-                mediator.reload(table, with: newSection, oldSections: oldSection, completion: mediator.didReloadAction)
+                view.registerNewCell(from: newSection)
+                let oldSection = self.applicableSections
+                self.applicableSections = newSection
+                self.reload(view, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
             }
         }
         
@@ -161,7 +161,7 @@ extension UITableView {
         }
         
         @objc public func didTap(_ gesture: UITapGestureRecognizer) {
-            guard let table = view else { return }
+            guard let table = gesture.view as? UITableView else { return }
             let location = gesture.location(in: table)
             guard let indexPath = table.indexPathForRow(at: location),
                   let cell = table.cellForRow(at: indexPath),
@@ -170,98 +170,6 @@ extension UITableView {
             }
             mediator.didTap(cell: cell)
         }
-    }
-    
-    open class Section: Identifiable, Equatable {
-        public var index: String?
-        public var cells: [AnyTableCellMediator]
-        public var cellCount: Int { cells.count }
-        public var identifier: AnyHashable
-        
-        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
-            self.identifier = identifier
-            self.cells = cells
-            self.index = index
-        }
-        
-        public func add(cell: AnyTableCellMediator) {
-            cells.append(cell)
-        }
-        
-        public func add(cells: [AnyTableCellMediator]) {
-            self.cells.append(contentsOf: cells)
-        }
-        
-        func isSameSection(with other: Section) -> Bool {
-            if other === self { return true }
-            return other.identifier == identifier
-        }
-        
-        public func clear() {
-            cells.removeAll()
-        }
-        
-        public func copy() -> Section {
-            return Section(identifier: identifier, cells: cells)
-        }
-        
-        public static func == (lhs: UITableView.Section, rhs: UITableView.Section) -> Bool {
-            let left = lhs.copy()
-            let right = rhs.copy()
-            guard left.identifier == right.identifier,
-                  left.cells.count == right.cells.count else { return false }
-            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
-                return false
-            }
-            return true
-        }
-    }
-    
-    public class TitledSection: Section {
-        
-        public var title: String
-        
-        public init(title: String, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
-            self.title = title
-            super.init(identifier: identifier, index: index, cells: cells)
-        }
-        
-        public override func copy() -> Section {
-            return TitledSection(title: title, identifier: identifier, cells: cells)
-        }
-        
-        public static func == (lhs: UITableView.TitledSection, rhs: UITableView.TitledSection) -> Bool {
-            guard let left = lhs.copy() as? UITableView.TitledSection,
-                  let right = rhs.copy() as? UITableView.TitledSection else {
-                return false
-            }
-            guard left.identifier == right.identifier,
-                  left.title == right.title,
-                  left.cells.count == right.cells.count else { return false }
-            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
-                return false
-            }
-            return true
-        }
-    }
-}
-
-extension UITableView {
-    
-    func registerNewCell(from sections: [UITableView.Section]) {
-        var registeredCells: [String] = []
-        for section in sections {
-            for cell in section.cells where !registeredCells.contains(cell.reuseIdentifier) {
-                self.register(cell.cellClass, forCellReuseIdentifier: cell.reuseIdentifier)
-                registeredCells.append(cell.reuseIdentifier)
-            }
-        }
-    }
-    
-    var sizeOfContent: CGSize {
-        let width: CGFloat = contentSize.width - contentInset.horizontal.both
-        let height: CGFloat = contentSize.height - contentInset.vertical.both
-        return .init(width: width, height: height)
     }
 }
 

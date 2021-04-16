@@ -7,8 +7,9 @@
 //
 
 import Foundation
-import Artisan
 import UIKit
+import Artisan
+import Pharos
 import Draftsman
 
 class KeywordCell: TableFragmentCell {
@@ -39,11 +40,10 @@ class KeywordCell: TableFragmentCell {
 }
 
 class KeywordCellVM: TableCellMediator<KeywordCell> {
-    @ViewState var keyword: String?
+    @Observable var keyword: String?
     var delegate: KeywordCellMediatorDelegate?
     override func bonding(with view: KeywordCell) {
-        super.bonding(with: view)
-        $keyword.bonding(with: view.keywordLabel, \.text)
+        $keyword.bonding(with: .relay(of: view.keywordLabel, \.text))
         view.clearButton.whenDidTapped(observing: self) { viewModel, _ in
             viewModel.delegate?.keywordCellDidTapClear(viewModel)
         }

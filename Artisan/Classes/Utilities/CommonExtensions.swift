@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 
 infix operator =~
 
@@ -39,3 +40,4 @@ extension String {
         return text.range(of: pattern, options: .regularExpression, range: nil, locale: nil) != nil
     }
 }
+#endif

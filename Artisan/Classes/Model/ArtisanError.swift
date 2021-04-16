@@ -7,11 +7,8 @@
 
 import Foundation
 #if canImport(UIKit)
-import UIKit
-import Draftsman
 
 public struct ArtisanError: LocalizedError {
-    
     /// Description of error
     public let errorDescription: String?
     

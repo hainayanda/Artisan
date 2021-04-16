@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Artisan
 import Draftsman
+import Pharos
 
 class SimilarEventCell: TableFragmentCell {
     lazy var collectionLayout: UICollectionViewFlowLayout = .init()
@@ -40,20 +41,16 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     typealias TapAction = (SimilarEventCellVM, Event) -> Void
     var service: EventService = MockEventService()
     
-    @ObservableState var event: Event?
-    @ObservableState var events: [Event] = []
+    @Observable var event: Event?
+    @Observable var events: [Event] = []
     
     private var tapObserver: TapAction?
     
-    override func didInit() {
-        $event.observe(observer: self)
-            .didSet(thenCall: SimilarEventCellVM.set(eventChanges:))
-        $events.observe(observer: self, on: .main)
-            .didSet(thenCall: SimilarEventCellVM.set(eventsChanges:))
-    }
-    
     override func bonding(with view: SimilarEventCell) {
         super.bonding(with: view)
+        $event.whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventChanges:))
+        $events.observe(on: .main)
+            .whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventsChanges:))
         view.collectionView.delegate = self
     }
     
@@ -63,7 +60,7 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     
     func set(eventChanges: Changes<Event?>) {
         guard let event = eventChanges.new else {
-            view?.collectionView.cells = []
+            bondedView?.collectionView.cells = []
             return
         }
         service.similarEvent(with: event) { [weak self] events in
@@ -72,9 +69,9 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     }
     
     func set(eventsChanges: Changes<[Event]>) {
-        view?.collectionView.sections = CollectionCellBuilder(sectionId: "similar")
-            .next(mediatorType: EventCollectionCellVM.self, fromItems: eventsChanges.new) { cell, model in
-                cell.cellIdentifier = event?.name
+        bondedView?.collectionView.sections = CollectionCellBuilder(sectionId: "similar")
+            .next(mediator: EventCollectionCellVM.self, fromItems: eventsChanges.new) { cell, model in
+                cell.distinctIdentifier = event?.name
                 cell.event = model
             }.build()
     }
