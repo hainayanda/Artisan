@@ -10,6 +10,7 @@ import Foundation
 import Artisan
 import UIKit
 import Draftsman
+import Pharos
 
 class EventCell: TableFragmentCell {
     lazy var bannerBackground: UIView = build {
@@ -78,28 +79,23 @@ class EventCell: TableFragmentCell {
 }
 
 class EventCellVM<Cell: EventCell>: TableCellMediator<Cell> {
-    @ObservableState var event: Event?
-    @ViewState var bannerImage: UIImage?
-    @ViewState var eventName: String?
-    @ViewState var eventDetails: String?
-    @ViewState var eventDate: String?
-    
-    override func didInit() {
-        $event.observe(observer: self)
-            .didSet(thenCall: EventCellVM.set(eventChanges:))
-    }
+    @Observable var event: Event?
+    @Observable var bannerImage: UIImage?
+    @Observable var eventName: String?
+    @Observable var eventDetails: String?
+    @Observable var eventDate: String?
     
     override func bonding(with view: Cell) {
-        super.bonding(with: view)
-        $bannerImage.bonding(with: view.banner, \.image)
-        $eventName.bonding(with: view.title, \.text)
-        $eventDetails.bonding(with: view.subTitle, \.text)
-        $eventDate.bonding(with: view.date, \.text)
+        $event.whenDidSet(invoke: self, method: EventCellVM.set(eventChanges:))
+        $bannerImage.bonding(with: .relay(of: view.banner, \.image))
+        $eventName.bonding(with: .relay(of: view.title, \.text))
+        $eventDetails.bonding(with: .relay(of: view.subTitle, \.text))
+        $eventDate.bonding(with: .relay(of: view.date, \.text))
     }
     
     func set(eventChanges: Changes<Event?>) {
         let event = eventChanges.new
-        cellIdentifier = event?.name
+        distinctIdentifier = event?.name
         bannerImage = event?.image
         eventName = event?.name
         eventDetails = event?.details

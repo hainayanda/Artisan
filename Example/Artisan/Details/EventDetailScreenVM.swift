@@ -9,38 +9,38 @@
 import Foundation
 import UIKit
 import Artisan
+import Pharos
 
 class EventDetailScreenVM: ViewMediator<EventDetailsScreen> {
     var router: Router = ExampleRouter()
     
-    @ObservableState var event: Event?
+    @Observable var event: Event?
     
-    override func didInit() {
-        $event.observe(observer: self)
-            .didSet(thenCall: EventDetailScreenVM.change(event:))
+    override func bonding(with view: EventDetailsScreen) {
+        $event.whenDidSet(invoke: self, method: EventDetailScreenVM.change(event:))
     }
 }
 
 extension EventDetailScreenVM {
     
     func didTapSimilar(event: Event) {
-        guard let view = self.view else { return }
+        guard let view = self.bondedView else { return }
         router.routeToDetails(of: event, from: view)
     }
     
     func change(event: Changes<Event?>) {
-        view?.title = event.new?.name
-        view?.tableView.sections = buildCells(from: event.new)
+        bondedView?.title = event.new?.name
+        bondedView?.tableView.sections = buildCells(from: event.new)
     }
     
     func buildCells(from event: Event?) -> [UITableView.Section] {
         return TableCellBuilder(sectionId: "header")
-            .next(mediatorType: EventCellVM<EventHeaderCell>.self, fromItem: event) { mediator, event in
-                mediator.cellIdentifier = "header"
+            .next(mediator: EventCellVM<EventHeaderCell>.self, fromItem: event) { mediator, event in
+                mediator.distinctIdentifier = "header"
                 mediator.event = event
-            }.nextSection(UITableView.TitledSection(title: "Similar Event", identifier: "similar"))
-            .next(mediatorType: SimilarEventCellVM.self, fromItem: event) { mediator, event in
-                mediator.cellIdentifier = "similar"
+            }.nextSection(UITableView.TitledSection(title: "Similar Event", distinctIdentifier: "similar"))
+            .next(mediator: SimilarEventCellVM.self, fromItem: event) { mediator, event in
+                mediator.distinctIdentifier = "similar"
                 mediator.event = event
                 mediator.whenDidTapped { [weak self] _, event in
                     self?.didTapSimilar(event: event)
