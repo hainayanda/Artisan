@@ -24,27 +24,27 @@ class CellMediatorSpec: QuickSpec {
                 expect(TableCellMediator<UITableViewCell>.cellReuseIdentifier).to(equal("artisan_managed_cell_ui_table_view_cell"))
             }
             it("should generate cell identifier") {
-                expect(testableTMediator.cellIdentifier as? String).toNot(beNil())
+                expect(testableTMediator.distinctIdentifier as? String).toNot(beNil())
             }
             it("should check same model") {
-                expect(testableTMediator.isSameMediator(with: testableTMediator)).to(beTrue())
+                expect(testableTMediator.isSame(with: testableTMediator)).to(beTrue())
                 let otherTMediator: TableCellMediator<UITableViewCell> = .init()
-                otherTMediator.cellIdentifier = testableTMediator.cellIdentifier
-                expect(testableTMediator.isSameMediator(with: otherTMediator)).to(beTrue())
-                expect(testableTMediator.isNotSameMediator(with: otherTMediator)).to(beFalse())
+                otherTMediator.distinctIdentifier = testableTMediator.distinctIdentifier
+                expect(testableTMediator.isSame(with: otherTMediator)).to(beTrue())
+                expect(testableTMediator.isNotSame(with: otherTMediator)).to(beFalse())
             }
             it("should know different model") {
                 let otherTMediator: TableCellMediator<UITableViewCell> = .init()
-                while otherTMediator.cellIdentifier == testableTMediator.cellIdentifier {
-                    otherTMediator.cellIdentifier = String.randomString()
+                while otherTMediator.distinctIdentifier == testableTMediator.distinctIdentifier {
+                    otherTMediator.distinctIdentifier = String.randomString()
                 }
-                expect(testableTMediator.isSameMediator(with: otherTMediator)).to(beFalse())
-                expect(testableTMediator.isNotSameMediator(with: otherTMediator)).to(beTrue())
+                expect(testableTMediator.isSame(with: otherTMediator)).to(beFalse())
+                expect(testableTMediator.isNotSame(with: otherTMediator)).to(beTrue())
             }
             it("should know different model class") {
                 let otherCMediator: CollectionCellMediator<UICollectionViewCell> = .init()
-                expect(testableTMediator.isSameMediator(with: otherCMediator)).to(beFalse())
-                expect(testableTMediator.isNotSameMediator(with: otherCMediator)).to(beTrue())
+                expect(testableTMediator.isSame(with: otherCMediator)).to(beFalse())
+                expect(testableTMediator.isNotSame(with: otherCMediator)).to(beTrue())
             }
         }
         describe("collection view model") {
@@ -56,27 +56,27 @@ class CellMediatorSpec: QuickSpec {
                 expect(CollectionCellMediator<UICollectionViewCell>.cellReuseIdentifier).to(equal("artisan_managed_cell_ui_collection_view_cell"))
             }
             it("should generate cell identifier") {
-                expect(testableCMediator.cellIdentifier as? String).toNot(beNil())
+                expect(testableCMediator.distinctIdentifier as? String).toNot(beNil())
             }
             it("should check same model") {
-                expect(testableCMediator.isSameMediator(with: testableCMediator)).to(beTrue())
+                expect(testableCMediator.isSame(with: testableCMediator)).to(beTrue())
                 let otherCMediator: CollectionCellMediator<UICollectionViewCell> = .init()
-                otherCMediator.cellIdentifier = testableCMediator.cellIdentifier
-                expect(testableCMediator.isSameMediator(with: otherCMediator)).to(beTrue())
-                expect(testableCMediator.isNotSameMediator(with: otherCMediator)).to(beFalse())
+                otherCMediator.distinctIdentifier = testableCMediator.distinctIdentifier
+                expect(testableCMediator.isSame(with: otherCMediator)).to(beTrue())
+                expect(testableCMediator.isNotSame(with: otherCMediator)).to(beFalse())
             }
             it("should know different model") {
                 let otherCMediator: CollectionCellMediator<UICollectionViewCell> = .init()
-                while otherCMediator.cellIdentifier == testableCMediator.cellIdentifier {
-                    otherCMediator.cellIdentifier = String.randomString()
+                while otherCMediator.distinctIdentifier == testableCMediator.distinctIdentifier {
+                    otherCMediator.distinctIdentifier = String.randomString()
                 }
-                expect(testableCMediator.isSameMediator(with: otherCMediator)).to(beFalse())
-                expect(testableCMediator.isNotSameMediator(with: otherCMediator)).to(beTrue())
+                expect(testableCMediator.isSame(with: otherCMediator)).to(beFalse())
+                expect(testableCMediator.isNotSame(with: otherCMediator)).to(beTrue())
             }
             it("should know different model class") {
                 let otherTMediator: TableCellMediator<UITableViewCell> = .init()
-                expect(testableCMediator.isSameMediator(with: otherTMediator)).to(beFalse())
-                expect(testableCMediator.isNotSameMediator(with: otherTMediator)).to(beTrue())
+                expect(testableCMediator.isSame(with: otherTMediator)).to(beFalse())
+                expect(testableCMediator.isNotSame(with: otherTMediator)).to(beTrue())
             }
         }
     }
