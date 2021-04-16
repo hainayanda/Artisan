@@ -2,13 +2,14 @@
 //  ClosureMediator.swift
 //  Artisan
 //
-//  Created by Nayanda Haberty on 29/01/21.
+//  Created by Nayanda Haberty on 16/04/21.
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
-public class ClosureMediator<View: UIView>: ViewMediator<View> {
+public class ClosureMediator<View: NSObject>: ViewMediator<View> {
     var applicator: (View) -> Void
     
     public init(_ applicator: @escaping (View) -> Void) {
@@ -58,3 +59,4 @@ public class CollectionClosureMediator<Cell: UICollectionViewCell>: CollectionCe
         applicator(view)
     }
 }
+#endif

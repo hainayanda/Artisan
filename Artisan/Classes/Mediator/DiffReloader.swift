@@ -6,25 +6,30 @@
 //
 
 import Foundation
-#if canImport(UIKit)
 import UIKit
 
-public protocol Identifiable {
-    var identifier: AnyHashable { get }
-    func haveSameIdentifier(with other: Identifiable) -> Bool
+public protocol Distinctable {
+    var distinctIdentifier: AnyHashable { get }
+    func distinct(with other: Distinctable) -> Bool
+    func indistinct(with other: Distinctable) -> Bool
 }
 
-public extension Identifiable {
-    func haveSameIdentifier(with other: Identifiable) -> Bool {
-        identifier == other.identifier
+public extension Distinctable {
+    
+    func indistinct(with other: Distinctable) -> Bool {
+        distinctIdentifier == other.distinctIdentifier
+    }
+    
+    func distinct(with other: Distinctable) -> Bool {
+        !indistinct(with: other)
     }
 }
 
 public protocol DiffReloaderWorker {
-    func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int: Identifiable])
-    func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int)
-    func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int: (old: Identifiable, new: Identifiable)])
-    func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int)
+    func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int: Distinctable])
+    func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Distinctable, at index: Int)
+    func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int: (old: Distinctable, new: Distinctable)])
+    func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Distinctable, from index: Int, to destIndex: Int)
     func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError)
 }
 
@@ -37,21 +42,21 @@ public class DiffReloader {
     }
     
     public func reloadDifference(
-        oldIdentities: [Identifiable],
-        newIdentities: [Identifiable]) {
+        oldIdentities: [Distinctable],
+        newIdentities: [Distinctable]) {
         let oldIdentitiesAfterRemoved = removeFrom(oldIdentities: oldIdentities, notIn: newIdentities)
         reloadChanges(in: oldIdentitiesAfterRemoved, to: newIdentities)
         runQueue()
     }
     
-    func removeFrom(oldIdentities: [Identifiable], notIn newIdentities: [Identifiable]) -> [Identifiable] {
+    func removeFrom(oldIdentities: [Distinctable], notIn newIdentities: [Distinctable]) -> [Distinctable] {
         var mutableIdentities = oldIdentities
-        var removedIndex: [Int: Identifiable] = [:]
+        var removedIndex: [Int: Distinctable] = [:]
         var mutableIndex: Int = 0
-        for (identityIndex, oldIdentifiable) in oldIdentities.enumerated() {
-            guard newIdentities.contains(where: { $0.haveSameIdentifier(with: oldIdentifiable)} ) else {
+        for (identityIndex, oldDistinctable) in oldIdentities.enumerated() {
+            guard newIdentities.contains(where: { $0.indistinct(with: oldDistinctable)} ) else {
                 mutableIdentities.remove(at: mutableIndex)
-                removedIndex[identityIndex] = oldIdentifiable
+                removedIndex[identityIndex] = oldDistinctable
                 continue
             }
             mutableIndex += 1
@@ -64,24 +69,24 @@ public class DiffReloader {
         return mutableIdentities
     }
     
-    func reloadChanges(in oldIdentities: [Identifiable], to newIdentities: [Identifiable]) {
+    func reloadChanges(in oldIdentities: [Distinctable], to newIdentities: [Distinctable]) {
         var mutableIdentities = oldIdentities
-        var reloadedIndex: [Int: (old: Identifiable, new: Identifiable)] = [:]
+        var reloadedIndex: [Int: (old: Distinctable, new: Distinctable)] = [:]
         for (identityIndex, identity) in newIdentities.enumerated() {
-            if let oldIdentifiable = mutableIdentities[safe: identityIndex],
-               oldIdentifiable.haveSameIdentifier(with: identity) {
-                reloadedIndex[identityIndex] = (old: oldIdentifiable, new: identity)
-            } else if let oldIndex = mutableIdentities.firstIndex(where: { $0.haveSameIdentifier(with: identity)}) {
-                let removedIdentifiable = mutableIdentities.remove(at: oldIndex)
+            if let oldDistinctable = mutableIdentities[safe: identityIndex],
+               oldDistinctable.indistinct(with: identity) {
+                reloadedIndex[identityIndex] = (old: oldDistinctable, new: identity)
+            } else if let oldIndex = mutableIdentities.firstIndex(where: { $0.indistinct(with: identity)}) {
+                let removedDistinctable = mutableIdentities.remove(at: oldIndex)
                 guard mutableIdentities.count >= identityIndex else {
                     fail(reason: "Fail move cell from \(oldIndex) to \(identityIndex)")
                     return
                 }
-                mutableIdentities.insert(removedIdentifiable, at: identityIndex)
+                mutableIdentities.insert(removedDistinctable, at: identityIndex)
                 queueLoad {
-                    $0.worker.diffReloader($0, shouldMove: removedIdentifiable, from: oldIndex, to: identityIndex)
+                    $0.worker.diffReloader($0, shouldMove: removedDistinctable, from: oldIndex, to: identityIndex)
                 }
-                reloadedIndex[identityIndex] = (old: removedIdentifiable, new: identity)
+                reloadedIndex[identityIndex] = (old: removedDistinctable, new: identity)
             } else {
                 guard mutableIdentities.count >= identityIndex else {
                     fail(reason: "Fail add cell to \(identityIndex)")
@@ -118,4 +123,3 @@ public class DiffReloader {
         }
     }
 }
-#endif

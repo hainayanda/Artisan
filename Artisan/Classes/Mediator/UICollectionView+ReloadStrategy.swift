@@ -6,7 +6,6 @@
 //
 
 import Foundation
-#if canImport(UIKit)
 import UIKit
 
 extension UICollectionView.Mediator {
@@ -79,15 +78,15 @@ public class CollectionMediatorSectionReloader: DiffReloaderWorker {
         self.forceRefresh = forceRefresh
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Distinctable]) {
         collection.deleteSections(.init(identifiables.keys))
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Distinctable, at index: Int) {
         collection.insertSections(.init(integer: index))
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Distinctable, new: Distinctable)]) {
         for (index, pair) in identifiables {
             guard let oldSection = pair.old as? UICollectionView.Section,
                   let newSection = pair.new as? UICollectionView.Section else {
@@ -102,7 +101,7 @@ public class CollectionMediatorSectionReloader: DiffReloaderWorker {
         }
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Distinctable, from index: Int, to destIndex: Int) {
         collection.moveSection(index, toSection: destIndex)
     }
     
@@ -129,22 +128,22 @@ public class CollectionMediatorCellReloader: DiffReloaderWorker {
         self.forceRefresh = forceRefresh
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Identifiable]) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldRemove identifiables: [Int : Distinctable]) {
         let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(item: $0, section: section) }
         collection.deleteItems(at: indexPaths)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Identifiable, at index: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldInsert identifiable: Distinctable, at index: Int) {
         collection.insertItems(at: [.init(item: index, section: section)])
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Identifiable, new: Identifiable)]) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldReload identifiables: [Int : (old: Distinctable, new: Distinctable)]) {
         guard forceRefresh else { return }
         let indexPaths: [IndexPath] = identifiables.keys.compactMap { IndexPath(item: $0, section: section) }
         collection.reloadItems(at: indexPaths)
     }
     
-    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Identifiable, from index: Int, to destIndex: Int) {
+    public func diffReloader(_ diffReloader: DiffReloader, shouldMove identifiable: Distinctable, from index: Int, to destIndex: Int) {
         collection.moveItem(at: .init(item: index, section: section), to: .init(item: destIndex, section: section))
     }
     
@@ -158,4 +157,3 @@ public class CollectionMediatorCellReloader: DiffReloaderWorker {
         canceled = true
     }
 }
-#endif

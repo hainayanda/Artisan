@@ -6,9 +6,9 @@
 //
 
 import Foundation
-#if canImport(UIKit)
 import UIKit
 import Draftsman
+import Pharos
 
 public typealias CollectionSection = UICollectionView.Section
 public typealias SupplementedCollectionSection = UICollectionView.SupplementedSection
@@ -38,7 +38,7 @@ extension UICollectionView {
             mediator.sections.first?.cells ?? []
         }
         set {
-            let section = Section(identifier: "single_section", cells: newValue)
+            let section = Section(distinctIdentifier: "single_section", cells: newValue)
             mediator.sections = [section]
         }
     }
@@ -66,9 +66,7 @@ extension UICollectionView {
             return flowSize.isCalculated ? flowSize : actualSizeFromCell
         }
         let customCellSize = cell.customCellSize(for: contentSize)
-        let defaultSize = cell.defaultCellSize(for: contentSize)
-        let artisanSize = customCellSize.isCalculated ? customCellSize : defaultSize
-        return artisanSize.isCalculated ? artisanSize : (flowSize.isCalculated ? flowSize : actualSizeFromCell)
+        return customCellSize.isCalculated ? customCellSize : (flowSize.isCalculated ? flowSize : actualSizeFromCell)
     }
     
     public func appendWithCell(_ builder: (CollectionCellBuilder) -> Void) {
@@ -82,11 +80,11 @@ extension UICollectionView {
     }
     
     public func buildWithCells(withFirstSectionId firstSection: String, _ builder: (CollectionCellBuilder) -> Void) {
-        buildWithCells(withFirstSection: Section(identifier: firstSection), builder)
+        buildWithCells(withFirstSection: Section(distinctIdentifier: firstSection), builder)
     }
     
     public func buildWithCells(withFirstSection firstSection: UICollectionView.Section? = nil, _ builder: (CollectionCellBuilder) -> Void) {
-        let collectionBuilder = CollectionCellBuilder(section: firstSection ?? Section(identifier: "first_section"))
+        let collectionBuilder = CollectionCellBuilder(section: firstSection ?? Section(distinctIdentifier: "first_section"))
         builder(collectionBuilder)
         sections = collectionBuilder.build()
     }
@@ -102,19 +100,19 @@ extension UICollectionView {
             $0.cancelsTouchesInView = false
         }
         var applicableSections: [Section] = []
-        @ObservableState public var sections: [Section] = []
+        @Observable public var sections: [Section] = []
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
         
         public override func bonding(with view: UICollectionView) {
             super.bonding(with: view)
-            $sections.observe(observer: self, on: .main, syncIfPossible: false).didSet { mediator, changes  in
-                guard let collection = mediator.view else { return }
+            $sections.observe(on: .main).whenDidSet { [weak self, weak view] changes in
+                guard let self = self, let collection = view else { return }
                 let newSection = changes.new
                 collection.registerNewCell(from: newSection)
-                let oldSection = mediator.applicableSections
-                mediator.applicableSections = newSection
-                mediator.reload(collection, with: newSection, oldSections: oldSection, completion: mediator.didReloadAction)
+                let oldSection = self.applicableSections
+                self.applicableSections = newSection
+                self.reload(collection, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
             }
         }
         
@@ -128,7 +126,7 @@ extension UICollectionView {
         }
         
         @objc public func didTap(_ gesture: UITapGestureRecognizer) {
-            guard let collection = view else { return }
+            guard let collection = gesture.view as? UICollectionView else { return }
             let location = gesture.location(in: collection)
             guard let indexPath = collection.indexPathForItem(at: location),
                   let cell = collection.cellForItem(at: indexPath),
@@ -139,14 +137,14 @@ extension UICollectionView {
         }
     }
     
-    open class Section: Identifiable, Equatable {
+    open class Section: Distinctable, Equatable {
         public var index: String?
         public var cells: [AnyCollectionCellMediator]
         public var cellCount: Int { cells.count }
-        public var identifier: AnyHashable
+        public var distinctIdentifier: AnyHashable
         
-        public init(identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
-            self.identifier = identifier
+        public init(distinctIdentifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
+            self.distinctIdentifier = distinctIdentifier
             self.cells = cells
             self.index = index
         }
@@ -161,7 +159,7 @@ extension UICollectionView {
         
         func isSameSection(with other: Section) -> Bool {
             if other === self { return true }
-            return other.identifier == identifier
+            return other.distinctIdentifier == distinctIdentifier
         }
         
         public func clear() {
@@ -169,15 +167,15 @@ extension UICollectionView {
         }
         
         public func copy() -> Section {
-            return Section(identifier: identifier, cells: cells)
+            return Section(distinctIdentifier: distinctIdentifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.Section, rhs: UICollectionView.Section) -> Bool {
             let left = lhs.copy()
             let right = rhs.copy()
-            guard left.identifier == right.identifier,
+            guard left.distinctIdentifier == right.distinctIdentifier,
                   left.cells.count == right.cells.count else { return false }
-            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
+            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSame(with: cell) {
                 return false
             }
             return true
@@ -189,14 +187,14 @@ extension UICollectionView {
         public var header: AnyCollectionCellMediator?
         public var footer: AnyCollectionCellMediator?
         
-        public init(header: AnyCollectionCellMediator? = nil, footer: AnyCollectionCellMediator? = nil, identifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
+        public init(header: AnyCollectionCellMediator? = nil, footer: AnyCollectionCellMediator? = nil, distinctIdentifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
             self.header = header
             self.footer = footer
-            super.init(identifier: identifier, index: index, cells: cells)
+            super.init(distinctIdentifier: distinctIdentifier, index: index, cells: cells)
         }
         
         public override func copy() -> Section {
-            return SupplementedSection(header: header, footer: footer, identifier: identifier, cells: cells)
+            return SupplementedSection(header: header, footer: footer, distinctIdentifier: distinctIdentifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.SupplementedSection, rhs: UICollectionView.SupplementedSection) -> Bool {
@@ -204,19 +202,19 @@ extension UICollectionView {
                   let right = rhs.copy() as? UICollectionView.SupplementedSection else {
                 return false
             }
-            guard left.identifier == right.identifier,
+            guard left.distinctIdentifier == right.distinctIdentifier,
                   left.cells.count == right.cells.count else { return false }
-            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSameMediator(with: cell) {
+            for (index, cell) in left.cells.enumerated() where !right.cells[index].isSame(with: cell) {
                 return false
             }
             if let leftHeader = left.header, let rightHeader = right.header,
-               leftHeader.isNotSameMediator(with: rightHeader) {
+               leftHeader.isNotSame(with: rightHeader) {
                 return false
             } else if (left.header == nil && right.header != nil) || (left.header != nil && right.header != nil) {
                 return false
             }
             if let leftFooter = left.footer, let rightFooter = right.footer,
-               leftFooter.isNotSameMediator(with: rightFooter) {
+               leftFooter.isNotSame(with: rightFooter) {
                 return false
             } else if (left.footer == nil && right.footer != nil) || (left.footer != nil && right.footer != nil) {
                 return false
@@ -351,4 +349,3 @@ extension UICollectionView.Mediator: UICollectionViewDataSource {
         )
     }
 }
-#endif
