@@ -57,7 +57,7 @@ open class ViewMediator<View: NSObject>: NSObject, AnyMediator, Buildable {
     }
     
     func pendingApply(to view: View) -> Bool {
-        if view is UITableViewCell || view is UICollectionView {
+        if view is UITableViewCell || view is UICollectionViewCell {
             return false
         }
         if let uiView = view as? UIView, uiView.superview == nil {

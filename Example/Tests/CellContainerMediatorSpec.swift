@@ -16,11 +16,14 @@ import Nimble
 class CellContainerMediatorSpec: QuickSpec {
     override func spec() {
         describe("collection view mediator behaviour") {
+            var superView: UIView!
             var collectionMediator: UICollectionView.Mediator!
             var collectionView: UICollectionView!
             beforeEach {
+                superView = .init()
                 collectionMediator = .init()
                 collectionView = UICollectionView(frame: .zero, collectionViewLayout: .init())
+                superView.addSubview(collectionView)
             }
             it("should assign itself as dataSource for UICollectionView") {
                 expect(collectionView.dataSource).to(beNil())
@@ -72,11 +75,14 @@ class CellContainerMediatorSpec: QuickSpec {
             }
         }
         describe("table view mediator behaviour") {
+            var superView: UIView!
             var tableMediator: UITableView.Mediator!
             var tableView: UITableView!
             beforeEach {
+                superView = .init()
                 tableMediator = .init()
                 tableView = .init()
+                superView.addSubview(tableView)
             }
             it("should assign itself as dataSource for UICollectionView") {
                 expect(tableView.dataSource).to(beNil())

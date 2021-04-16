@@ -18,10 +18,13 @@ class MediatorSpec: QuickSpec {
     override func spec() {
         describe("view mediator behaviour") {
             var mediatorForTest: ExtendedTestableVM!
+            var superView: UIView!
             var view: UIView!
             beforeEach {
                 mediatorForTest = .init()
+                superView = .init()
                 view = .init()
+                superView.addSubview(view)
             }
             it("should get all observables") {
                 let observables = mediatorForTest.observables
