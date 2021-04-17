@@ -6,6 +6,7 @@
 //
 
 import Foundation
+#if canImport(UIKit)
 import UIKit
 
 var didMoveToSuperviewNotification: Notification.Name = .init("Artisan_didMoveToSuperview")
@@ -62,3 +63,4 @@ extension UIViewController {
         NotificationCenter.default.post(name: viewDidLoadNotification, object: self)
     }
 }
+#endif
