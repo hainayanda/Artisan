@@ -13,13 +13,13 @@ import Pharos
 import Draftsman
 
 class KeywordCell: TableFragmentCell {
-    lazy var keywordLabel = build(UILabel.self)
+    lazy var keywordLabel = builder(UILabel.self)
         .font(.mediumContent)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.text)
         .build()
-    lazy var clearButton: UIButton = build {
+    lazy var clearButton: UIButton = builder {
         $0.setImage(#imageLiteral(resourceName: "delete"), for: .normal)
         $0.alpha = .semiOpaque
     }

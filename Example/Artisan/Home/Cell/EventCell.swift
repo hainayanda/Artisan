@@ -13,7 +13,7 @@ import Draftsman
 import Pharos
 
 class EventCell: TableFragmentCell {
-    lazy var bannerBackground: UIView = build {
+    lazy var bannerBackground: UIView = builder {
         $0.layer.cornerRadius = .x4
         $0.backgroundColor = .white
         $0.layer.shadowColor = UIColor.inactive.cgColor
@@ -21,24 +21,24 @@ class EventCell: TableFragmentCell {
         $0.layer.shadowOffset = .init(width: 0, height: 2)
         $0.layer.shadowRadius = 4
     }
-    lazy var banner: UIImageView = build {
+    lazy var banner: UIImageView = builder {
         $0.layer.cornerRadius = .x4
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
     }
-    lazy var title = build(UILabel.self)
+    lazy var title = builder(UILabel.self)
         .font(titleFont)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.secondary)
         .build()
-    lazy var subTitle = build(UILabel.self)
+    lazy var subTitle = builder(UILabel.self)
         .font(subTitleFont)
         .numberOfLines(1)
         .textAlignment(.left)
         .textColor(.main)
         .build()
-    lazy var date = build(UILabel.self)
+    lazy var date = builder(UILabel.self)
         .font(dateFont)
         .numberOfLines(1)
         .textAlignment(.left)

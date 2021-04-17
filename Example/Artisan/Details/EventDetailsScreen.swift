@@ -12,7 +12,7 @@ import Artisan
 import Draftsman
 
 class EventDetailsScreen: UIViewController {
-    lazy var tableView: UITableView = build {
+    lazy var tableView: UITableView = builder {
         $0.animationSet =  .init(insertAnimation: .right, reloadAnimation: .fade, deleteAnimation: .right)
         $0.backgroundColor = .clear
         $0.separatorStyle = .none

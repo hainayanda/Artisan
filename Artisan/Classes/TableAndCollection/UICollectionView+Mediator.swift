@@ -92,7 +92,7 @@ extension UICollectionView {
     }
     
     public class Mediator: ViewMediator<UICollectionView> {
-        var tapGestureRecognizer: UITapGestureRecognizer = build(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
+        var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
             $0.numberOfTouchesRequired = 1
             $0.isEnabled = true
             $0.cancelsTouchesInView = false
