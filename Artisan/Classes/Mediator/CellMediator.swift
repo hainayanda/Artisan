@@ -7,6 +7,7 @@
 
 import Foundation
 #if canImport(UIKit)
+import UIKit
 
 public protocol CellMediator: AnyMediator, Distinctable {
     static var cellViewClass: AnyClass { get }
