@@ -4,7 +4,7 @@
 
 # Artisan
 
-Artisan is a DSL, MVVM and Data Binding framework for Swift.
+Artisan is a MVVM framework for Swift using the bonding features from [Pharos](https://github.com/nayanda1/Pharos) and constraints builder from [Draftsman](https://github.com/nayanda1/Draftsman).
 
 ![build](https://github.com/nayanda1/Artisan/workflows/build/badge.svg)
 ![test](https://github.com/nayanda1/Artisan/workflows/test/badge.svg)
@@ -70,101 +70,93 @@ Artisan is available under the MIT license. See the [LICENSE](LICENSE) file for 
 
 ## Usage
 
-Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed information. About half of the features are provided by [Pharos](https://github.com/nayanda1/Pharos) and [Draftsman](https://github.com/nayanda1/Draftsman)
+Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed information.
 
 ### Basic Usage
 
-Want to layout tableView to fill UIViewController? 
-
-**old way**
+Creating MVVM Pattern using Artisan is easy. All you need to do is extend `ViewMediator`, `TableCellMediator` or `CollectionCellMediator` and implement `bonding` method.
+For the example, If you want to create custom `UITableViewCell`:
 
 ```swift
-override func viewDidLoad() {
-    super.viewDidLoad()
-    tableView.translatesAutoresizingMaskIntoConstraints = false
-    view.addSubview(tableView)
-    NSLayoutConstraint.activate([
-        tableView.topAnchor.constraint(equalTo: view.topAnchor),
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
-    ])
+import Artisan
+import UIKit
+import Draftsman
+import Pharos
+
+class MyCell: TableFragmentCell {
+    lazy var title = builder(UILabel.self)
+        .font(.boldSystemFont(ofSize: 16))
+        .numberOfLines(1)
+        .textAlignment(.left)
+        .textColor(.secondary)
+        .build()
+    lazy var subTitle = builder(UILabel.self)
+        .font(.systemFont(ofSize: 12))
+        .numberOfLines(1)
+        .textAlignment(.left)
+        .textColor(.main)
+        .build()
+    
+    // MARK: Dimensions
+    var margin: UIEdgeInsets = .init(insets: 16)
+    var spacing: CGFloat = 6
+    
+    override func planContent(_ plan: InsertablePlan) {
+        plan.fit(title)
+            .at(.fullTop, .equalTo(margin), to: .parent)
+        plan.fit(subTitle)
+            .at(.bottomOf(title), .equalTo(spacing))
+            .at(.fullBottom, .equalTo(margin), to: .parent)
+    }
 }
-```
 
-**Artisan way**
+class MyCellVM<Cell: MyCell>: TableCellMediator<Cell> {
+    @Observable var model: MyModel
+    
+    init(model: MyModel) {
+        self.model = model
+    }
 
-```swift
-override func viewDidLoad() {
-    super.viewDidLoad()
-    planContent { plan in
-        plan.fit(tableView)
-            .edges(.equal, to: .parent)
+    override func bonding(with view: Cell) {
+        $event.map { $0.title }.relayValue(to: .relay(of: view.title, \.text))
+        $event.map { $0.description }.relayValue(to: .relay(of: view.subTitle, \.text))
     }
 }
 ```
 
-Want to bind and observe text in UISearchBar?
-
-**old way**
+then add it to `UITableView`
 
 ```swift
+import Artisan
+import UIKit
+import Draftsman
+import Pharos
+
 class MyViewController: UIViewController {
-    lazy var searchBar: UISearchBar = .init()
-    
-    var searchPhrase: String?
-    
-    override func viewDidLoad() {
+    lazy var tableView: UITableView = .init()
+
+    @Observable var models: [MyModel] = []
+
+    override viewDidLoad() {
         super.viewDidLoad()
-        searchBar.delegate = self
-        ...
-        ...
-    }
-    
-    func set(searchPhrase: String?) {
-        searchBar.text = searchPhrase
-        self.searchPhrase = searchPhrase
-    }
-    ...
-    ...
-    ...
-}
-
-extension MyViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchPhrase = searchText
-        // do something with text
-    }
-}
-```
-
-**Artisan way**
-
-```swift
-class MyViewController: UIViewController {
-    lazy var searchBar: UISearchBar = .init()
-
-    @Observable var searchPhrase: String?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        $searchPhrase.bonding(with: .relay(of: searchBar, \.text))
-            .whenDidSet { changes in
-                // do something with changes
+        $models.map { MyCellVM(model: $0) }
+            .whenDidSet { [weak self] changes in
+                self?.tableView.cells = changes.new
             }
-        ...
-        ...
+        getData()
     }
-    ...
-    ...
-    ...
+
+    func getData() {
+        doGetDataFromAPI { [weak self] data in
+            self?.models = data
+        }
+    }
 }
 ```
 
-Want to update cell in tableView?
-Want to create iOS Application with MVVM framework?
+It will automatically update table cells with new data everytime you get data from API
 
-Artisan have all of those feature in one pack. read [wiki](https://github.com/nayanda1/Artisan/wiki) for more or just look and experimenting with Example project.
+For more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
 
 ## Contribute
 
