@@ -18,13 +18,13 @@ class EventSearchScreen: UIViewController, ObservableView {
     typealias Observer = EventSearchScreenObserver
     
     // MARK: View
-    lazy var searchBar: UISearchBar = build {
+    lazy var searchBar: UISearchBar = builder {
         $0.placeholder = "Search event here!"
         $0.sizeToFit()
         $0.tintColor = .text
         $0.barTintColor = .background
     }
-    lazy var tableView: UITableView = build {
+    lazy var tableView: UITableView = builder {
         $0.animationSet =  .init(insertAnimation: .top, reloadAnimation: .fade, deleteAnimation: .top)
         $0.backgroundColor = .clear
         $0.separatorStyle = .none

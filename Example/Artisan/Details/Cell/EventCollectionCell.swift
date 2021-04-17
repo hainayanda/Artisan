@@ -13,12 +13,12 @@ import Draftsman
 import Pharos
 
 class EventCollectionCell: CollectionFragmentCell {
-    lazy var banner: UIImageView = build {
+    lazy var banner: UIImageView = builder {
         $0.layer.cornerRadius = .x4
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
     }
-    lazy var title = build(UILabel.self)
+    lazy var title = builder(UILabel.self)
         .font(titleFont)
         .numberOfLines(1)
         .textAlignment(.center)
