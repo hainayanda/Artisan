@@ -38,7 +38,7 @@ pod 'Pharos ~> 1.1'
 
 - Add it using xcode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Artisan.git** as Swift Package url
-- Set rules at **version**, with **Up to Next Major** option and put **3.0.1** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **3.0.2** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -47,7 +47,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.0.1"))
+    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.0.2"))
 ]
 ```
 
