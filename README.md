@@ -70,7 +70,7 @@ Artisan is available under the MIT license. See the [LICENSE](LICENSE) file for 
 
 ## Usage
 
-Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed information
+Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed information. About half of the features are provided by [Pharos](https://github.com/nayanda1/Pharos) and [Draftsman](https://github.com/nayanda1/Draftsman)
 
 ### Basic Usage
 
