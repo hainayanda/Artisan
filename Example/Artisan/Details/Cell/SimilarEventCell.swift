@@ -47,7 +47,6 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     private var tapObserver: TapAction?
     
     override func bonding(with view: SimilarEventCell) {
-        super.bonding(with: view)
         $event.whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventChanges:))
         $events.observe(on: .main)
             .whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventsChanges:))

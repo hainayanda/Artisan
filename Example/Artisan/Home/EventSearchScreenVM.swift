@@ -21,7 +21,6 @@ class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
     @Observable var history: [String] = []
     
     override func bonding(with view: EventSearchScreen) {
-        super.bonding(with: view)
         $searchPhrase.bonding(with: .relay(of: view.searchBar, \.text))
             .whenDidSet(invoke: self, method: EventSearchScreenVM.search(for:))
             .multipleSetDelayed(by: .fast)

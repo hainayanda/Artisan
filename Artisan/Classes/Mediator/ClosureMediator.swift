@@ -20,8 +20,7 @@ public class ClosureMediator<View: NSObject>: ViewMediator<View> {
         self.applicator = { _ in }
     }
     
-    open override func willApplying(_ view: View) {
-        super.willApplying(view)
+    open override func bonding(with view: View) {
         applicator(view)
     }
 }
@@ -37,10 +36,10 @@ public class TableClosureMediator<Cell: UITableViewCell>: TableCellMediator<Cell
         self.applicator = { _ in }
     }
     
-    open override func willApplying(_ view: Cell) {
-        super.willApplying(view)
+    open override func bonding(with view: Cell) {
         applicator(view)
     }
+    
 }
 
 public class CollectionClosureMediator<Cell: UICollectionViewCell>: CollectionCellMediator<Cell> {
@@ -54,8 +53,7 @@ public class CollectionClosureMediator<Cell: UICollectionViewCell>: CollectionCe
         self.applicator = { _ in }
     }
     
-    open override func willApplying(_ view: Cell) {
-        super.willApplying(view)
+    open override func bonding(with view: Cell) {
         applicator(view)
     }
 }

@@ -21,7 +21,7 @@ extension UITableView {
             return mediator
         }
         let mediator = Mediator()
-        mediator.apply(to: self)
+        mediator.bond(with: self)
         return mediator
     }
     
@@ -126,6 +126,9 @@ extension UITableView {
             self.deleteSectionAnimation = deleteAnimation
         }
     }
+}
+
+extension UITableView {
     
     public class Mediator: ViewMediator<UITableView> {
         var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
@@ -139,8 +142,12 @@ extension UITableView {
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
         
+        public override func willBonded(with view: UITableView) {
+            view.dataSource = self
+            view.addGestureRecognizer(tapGestureRecognizer)
+        }
+        
         public override func bonding(with view: UITableView) {
-            super.bonding(with: view)
             $sections.observe(on: .main).whenDidSet { [weak self, weak view] changes in
                 guard let self = self, let view = view else { return }
                 let newSection = changes.new
@@ -151,13 +158,12 @@ extension UITableView {
             }
         }
         
-        public func whenDidReloadCells(then: ((Bool) -> Void)?) {
-            didReloadAction = then
+        public override func bondDidRemoved() {
+            tapGestureRecognizer.view?.removeGestureRecognizer(tapGestureRecognizer)
         }
         
-        public override func didApplying(_ view: UITableView) {
-            view.dataSource = self
-            view.addGestureRecognizer(tapGestureRecognizer)
+        public func whenDidReloadCells(then: ((Bool) -> Void)?) {
+            didReloadAction = then
         }
         
         @objc public func didTap(_ gesture: UITapGestureRecognizer) {
