@@ -139,10 +139,8 @@ class MyViewController: UIViewController {
 
     override viewDidLoad() {
         super.viewDidLoad()
-        $models.map { MyCellVM(model: $0) }
-            .whenDidSet { [weak self] changes in
-                self?.tableView.cells = changes.new
-            }
+        $models.compactMap { MyCellVM(model: $0) }
+            .relayValue(to: tableView.mediator.$cells)
         getData()
     }
 
