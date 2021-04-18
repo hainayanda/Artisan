@@ -33,11 +33,10 @@ extension UICollectionView {
     
     public var cells: [AnyCollectionCellMediator] {
         get {
-            mediator.sections.first?.cells ?? []
+            mediator.cells
         }
         set {
-            let section = Section(distinctIdentifier: "single_section", cells: newValue)
-            mediator.sections = [section]
+            mediator.cells = newValue
         }
     }
     
@@ -102,6 +101,8 @@ extension UICollectionView {
         }
         var applicableSections: [Section] = []
         @Observable public var sections: [Section] = []
+        @Observable public var cells: [AnyCollectionCellMediator] = []
+        
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
         
@@ -111,14 +112,24 @@ extension UICollectionView {
         }
         
         public override func bonding(with view: UICollectionView) {
-            $sections.observe(on: .main).whenDidSet { [weak self, weak view] changes in
-                guard let self = self, let collection = view else { return }
-                let newSection = changes.new
-                collection.registerNewCell(from: newSection)
-                let oldSection = self.applicableSections
-                self.applicableSections = newSection
-                self.reload(collection, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
-            }
+            $sections.observe(on: .main)
+                .syncWhenInSameThread()
+                .whenDidSet { [weak self, weak view] changes in
+                    guard let self = self, let collection = view else { return }
+                    let newSection = changes.new
+                    collection.registerNewCell(from: newSection)
+                    let oldSection = self.applicableSections
+                    self.applicableSections = newSection
+                    self.reload(collection, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
+                }
+            _cells.mutator { [weak self] in
+                self?.sections.first?.cells ?? []
+            } set: { _ in }
+            $cells.observe(on: .main)
+                .syncWhenInSameThread()
+                .whenDidSet { [weak self] changes in
+                    self?.sections = [Section(distinctIdentifier: "single_section", cells: changes.new)]
+                }
         }
         
         public override func bondDidRemoved() {
