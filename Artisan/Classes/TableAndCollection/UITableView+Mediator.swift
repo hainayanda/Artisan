@@ -36,11 +36,10 @@ extension UITableView {
     
     public var cells: [AnyTableCellMediator] {
         get {
-            mediator.sections.first?.cells ?? []
+            mediator.cells
         }
         set {
-            let section = Section(distinctIdentifier: "single_section", cells: newValue)
-            mediator.sections = [section]
+            mediator.cells = newValue
         }
     }
     
@@ -138,6 +137,7 @@ extension UITableView {
         }
         var applicableSections: [Section] = []
         @Observable public var sections: [Section] = []
+        @Observable public var cells: [AnyTableCellMediator] = []
         public var animationSet: UITableView.AnimationSet = .init()
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
@@ -148,13 +148,20 @@ extension UITableView {
         }
         
         public override func bonding(with view: UITableView) {
-            $sections.observe(on: .main).whenDidSet { [weak self, weak view] changes in
+            $sections.observe(on: .main)
+                .syncWhenInSameThread()
+                .whenDidSet { [weak self, weak view] changes in
                 guard let self = self, let view = view else { return }
                 let newSection = changes.new
                 view.registerNewCell(from: newSection)
                 let oldSection = self.applicableSections
                 self.applicableSections = newSection
                 self.reload(view, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
+            }
+            _cells.mutator { [weak self] in
+                self?.sections.first?.cells ?? []
+            } set: { newValue in
+                self.sections = [Section(distinctIdentifier: "single_section", cells: newValue)]
             }
         }
         

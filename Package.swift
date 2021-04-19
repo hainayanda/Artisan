@@ -17,8 +17,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/Quick/Quick.git", from: "3.0.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "9.0.0"),
-        .package(url: "https://github.com/nayanda1/Draftsman.git", from: "1.0.0"),
-        .package(url: "https://github.com/nayanda1/Pharos.git", from: "1.1.0")
+        .package(url: "https://github.com/nayanda1/Draftsman.git", from: "1.0.4"),
+        .package(url: "https://github.com/nayanda1/Pharos.git", from: "1.1.5")
     ],
     targets: [
         .target(

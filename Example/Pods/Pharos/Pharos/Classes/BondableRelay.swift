@@ -11,14 +11,16 @@ public class BondableRelay<Value>: TwoWayRelay<Value> {
     var bondingRelay: BaseRelay<Value>?
     var outsideInvoked: Bool = false
     
-    public override func relay(changes: Changes<Value>) {
-        super.relay(changes: changes)
+    @discardableResult
+    public override func relay(changes: Changes<Value>) -> Bool {
+        guard super.relay(changes: changes) else { return false }
         bondingRelay?.relay(changes: changes)
+        return true
     }
     
     @discardableResult
     public func bonding(with twoWayRelay: TwoWayRelay<Value>) -> Self {
-        relayNotification(to: twoWayRelay)
+        next(relay: twoWayRelay)
         twoWayRelay.relayBackConsumer { [weak self] changes in
             self?.relayBack(changes: changes)
         }

@@ -14,12 +14,17 @@ open class ValueRelay<Value>: BaseRelay<Value>, ObservableRelay {
     public internal(set) var currentValue: Value
     var relayDispatch: RelayDispatchHandler<Value> = .init()
     var nextRelays: Set<BaseRelay<Value>> = Set()
+    var ignoring: Ignorer = { _ in false }
     
     public init(currentValue: Value) {
         self.currentValue = currentValue
     }
     
-    open override func relay(changes: Changes<Value>) {
+    @discardableResult
+    open override func relay(changes: Changes<Value>) -> Bool {
+        guard !ignoring(changes) else {
+            return false
+        }
         currentValue = changes.new
         relayDispatch.relay(changes: changes)
         nextRelays = nextRelays.filter {
@@ -27,11 +32,17 @@ open class ValueRelay<Value>: BaseRelay<Value>, ObservableRelay {
             $0.relay(changes: changes)
             return true
         }
+        return true
     }
     
     @discardableResult
     public func whenDidSet(then consume: @escaping Consumer) -> Self {
         relayDispatch.consumer = consume
+        return self
+    }
+    
+    public func ignore(when ignoring: @escaping Ignorer) -> Self {
+        self.ignoring = ignoring
         return self
     }
     
@@ -53,12 +64,6 @@ open class ValueRelay<Value>: BaseRelay<Value>, ObservableRelay {
         return self
     }
     
-    public func nextRelay() -> ValueRelay<Value> {
-        let nextRelay = ValueRelay<Value>(currentValue: currentValue)
-        relayNotification(to: nextRelay)
-        return nextRelay
-    }
-    
     public func invokeRelay() {
         relay(changes: .init(old: currentValue, new: currentValue, source: self))
     }
@@ -69,8 +74,8 @@ open class ValueRelay<Value>: BaseRelay<Value>, ObservableRelay {
     }
     
     @discardableResult
-    public func relayNotification(to relay: BaseRelay<Value>) -> Self {
+    public func next<Relay: BaseRelay<Value>>(relay: Relay) -> Relay {
         nextRelays.insert(relay)
-        return self
+        return relay
     }
 }

@@ -30,7 +30,7 @@ pod 'Pharos'
 
 - Add it using xcode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Pharos.git** as Swift Package url
-- Set rules at **version**, with **Up to Next Major** option and put **1.1.0** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **1.1.5** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -39,7 +39,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Pharos.git", .upToNextMajor(from: "1.1.0"))
+    .package(url: "https://github.com/nayanda1/Pharos.git", .upToNextMajor(from: "1.1.5"))
 ]
 ```
 
@@ -230,6 +230,24 @@ class MyClass {
     }
 }
 ```
+## Ignoring Set
+
+You can ignore set to relay by passing closure that returning `Bool` value which indicated those value should be ignored:
+
+```swift
+class MyClass {
+    @Observable var text: String?
+    
+    func observeText() {
+        $text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }.ignore { $0.new?.isEmpty ?? true }
+    }
+}
+```
+
+At the example above, whenDidSet closure will not run when new value is empty or null
 
 ## Delaying Multiple Set
 
@@ -348,6 +366,22 @@ class MyClass {
             .whenDidSet { changes in
                 print("notified by Main Relay")
                 print("changes now is Int with value \(changes.new)")
+            }
+    }
+}
+```
+
+If your value is `Array`, you can use `compactMap` to map original `Array` to target `Array`:
+
+```swift
+class MyClass {
+    @Observable var array: [String] = []
+    
+    func observeText() {
+        $array.compactMap { $0.count }
+            .whenDidSet { changes in
+                print("notified by Main Relay")
+                print("changes now is [Int]")
             }
     }
 }

@@ -44,8 +44,9 @@ class KeywordCellVM: TableCellMediator<KeywordCell> {
     var delegate: KeywordCellMediatorDelegate?
     override func bonding(with view: KeywordCell) {
         $keyword.bonding(with: .relay(of: view.keywordLabel, \.text))
-        view.clearButton.whenDidTapped(observing: self) { viewModel, _ in
-            viewModel.delegate?.keywordCellDidTapClear(viewModel)
+        view.clearButton.whenDidTapped { [weak self] _ in
+            guard let self = self else { return }
+            self.delegate?.keywordCellDidTapClear(self)
         }
     }
 }
