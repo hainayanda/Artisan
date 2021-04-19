@@ -133,26 +133,31 @@ import Draftsman
 import Pharos
 
 class MyViewController: UIViewController {
-    lazy var tableView: UITableView = .init()
-
+    var tableView: UITableView!
+    var searchBar: UISearchBar!
+  
+    @Observable var searchPhrase: String?
     @Observable var models: [MyModel] = []
 
     override viewDidLoad() {
         super.viewDidLoad()
+        $searchPhrase.bonding(with: .relay(of: searchBar, \.text)
+            .multipleSetDelayed(by: 1)
+            .whenDidSet(invoke: self, method: MyViewController.getData(from:))
         $models.compactMap { MyCellVM(model: $0) }
+            .observe(on: .main)
             .relayValue(to: tableView.mediator.$cells)
-        getData()
     }
 
-    func getData() {
-        doGetDataFromAPI { [weak self] data in
+    func getData(from: changes: Changes<String?>) {
+        doGetDataFromAPI(for: changes.new) { [weak self] data in
             self?.models = data
         }
     }
 }
 ```
 
-It will automatically update table cells with new data everytime you get data from API
+It will automatically run getData when user type in searchBar, with minimum interval between method call is 1 second and will update table cells with new data on Main Thread everytime you get data from API
 
 For more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
 
