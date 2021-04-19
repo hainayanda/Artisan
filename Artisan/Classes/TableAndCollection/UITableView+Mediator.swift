@@ -160,12 +160,9 @@ extension UITableView {
             }
             _cells.mutator { [weak self] in
                 self?.sections.first?.cells ?? []
-            } set: { _ in }
-            $cells.observe(on: .main)
-                .syncWhenInSameThread()
-                .whenDidSet { [weak self] changes in
-                    self?.sections = [Section(distinctIdentifier: "single_section", cells: changes.new)]
-                }
+            } set: { newValue in
+                self.sections = [Section(distinctIdentifier: "single_section", cells: newValue)]
+            }
         }
         
         public override func bondDidRemoved() {
