@@ -1,8 +1,8 @@
 PODS:
   - Artisan (3.0.4):
-    - Draftsman (~> 1.0.4)
+    - Draftsman (~> 1.0.5)
     - Pharos (~> 1.1.5)
-  - Draftsman (1.0.4)
+  - Draftsman (1.0.5)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
   - FBSnapshotTestCase/Core (2.1.4)
@@ -44,8 +44,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Artisan: 27cfad52f5ca037313297a7f033c58a4f28be0b3
-  Draftsman: a7b06994ba019e5e7913acde92aee138fb4a00fe
+  Artisan: b5975afff7af361db81b1d2cda9b08c1d982a324
+  Draftsman: 082a25c23b0e06712065ebb5ec0ea0965a47feb7
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
