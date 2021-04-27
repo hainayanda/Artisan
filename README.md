@@ -6,6 +6,7 @@
 
 Artisan is a MVVM framework for Swift using the bonding features from [Pharos](https://github.com/nayanda1/Pharos) and constraints builder from [Draftsman](https://github.com/nayanda1/Draftsman).
 
+[![codebeat badge](https://codebeat.co/badges/a3e6f380-c48e-44bb-997c-56b9615c64b3)](https://codebeat.co/projects/github-com-nayanda1-artisan-main)
 ![build](https://github.com/nayanda1/Artisan/workflows/build/badge.svg)
 ![test](https://github.com/nayanda1/Artisan/workflows/test/badge.svg)
 [![Version](https://img.shields.io/cocoapods/v/Artisan.svg?style=flat)](https://cocoapods.org/pods/Artisan)
