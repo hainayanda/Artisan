@@ -2,6 +2,7 @@
 
 Draftsman is a DSL framework for Swift focussed on builder pattern
 
+[![codebeat badge](https://codebeat.co/badges/e0358dc0-7445-47a9-8f81-5c57a11fa9e8)](https://codebeat.co/projects/github-com-nayanda1-draftsman-master)
 ![build](https://github.com/nayanda1/Draftsman/workflows/build/badge.svg)
 ![test](https://github.com/nayanda1/Draftsman/workflows/test/badge.svg)
 [![Version](https://img.shields.io/cocoapods/v/Draftsman.svg?style=flat)](https://cocoapods.org/pods/Draftsman)
@@ -25,14 +26,14 @@ Draftsman is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Draftsman'
+pod 'Draftsman', '~> 1.0.6'
 ```
 
 ### Swift Package Manager from XCode
 
 - Add it using xcode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Draftsman.git** as Swift Package url
-- Set rules at **version**, with **Up to Next Major** option and put **1.0.5** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **1.0.6** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -41,7 +42,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Draftsman.git", .upToNextMajor(from: "1.0.5"))
+    .package(url: "https://github.com/nayanda1/Draftsman.git", .upToNextMajor(from: "1.0.6"))
 ]
 ```
 
