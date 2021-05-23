@@ -31,7 +31,7 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'Artisan ~> 3.0.5'
-pod 'Draftsman ~> 1.0.5'
+pod 'Draftsman ~> 1.0.6'
 pod 'Pharos ~> 1.1.5'
 ```
 
