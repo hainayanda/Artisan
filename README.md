@@ -31,16 +31,16 @@ Artisan is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Artisan ~> 3.0.9'
-pod 'Draftsman ~> 1.0.9'
-pod 'Pharos ~> 1.1.5'
+pod 'Artisan ~> 3.1.0'
+pod 'Draftsman ~> 1.1.0'
+pod 'Pharos ~> 1.2.0'
 ```
 
 ### Swift Package Manager from XCode
 
 - Add it using xcode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Artisan.git** as Swift Package url
-- Set rules at **version**, with **Up to Next Major** option and put **3.0.9** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **3.1.0** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -49,7 +49,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.0.9"))
+    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.1.0"))
 ]
 ```
 

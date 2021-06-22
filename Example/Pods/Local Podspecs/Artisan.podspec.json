@@ -21,10 +21,10 @@
   "source_files": "Artisan/Classes/**/*",
   "dependencies": {
     "Draftsman": [
-      "~> 1.0.9"
+      "~> 1.1.0"
     ],
     "Pharos": [
-      "~> 1.1.5"
+      "~> 1.2.0"
     ]
   },
   "swift_versions": "5.1",

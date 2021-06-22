@@ -1,9 +1,11 @@
 # Pharos
 
-Pharos is Observer pattern framework for Swift that utilize `propertyWrapper`
+Pharos is Observer pattern framework for Swift that utilize `propertyWrapper`. It could help a lot when designing Apps using reactive programming
 
+[![codebeat badge](https://codebeat.co/badges/e4784f82-ff10-45cf-92e2-93497bb6b1a4)](https://codebeat.co/projects/github-com-nayanda1-pharos-main)
 ![build](https://github.com/nayanda1/Pharos/workflows/build/badge.svg)
 ![test](https://github.com/nayanda1/Pharos/workflows/test/badge.svg)
+[![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen)](https://swift.org/package-manager/)
 [![Version](https://img.shields.io/cocoapods/v/Pharos.svg?style=flat)](https://cocoapods.org/pods/Pharos)
 [![License](https://img.shields.io/cocoapods/l/Pharos.svg?style=flat)](https://cocoapods.org/pods/Pharos)
 [![Platform](https://img.shields.io/cocoapods/p/Pharos.svg?style=flat)](https://cocoapods.org/pods/Pharos)
@@ -30,7 +32,7 @@ pod 'Pharos'
 
 - Add it using xcode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Pharos.git** as Swift Package url
-- Set rules at **version**, with **Up to Next Major** option and put **1.1.5** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **1.2.0** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -39,7 +41,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Pharos.git", .upToNextMajor(from: "1.1.5"))
+    .package(url: "https://github.com/nayanda1/Pharos.git", .upToNextMajor(from: "1.2.0"))
 ]
 ```
 
@@ -141,6 +143,99 @@ class MyClass {
 }
 ```
 
+## Multiple observer
+
+By design the Observable will have one main relay which only consist of one observer.
+So if you set observer closure multiple time on Main Relay, it will only replace it but not add a new one:
+
+```swift
+class MyClass {
+    @Observable var text: String?
+    
+    func observeText() {
+        $text.whenDidSet { changes in
+            print("first closure")
+        }.whenDidSet { changes in
+            print("will replace first closure")
+        }
+    }
+}
+```
+
+At example above, first closure will replaced by second closure since both are assigned in Main Relay. But any relay could have multiple child relay which will notified by the previous relay as described by diagram below:
+
+![alt text](https://github.com/nayanda1/Vellum/blob/main/ObservableRelay.png)
+
+And remember, single relay will always just have one did set listener:
+
+![alt text](https://github.com/nayanda1/Vellum/blob/main/DidSet.png)
+
+To use next relay, you could just do something like this:
+
+```swift
+class MyClass {
+    @Observable var text: String?
+    
+    func observeTextLinearly() {
+        $text.whenDidSet { changes in
+            print("notified by Observable")
+        }.nextRelay().whenDidSet { changes in
+            print("notified by Main Relay")
+        }.nextRelay().whenDidSet { changes in
+            print("notified by Previous Relay")
+        }
+    }
+    
+    func addRelayToMainRelay() {
+        $text.nextRelay().whenDidSet {
+            print("notified by Main Relay")
+        }
+        $text.nextRelay().whenDidSet {
+            print("notified by Main Relay Too")
+        }.nextRelay().whenDidSet { changes in
+            print("notified by Previous Relay")
+        }
+    }
+}
+```
+
+At example above, all closure will be run if any set happens. The only difference between all the relay is just the one who notified it.
+
+## Using Retainer
+
+You could use `Retainer` to make sure the relay created will discarded by `ARC` when `Retainer` is discarded so the closure in the relay and all of its next relays will not run if its not used anymore:
+
+```swift
+class MyClass {
+    @Observable var text: String?
+    
+    var retainer: Retainer = .init()
+    
+    func observeText() {
+        $text.nextRelay()
+            .referenceManaged(by: dereferencer)
+            .whenDidSet { changes in
+                print(changes.new)
+                print(changes.old)
+            }
+    }
+    
+    func discardManually() {
+        dereferencer.discardAll()
+    }
+    
+    func discardByCreateNewDereferencer() {
+        dereferencer = .init()
+    }
+    
+}
+```
+
+There are many ways to discard the relay managed by `Dereferencer`:
+- call `discardAll()` from relay's dereferencer
+- replace dereferencer by new one, which will trigger `ARC` to remove dereferencer from memory thus will discard all of its managed relays by default.
+- doing nothing, which if the object that have dereferencer is discarded by `ARC`, it will automatically discard the `Dereferencer` thus will discard all of its managed relays by default.
+
 ## Custom getter and setter
 
 You can create Observable using custom getter and setter which will relay value if there's some value set to those observable.
@@ -166,9 +261,9 @@ class MyClass {
 
 On the example above , everytime title is set, it will call the set closure and then relay it to its relays.
 
-## Bonding using KVO
+## Bondable Relays
 
-You can observe changes in any `NSObject` property that are compatible with `KVO` like most of `UIView` properties using `KeyPath`:
+You can observe changes in supported `UIView` property by accesing it with `bondableRelays`:
 
 ```swift
 class MyClass {
@@ -176,7 +271,7 @@ class MyClass {
     @Observable var text: String?
     
     func observeText() {
-        $text.bonding(with: .relay(of: textField, \.text))
+        $text.bonding(with: textField.bondableRelays.text)
             .whenDidSet { changes in
                 print(changes.new)
                 print(changes.old)
@@ -187,6 +282,10 @@ class MyClass {
 
 At the example above, everytime `text` is set, it will automatically set the `textField.text`, and when  `textField.text` is set it will automatically set the `text`. On both occasion it will always notify the `whenDidSet` closure.
 
+The mechanism can be describe by diagram below:
+
+![alt text](https://github.com/nayanda1/Vellum/blob/main/BondingRelay.png)
+
 If you want to bond and match both value right away, use `bondAndApply` or `bondAndMap`. the difference between both is apply will set the `Observable` value to `Object property` and map will set the `Object property` to `Observable`
 
 ```swift
@@ -195,7 +294,7 @@ class MyClass {
     @Observable var text: String?
     
     func applyToField() {
-        $text.bondAndApply(to: .relay(of: textField, \.text))
+        $text.bondAndApply(to: textField.bondableRelays.text)
             .whenDidSet { changes in
                 print(changes.new)
                 print(changes.old)
@@ -203,7 +302,7 @@ class MyClass {
     }
     
     func mapFromField() {
-        $text.bondAndMap(from: .relay(of: textField, \.text))
+        $text.bondAndMap(from: textField.bondableRelays.text)
             .whenDidSet { changes in
                 print(changes.new)
                 print(changes.old)
@@ -212,14 +311,14 @@ class MyClass {
 }
 ```
 
-Actually what `relay(of:,)` static method do is creating `TwoWayRelay` of given object keypath. `TwoWayRelay` is open, so you could also creating one of your own. You can always treat `TwoWayRelay` as observable:
+Actually what `textField.relays.text` do is creating `AssociativeTwoWayRelay` of given object keypath. `AssociativeTwoWayRelay` is open, so you could also creating one of your own. You can always treat `AssociativeTwoWayRelay` as observable:
 
 ```swift
 class MyClass {
-    var relay: TwoWayRelay<String?>
+    var relay: AssociativeTwoWayRelay<String?>
 
     init(textField: UITextField) {
-        self.relay = .relay(of: textField, \.text)
+        self.relay = textField.bondableRelays.text
     }
     
     func observeRelay() {
@@ -230,6 +329,43 @@ class MyClass {
     }
 }
 ```
+
+Some of the relays are just `ValueRelay` which cannot be bond since its readonly, but you can always observe the value of it:
+
+```swift
+class MyClass {
+    var relay: ValueRelay<UIControl.State>
+
+    init(button: UIButton) {
+        self.relay = button.relays.state
+    }
+    
+    func observeRelay() {
+        relay.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }
+    }
+}
+```
+
+If you just want to observe the value without storing the relay, retain it with the source of the relay, so it will always called until the source is removed by `ARC`. You could always use `Retainer` if you want:
+
+```swift
+class MyClass {
+    var button: UIButton = .init()
+    
+    func observeRelay() {
+        button.relays.state
+            .retainToSource()
+            .whenDidSet { changes in
+                print(changes.new)
+                print(changes.old)
+            }
+    }
+}
+```
+
 ## Ignoring Set
 
 You can ignore set to relay by passing closure that returning `Bool` value which indicated those value should be ignored:
@@ -298,60 +434,6 @@ class MyClass {
     }
 }
 ```
-
-## Multiple observer
-
-By design the Observable will have one main relay which only consist of one observer.
-So if you set observer closure multiple time on Main Relay, it will only replace it but not add a new one:
-
-```swift
-class MyClass {
-    @Observable var text: String?
-    
-    func observeText() {
-        $text.whenDidSet { changes in
-            print("first closure")
-        }.whenDidSet { changes in
-            print("will replace first closure")
-        }
-    }
-}
-```
-
-At example above, first closure will replaced by second closure since both are assigned in Main Relay. But any relay could have multiple child relay which will notified by the previous relay:
-
-**Observable -> Main Relay -> Multiple Next Relay -> ... -> Multiple Next Relay**
-
-To use next relay, you could just do something like this:
-
-```swift
-class MyClass {
-    @Observable var text: String?
-    
-    func observeTextLinearly() {
-        $text.whenDidSet { changes in
-            print("notified by Observable")
-        }.nextRelay().whenDidSet { changes in
-            print("notified by Main Relay")
-        }.nextRelay().whenDidSet { changes in
-            print("notified by Previous Relay")
-        }
-    }
-    
-    func addRelayToMainRelay() {
-        $text.nextRelay().whenDidSet {
-            print("notified by Main Relay")
-        }
-        $text.nextRelay().whenDidSet {
-            print("notified by Main Relay Too")
-        }.nextRelay().whenDidSet { changes in
-            print("notified by Previous Relay")
-        }
-    }
-}
-```
-
-At example above, all closure will be run if any set happens. The only difference between all the relay is just the one who notified it.
 
 ## Mapping Value
 
@@ -437,38 +519,6 @@ class MyClass {
 ```
 
 Keep in mind that merged relays will strong referenced in new relay.
-
-## Using Dereferencer
-
-You could use `Dereferencer` to make sure the relay created will discarded by `ARC` when `Dereferencer` is discarded so the closure in the relay will not run if its not used anymore:
-
-```swift
-class MyClass {
-    @Observable var text: String?
-    
-    var dereferencer: Dereferencer = .init()
-    
-    func observeText() {
-        $text.nextRelay()
-            .referenceManaged(by: dereferencer)
-            .whenDidSet { changes in
-                print(changes.new)
-                print(changes.old)
-            }
-    }
-    
-    func discardManually() {
-        dereferencer.discardAll()
-    }
-    
-    func discardByCreateNewDereferencer() {
-        dereferencer = .init()
-    }
-    
-}
-```
-
-`discardAll` will invalidate all relay associated with those `Dereferencer`. But `discardAll` not necessarily needed to invalidate relay since everytime `Dereferencer` is discarded by `ARC`, it will automatically invalidate all relay associated with those `Dereferencer`.
 
 ***
 

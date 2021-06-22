@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Clavier",
+        "repositoryURL": "https://github.com/nayanda1/Clavier.git",
+        "state": {
+          "branch": null,
+          "revision": "ab66cf092810e8e87ee895c352b0261fc57ee585",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "CwlCatchException",
         "repositoryURL": "https://github.com/mattgallagher/CwlCatchException.git",
         "state": {
@@ -24,8 +33,8 @@
         "repositoryURL": "https://github.com/nayanda1/Draftsman.git",
         "state": {
           "branch": null,
-          "revision": "73d571d91a5ef4a730333bd06ba10f3332966988",
-          "version": "1.0.9"
+          "revision": "451536a809e1eb094510b115d7f228e1f8914283",
+          "version": "1.1.0"
         }
       },
       {
@@ -42,8 +51,8 @@
         "repositoryURL": "https://github.com/nayanda1/Pharos.git",
         "state": {
           "branch": null,
-          "revision": "93a47b92b73f52586f9748051c524a6385058c5f",
-          "version": "1.1.5"
+          "revision": "8db1d26002acfbda6de3ae870cb071c81ff7bba9",
+          "version": "1.2.0"
         }
       },
       {
