@@ -120,8 +120,8 @@ class MyCellVM<Cell: MyCell>: TableCellMediator<Cell> {
     }
 
     override func bonding(with view: Cell) {
-        $event.map { $0.title }.relayValue(to: .relay(of: view.title, \.text))
-        $event.map { $0.description }.relayValue(to: .relay(of: view.subTitle, \.text))
+        $event.map { $0.title }.relayValue(to: view.title.relays.text))
+        $event.map { $0.description }.relayValue(to: view.subTitle.relays.text))
     }
 }
 ```
@@ -143,12 +143,13 @@ class MyViewController: UIViewController {
 
     override viewDidLoad() {
         super.viewDidLoad()
-        $searchPhrase.bonding(with: .relay(of: searchBar, \.text)
+        $searchPhrase.bonding(with: searchBar.bondableRelays.text)
             .multipleSetDelayed(by: 1)
             .whenDidSet(invoke: self, method: MyViewController.getData(from:))
-        $models.compactMap { MyCellVM(model: $0) }
-            .observe(on: .main)
-            .relayValue(to: tableView.mediator.$cells)
+        $models.compactMap { model -> AnyTableCellMediator in
+              MyCellVM(model: $0) 
+          }.observe(on: .main)
+          .relayValue(to: tableView.relays.cells)
     }
 
     func getData(from: changes: Changes<String?>) {
