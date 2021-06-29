@@ -31,9 +31,9 @@ Artisan is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Artisan ~> 3.1.0'
-pod 'Draftsman ~> 1.1.0'
-pod 'Pharos ~> 1.2.0'
+pod 'Artisan', '~> 3.1.0'
+pod 'Draftsman', '~> 1.1.0'
+pod 'Pharos', '~> 1.2.0'
 ```
 
 ### Swift Package Manager from XCode
