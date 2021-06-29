@@ -112,14 +112,14 @@ class MyCell: TableFragmentCell {
     }
 }
 
-class MyCellVM<Cell: MyCell>: TableCellMediator<Cell> {
+class MyCellVM: TableCellMediator<MyCell> {
     @Observable var model: MyModel
     
     init(model: MyModel) {
         self.model = model
     }
 
-    override func bonding(with view: Cell) {
+    override func bonding(with view: MyCell) {
         $event.map { $0.title }.relayValue(to: view.title.relays.text))
         $event.map { $0.description }.relayValue(to: view.subTitle.relays.text))
     }
