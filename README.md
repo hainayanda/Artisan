@@ -147,7 +147,7 @@ class MyViewController: UIViewController {
             .multipleSetDelayed(by: 1)
             .whenDidSet(invoke: self, method: MyViewController.getData(from:))
         $models.compactMap { model -> AnyTableCellMediator in
-              MyCellVM(model: $0) 
+              MyCellVM(model: model) 
           }.observe(on: .main)
           .relayValue(to: tableView.relays.cells)
     }
