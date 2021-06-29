@@ -152,7 +152,7 @@ class MyViewController: UIViewController {
           .relayValue(to: tableView.relays.cells)
     }
 
-    func getData(from: changes: Changes<String?>) {
+    func getData(from changes: Changes<String?>) {
         doGetDataFromAPI(for: changes.new) { [weak self] data in
             self?.models = data
         }
