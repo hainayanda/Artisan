@@ -4,7 +4,7 @@
 
 # Artisan
 
-Artisan is a MVVM framework for Swift using the bonding features from [Pharos](https://github.com/nayanda1/Pharos) and constraints builder from [Draftsman](https://github.com/nayanda1/Draftsman).
+Artisan is an MVVM framework for Swift using the bonding features from [Pharos](https://github.com/nayanda1/Pharos) and constraints builder from [Draftsman](https://github.com/nayanda1/Draftsman).
 
 [![codebeat badge](https://codebeat.co/badges/a3e6f380-c48e-44bb-997c-56b9615c64b3)](https://codebeat.co/projects/github-com-nayanda1-artisan-main)
 ![build](https://github.com/nayanda1/Artisan/workflows/build/badge.svg)
@@ -76,8 +76,8 @@ Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed informat
 
 ### Basic Usage
 
-Creating MVVM Pattern using Artisan is easy. All you need to do is extend `ViewMediator`, `TableCellMediator` or `CollectionCellMediator` and implement `bonding` method.
-For the example, If you want to create custom `UITableViewCell`:
+Creating an MVVM Pattern using Artisan is easy. All you need to do is extend `ViewMediator`, `TableCellMediator` or `CollectionCellMediator` and implement `bonding` method.
+For example, If you want to create a custom `UITableViewCell`:
 
 ```swift
 import Artisan
@@ -160,7 +160,7 @@ class MyViewController: UIViewController {
 }
 ```
 
-It will automatically run getData when user type in searchBar, with minimum interval between method call is 1 second and will update table cells with new data on Main Thread everytime you get data from API
+It will automatically run getData when the user type in searchBar, with a minimum interval between method call, is 1 second, and will update table cells with new data on Main Thread every time you get data from API
 
 For more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
 
