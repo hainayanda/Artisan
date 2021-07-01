@@ -38,8 +38,8 @@ pod 'Pharos', '~> 1.2.0'
 
 ### Swift Package Manager from XCode
 
-- Add it using xcode menu **File > Swift Package > Add Package Dependency**
-- Add **https://github.com/nayanda1/Artisan.git** as Swift Package url
+- Add it using XCode menu **File > Swift Package > Add Package Dependency**
+- Add **https://github.com/nayanda1/Artisan.git** as Swift Package URL
 - Set rules at **version**, with **Up to Next Major** option and put **3.1.1** as its version
 - Click next and wait
 
@@ -160,7 +160,7 @@ class MyViewController: UIViewController {
 }
 ```
 
-It will automatically run getData when the user type in searchBar, with a minimum interval between method call, is 1 second, and will update table cells with new data on Main Thread every time you get data from API
+It will automatically run getData when the user type in searchBar, with a minimum interval between method calls, is 1 second and will update table cells with new data on Main Thread every time you get data from API
 
 For more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
 
