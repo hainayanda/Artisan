@@ -106,15 +106,15 @@ extension UICollectionView {
             super.init(identifier: identifier, index: index, builder: builder)
         }
         
-        open override func add(cell: AnyTableCellMediator) {
+        open override func add(cell: AnyCollectionCellMediator) {
             super.add(cell: cell)
         }
         
-        open override func add(cells: [AnyTableCellMediator]) {
+        open override func add(cells: [AnyCollectionCellMediator]) {
             super.add(cells: cells)
         }
         
-        open override func add(@TableCellBuilder _ builder: () -> [AnyTableCellMediator]) {
+        open override func add(@CollectionCellBuilder _ builder: () -> [AnyCollectionCellMediator]) {
             super.add(builder)
         }
         
