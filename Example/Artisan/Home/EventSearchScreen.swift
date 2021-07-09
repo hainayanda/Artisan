@@ -14,7 +14,7 @@ protocol EventSearchScreenObserver {
     func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath)
 }
 
-class EventSearchScreen: UIViewController, ObservableView {
+class EventSearchScreen: UIViewController, ObservableView, Planned {
     typealias Observer = EventSearchScreenObserver
     
     // MARK: View
@@ -37,10 +37,15 @@ class EventSearchScreen: UIViewController, ObservableView {
         $0.delegate = self
     }
     
+    @LayoutPlan
+    var viewPlan: ViewPlan {
+        tableView.plan.edges(.equal, to: .safeArea)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
-        planViewContent()
+        applyPlan()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,12 +60,6 @@ extension EventSearchScreen {
     private func setupNavigation() {
         navigationController?.navigationBar.tintColor = .main
         navigationItem.titleView = searchBar
-    }
-    
-    private func planViewContent() {
-        planContent { plan in
-            plan.fit(tableView).edges(.equal, to: .safeArea)
-        }
     }
 }
 

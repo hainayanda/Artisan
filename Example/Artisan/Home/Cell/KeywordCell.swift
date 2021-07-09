@@ -24,26 +24,40 @@ class KeywordCell: TableFragmentCell {
         $0.alpha = .semiOpaque
     }
     
-    override func fragmentWillPlanContent() {
-        contentView.backgroundColor = .background
-    }
-    
-    override func planContent(_ plan: InsertablePlan) {
-        plan.fit(keywordLabel)
+    @LayoutPlan
+    override var viewPlan: ViewPlan {
+        keywordLabel.plan
             .at(.fullLeft, .equalTo(CGFloat.x8), to: .safeArea)
             .right(.moreThanTo(.x4), to: clearButton.leftAnchor)
-        plan.fit(clearButton)
+        clearButton.plan
             .right(.equalTo(CGFloat.x8), to: .safeArea)
             .centerY(.equal, to: .parent)
             .size(.equalTo(.init(width: .x8, height: .x8)))
+    }
+    
+    override func fragmentWillPlanContent() {
+        contentView.backgroundColor = .background
     }
 }
 
 class KeywordCellVM: TableCellMediator<KeywordCell> {
     @Observable var keyword: String?
+    
     var delegate: KeywordCellMediatorDelegate?
+    
+    init(keyword: String?, delegate: KeywordCellMediatorDelegate?) {
+        self.keyword = keyword
+        self.delegate = delegate
+        super.init()
+        self.distinctIdentifier = keyword
+    }
+    
+    required init() {
+        super.init()
+    }
+    
     override func bonding(with view: KeywordCell) {
-        $keyword.bonding(with: .relay(of: view.keywordLabel, \.text))
+        $keyword.relayValue(to: view.keywordLabel.bearerRelays.text)
         view.clearButton.whenDidTapped { [weak self] _ in
             guard let self = self else { return }
             self.delegate?.keywordCellDidTapClear(self)
@@ -51,6 +65,6 @@ class KeywordCellVM: TableCellMediator<KeywordCell> {
     }
 }
 
-protocol KeywordCellMediatorDelegate: class {
+protocol KeywordCellMediatorDelegate: AnyObject {
     func keywordCellDidTapClear(_ mediator: KeywordCellVM)
 }

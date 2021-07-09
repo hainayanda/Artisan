@@ -11,7 +11,7 @@ import UIKit
 import Artisan
 import Draftsman
 
-class EventDetailsScreen: UIViewController {
+class EventDetailsScreen: UIViewController, Planned {
     lazy var tableView: UITableView = builder {
         $0.animationSet =  .init(insertAnimation: .right, reloadAnimation: .fade, deleteAnimation: .right)
         $0.backgroundColor = .clear
@@ -25,21 +25,16 @@ class EventDetailsScreen: UIViewController {
         }
     }
     
+    @LayoutPlan
+    var viewPlan: ViewPlan {
+        tableView.plan.edges(.equal, to: .safeArea)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
         navigationController?.navigationBar.tintColor = .main
-        planViewContent()
-    }
-}
-
-extension EventDetailsScreen {
-    
-    private func planViewContent() {
-        planContent { plan in
-            plan.fit(tableView)
-                .edges(.equal, to: .safeArea)
-        }
+        applyPlan()
     }
 }
 

@@ -16,6 +16,13 @@ class SimilarEventCell: TableFragmentCell {
     lazy var collectionLayout: UICollectionViewFlowLayout = .init()
     lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: collectionLayout)
     
+    @LayoutPlan
+    override var viewPlan: ViewPlan {
+        collectionView.plan
+            .edges(.equal, to: .parent)
+            .height(.equalTo(.x48))
+    }
+    
     override func fragmentWillPlanContent() {
         collectionView.allowsSelection = true
         collectionView.backgroundColor = .clear
@@ -24,12 +31,6 @@ class SimilarEventCell: TableFragmentCell {
         collectionLayout.itemSize = .init(width: .x64, height: .x48)
         collectionLayout.minimumInteritemSpacing = .zero
         collectionLayout.minimumLineSpacing = .zero
-    }
-    
-    override func planContent(_ plan: InsertablePlan) {
-        plan.fit(collectionView)
-            .edges(.equal, to: .parent)
-            .height(.equalTo(.x48))
     }
     
     override func calculatedCellHeight(for cellWidth: CGFloat) -> CGFloat {
@@ -46,6 +47,15 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     
     private var tapObserver: TapAction?
     
+    init(event: Event?) {
+        self.event = event
+        super.init()
+    }
+    
+    required init() {
+        super.init()
+    }
+    
     override func bonding(with view: SimilarEventCell) {
         $event.whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventChanges:))
         $events.observe(on: .main)
@@ -53,8 +63,10 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
         view.collectionView.delegate = self
     }
     
-    func whenDidTapped(thenRun action: @escaping TapAction) {
+    @discardableResult
+    func whenDidTapped(thenRun action: @escaping TapAction) -> Self {
         tapObserver = action
+        return self
     }
     
     func set(eventChanges: Changes<Event?>) {
@@ -68,11 +80,12 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
     }
     
     func set(eventsChanges: Changes<[Event]>) {
-        bondedView?.collectionView.sections = CollectionCellBuilder(sectionId: "similar")
-            .next(mediator: EventCollectionCellVM.self, fromItems: eventsChanges.new) { cell, model in
-                cell.distinctIdentifier = event?.name
-                cell.event = model
-            }.build()
+        bondedView?.collectionView.reloadWith {
+            ItemToCollectionMediator(items: eventsChanges.new, to: EventCollectionCellVM.self) { cell, item in
+                cell.distinctIdentifier = item.name
+                cell.event = item
+            }
+        }
     }
 }
 

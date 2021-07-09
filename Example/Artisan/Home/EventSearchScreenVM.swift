@@ -21,7 +21,7 @@ class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
     @Observable var history: [String] = []
     
     override func bonding(with view: EventSearchScreen) {
-        $searchPhrase.bonding(with: .relay(of: view.searchBar, \.text))
+        $searchPhrase.bonding(with: view.searchBar.bondableRelays.text)
             .whenDidSet(invoke: self, method: EventSearchScreenVM.search(for:))
             .multipleSetDelayed(by: .fast)
         $results.observe(on: .main)
@@ -80,24 +80,29 @@ extension EventSearchScreenVM {
     }
     
     func didGet(results: Changes<[Event]>) {
-        print(results.new.count)
-        bondedView?.tableView.sections = constructCells(with: history, and: results.new)
+        reloadTable(with: history, and: results.new)
     }
     
     func didHistory(updated: Changes<[String]>) {
-        bondedView?.tableView.sections = constructCells(with: updated.new, and: results)
+        reloadTable(with: updated.new, and: results)
     }
     
-    func constructCells(with histories: [String], and events: [Event]) -> [UITableView.Section] {
-        TableCellBuilder(section: UITableView.TitledSection(title: "Search History", distinctIdentifier: "history"))
-            .next(mediator: KeywordCellVM.self, fromItems: histories) { mediator, history in
-                mediator.distinctIdentifier = history
-                mediator.keyword = history
-                mediator.delegate = self
-            }.nextSection(UITableView.TitledSection(title: "Search Results", distinctIdentifier: "results"))
-            .next(mediator: EventCellVM.self, fromItems: events) { mediator, event in
-                mediator.event = event
-            }.build()
+    func reloadTable(with histories: [String], and events: [Event]) {
+        bondedView?.tableView.reloadWith {
+            TableTitledSection(title: "Search History", identifier: "history") {
+                ItemToTableMediator(items: histories, to: KeywordCellVM.self) { mediator, history in
+                    mediator.distinctIdentifier = history
+                    mediator.keyword = history
+                    mediator.delegate = self
+                }
+            }
+            TableTitledSection(title: "Search Results", identifier: "results") {
+                ItemToTableMediator(items: events, to: EventCellVM.self) { mediator, event in
+                    mediator.distinctIdentifier = event.name
+                    mediator.event = event
+                }
+            }
+        }
     }
 }
 
