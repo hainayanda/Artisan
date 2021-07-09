@@ -32,9 +32,9 @@ class CellContainerMediatorSpec: QuickSpec {
                 expect(collectionView.dataSource as? UICollectionView.Mediator).to(equal(collectionMediator))
             }
             it("should provide clean datasource") {
-                var sections: [UICollectionView.Section] = []
+                var sections: [CollectionSection] = []
                 for index in 0 ..< Int.random(in: 5..<10) {
-                    let section = UICollectionView.Section(distinctIdentifier: index)
+                    let section = CollectionSection(identifier: index)
                     for cellIndex in 0 ..< Int.random(in: 5..<10) {
                         section.add(cell: DummyCollectionCellMediator(id: cellIndex))
                     }
@@ -49,26 +49,26 @@ class CellContainerMediatorSpec: QuickSpec {
                 }
             }
             it("should return index titles if have any") {
-                var sections: [UICollectionView.Section] = []
+                var sections: [CollectionSection] = []
                 var expectedResult: [String] = []
                 for index in 0 ..< Int.random(in: 10..<20) {
                     let titled = Bool.random()
                     if titled {
                         let title: String = .randomString()
                         expectedResult.append(title)
-                        sections.append(UICollectionView.Section(distinctIdentifier: index, index: title))
+                        sections.append(CollectionSection(identifier: index, index: title))
                     } else {
                         expectedResult.append("")
-                        sections.append(UICollectionView.Section(distinctIdentifier: index))
+                        sections.append(CollectionSection(identifier: index))
                     }
                 }
                 collectionMediator.applicableSections = sections
                 expect(collectionMediator.indexTitles(for: collectionView)).to(equal(expectedResult))
             }
             it("should return nil for titles if do not have any") {
-                var sections: [UICollectionView.Section] = []
+                var sections: [CollectionSection] = []
                 for index in 0 ..< Int.random(in: 10..<20) {
-                    sections.append(UICollectionView.Section(distinctIdentifier: index))
+                    sections.append(CollectionSection(identifier: index))
                 }
                 collectionMediator.applicableSections = sections
                 expect(collectionMediator.indexTitles(for: collectionView)).to(beNil())
@@ -91,9 +91,9 @@ class CellContainerMediatorSpec: QuickSpec {
                 expect(tableView.dataSource as? UITableView.Mediator).to(equal(tableMediator))
             }
             it("should provide clean datasource") {
-                var sections: [UITableView.Section] = []
+                var sections: [TableSection] = []
                 for index in 0 ..< Int.random(in: 5..<10) {
-                    let section = UITableView.Section(distinctIdentifier: index)
+                    let section = TableSection(identifier: index)
                     for cellIndex in 0 ..< Int.random(in: 5..<10) {
                         section.add(cell: DummyTableCell(id: cellIndex))
                     }
@@ -108,26 +108,26 @@ class CellContainerMediatorSpec: QuickSpec {
                 }
             }
             it("should return index titles if have any") {
-                var sections: [UITableView.Section] = []
+                var sections: [TableSection] = []
                 var expectedResult: [String] = []
                 for index in 0 ..< Int.random(in: 10..<20) {
                     let titled = Bool.random()
                     if titled {
                         let title: String = .randomString()
                         expectedResult.append(String(title.first!))
-                        sections.append(UITableView.TitledSection(title: title, distinctIdentifier: index, index: String(title.first!)))
+                        sections.append(TableTitledSection(title: title, identifier: index, index: String(title.first!)))
                     } else {
                         expectedResult.append("")
-                        sections.append(UITableView.Section(distinctIdentifier: index))
+                        sections.append(TableSection(identifier: index))
                     }
                 }
                 tableMediator.applicableSections = sections
                 expect(tableMediator.sectionIndexTitles(for: tableView)).to(equal(expectedResult))
             }
             it("should return nil for titles if do not have any") {
-                var sections: [UITableView.Section] = []
+                var sections: [TableSection] = []
                 for index in 0 ..< Int.random(in: 10..<20) {
-                    sections.append(UITableView.Section(distinctIdentifier: index))
+                    sections.append(TableSection(identifier: index))
                 }
                 tableMediator.applicableSections = sections
                 expect(tableMediator.sectionIndexTitles(for: tableView)).to(beNil())
@@ -138,7 +138,14 @@ class CellContainerMediatorSpec: QuickSpec {
 
 class DummyCollectionCellMediator: AnyCollectionCellMediator {
     var id: String = .randomString()
-    var distinctIdentifier: AnyHashable { id }
+    var distinctIdentifier: AnyHashable {
+        get {
+            id
+        }
+        set {
+            id = newValue as? String ?? "\(newValue)"
+        }
+    }
     var compatible: Bool = true
     static var cellViewClass: AnyClass = UICollectionReusableView.self
     static var cellReuseIdentifier: String = .randomString()
@@ -175,13 +182,24 @@ class DummyCollectionCellMediator: AnyCollectionCellMediator {
     }
     
     func bondDidRemoved() { }
+    
+    func generateCellMediators() -> [AnyCollectionCellMediator] {
+        [self]
+    }
 }
 
 class DummyTableCell: AnyTableCellMediator {
     
     var id: String = .randomString()
     var index: String?
-    var distinctIdentifier: AnyHashable { id }
+    var distinctIdentifier: AnyHashable {
+        get {
+            id
+        }
+        set {
+            id = newValue as? String ?? "\(newValue)"
+        }
+    }
     var compatible: Bool = true
     static var cellViewClass: AnyClass = UITableViewCell.self
     static var cellReuseIdentifier: String = .randomString()
@@ -217,6 +235,10 @@ class DummyTableCell: AnyTableCellMediator {
     }
     
     func bondDidRemoved() { }
+    
+    func generateCellMediators() -> [AnyTableCellMediator] {
+        [self]
+    }
     
 }
 #endif
