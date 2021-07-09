@@ -69,7 +69,7 @@ extension UICollectionView.Mediator {
     }
 }
 
-public class CollectionSectionReloader: DiffReloaderWorker {
+public final class CollectionSectionReloader: DiffReloaderWorker {
     let collection: UICollectionView
     let forceRefresh: Bool
     var canceled: Bool = false

@@ -23,19 +23,19 @@ public extension ObservableRelay where Observed: Collection {
     }
 }
 
-public class MappedRelay<Value, Mapped>: BaseRelay<Value>, ObservableRelay {
+public final class MappedRelay<Value, Mapped>: BaseRelay<Value>, ObservableRelay {
     
     public typealias Mapper = (Value) -> Mapped
     public typealias Observed = Mapped
     
     public internal(set) var currentValue: Mapped
     
-    var relayDispatch: RelayDispatchHandler<Mapped> = .init()
+    var relayDispatch: RelayChangeHandler<Mapped> = .init()
     var nextRelays: Set<BaseRelay<Mapped>> = Set()
     let mapper: Mapper
     var ignoring: Ignorer = { _ in false }
     public override var isValid: Bool {
-        relayDispatch.consumer != nil
+        relayDispatch.consumer != nil || !nextRelays.isEmpty
     }
     
     init(value: Value, mapper: @escaping Mapper) {
@@ -106,5 +106,6 @@ public class MappedRelay<Value, Mapped>: BaseRelay<Value>, ObservableRelay {
     
     public override func discard() {
         relayDispatch.consumer = nil
+        nextRelays.removeAll()
     }
 }

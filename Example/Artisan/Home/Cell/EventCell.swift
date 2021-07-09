@@ -45,6 +45,25 @@ class EventCell: TableFragmentCell {
         .textColor(.text)
         .build()
     
+    @LayoutPlan
+    override var viewPlan: ViewPlan {
+        bannerBackground.plan
+            .at(.fullTop, .equalTo(margin), to: .parent)
+            .width(.equalTo(.height(of: .myself)), multiplyBy: bannerWidthToHeightMultiplier)
+        banner.plan
+            .at(.fullTop, .equalTo(margin), to: .parent)
+            .width(.equalTo(.height(of: .myself)), multiplyBy: bannerWidthToHeightMultiplier)
+        title.plan
+            .at(.bottomOf(banner), .equalTo(spacing))
+            .horizontal(.equalTo(margin), to: .parent)
+        subTitle.plan
+            .at(.bottomOf(title), .equalTo(spacing))
+            .horizontal(.equalTo(margin), to: .parent)
+        date.plan
+            .at(.bottomOf(subTitle), .equalTo(spacing))
+            .at(.fullBottom, .equalTo(margin), to: .parent)
+    }
+    
     // MARK: Dimensions
     var bannerWidthToHeightMultiplier: CGFloat = 2
     var margin: UIEdgeInsets = .init(insets: .x8)
@@ -58,24 +77,6 @@ class EventCell: TableFragmentCell {
         contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor.inactive.withAlphaComponent(.semiOpaque).cgColor
     }
-    
-    override func planContent(_ plan: InsertablePlan) {
-        plan.fit(bannerBackground)
-            .at(.fullTop, .equalTo(margin), to: .parent)
-            .width(.equalTo(.myself), .height, multiplyBy: bannerWidthToHeightMultiplier)
-        plan.fit(banner)
-            .at(.fullTop, .equalTo(margin), to: .parent)
-            .width(.equalTo(.myself), .height, multiplyBy: bannerWidthToHeightMultiplier)
-        plan.fit(title)
-            .at(.bottomOf(banner), .equalTo(spacing))
-            .horizontal(.equalTo(margin), to: .parent)
-        plan.fit(subTitle)
-            .at(.bottomOf(title), .equalTo(spacing))
-            .horizontal(.equalTo(margin), to: .parent)
-        plan.fit(date)
-            .at(.bottomOf(subTitle), .equalTo(spacing))
-            .at(.fullBottom, .equalTo(margin), to: .parent)
-    }
 }
 
 class EventCellVM<Cell: EventCell>: TableCellMediator<Cell> {
@@ -85,12 +86,21 @@ class EventCellVM<Cell: EventCell>: TableCellMediator<Cell> {
     @Observable var eventDetails: String?
     @Observable var eventDate: String?
     
+    init(event: Event?) {
+        self.event = event
+        super.init()
+    }
+    
+    required init() {
+        super.init()
+    }
+    
     override func bonding(with view: Cell) {
         $event.whenDidSet(invoke: self, method: EventCellVM.set(eventChanges:))
-        $bannerImage.bonding(with: .relay(of: view.banner, \.image))
-        $eventName.bonding(with: .relay(of: view.title, \.text))
-        $eventDetails.bonding(with: .relay(of: view.subTitle, \.text))
-        $eventDate.bonding(with: .relay(of: view.date, \.text))
+        $bannerImage.relayValue(to: view.banner.bearerRelays.image)
+        $eventName.relayValue(to: view.title.bearerRelays.text)
+        $eventDetails.relayValue(to: view.subTitle.bearerRelays.text)
+        $eventDate.relayValue(to: view.date.bearerRelays.text)
     }
     
     func set(eventChanges: Changes<Event?>) {

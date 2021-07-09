@@ -31,10 +31,11 @@ class EventCollectionCell: CollectionFragmentCell {
     var spacing: CGFloat = .x3
     var titleFont: UIFont = .mediumContent
     
-    override func planContent(_ plan: InsertablePlan) {
-        plan.fit(banner)
+    @LayoutPlan
+    override var viewPlan: ViewPlan {
+        banner.plan
             .at(.fullTop, .equalTo(margin), to: .parent)
-        plan.fit(title)
+        title.plan
             .at(.bottomOf(banner), .equalTo(spacing))
             .at(.fullBottom, .equalTo(margin), to: .parent)
     }
@@ -45,10 +46,19 @@ class EventCollectionCellVM: CollectionCellMediator<EventCollectionCell> {
     @Observable var bannerImage: UIImage?
     @Observable var eventName: String?
     
+    init(event: Event?) {
+        self.event = event
+        super.init()
+    }
+    
+    required init() {
+        super.init()
+    }
+    
     override func bonding(with view: EventCollectionCell) {
         $event.whenDidSet(invoke: self, method: EventCollectionCellVM.set(eventChanges:))
-        $bannerImage.bonding(with: .relay(of: view.banner, \.image))
-        $eventName.bonding(with: .relay(of: view.title, \.text))
+        $bannerImage.relayValue(to: view.banner.bearerRelays.image)
+        $eventName.relayValue(to: view.title.bearerRelays.text)
     }
     
     func set(eventChanges: Changes<Event?>) {

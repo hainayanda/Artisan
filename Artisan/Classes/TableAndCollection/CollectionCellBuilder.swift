@@ -9,155 +9,155 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 
-public class CollectionCellBuilder {
-    var sections: [UICollectionView.Section]
-    var lastSection: UICollectionView.Section {
-        guard let last = sections.last else {
-            let section: UICollectionView.Section = .init()
-            sections.append(section)
-            return section
-        }
-        return last
-    }
-    
-    public init(sections: [UICollectionView.Section]) {
-        self.sections = sections
-    }
-    
-    public init(section: UICollectionView.Section = .init()) {
-        self.sections = [section]
-    }
-    
-    public init(sectionId: AnyHashable = String.randomString()) {
-        self.sections = [.init(distinctIdentifier: sectionId)]
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyCollectionCellMediator, Item>(
-        mediator mediatorType: Mediator.Type,
-        fromItems items: [Item],
-        _ builder: (inout Mediator, Item) -> Void) -> CollectionCellBuilder {
-        for item in items {
-            var cell = Mediator.init()
-            builder(&cell, item)
-            lastSection.add(cell: cell)
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyCollectionCellMediator, Item>(
-        mediator mediatorType: Mediator.Type,
-        fromItem item: Item,
-        _ builder: (inout Mediator, Item) -> Void) -> CollectionCellBuilder {
-        return next(mediator: mediatorType, fromItems: [item], builder)
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyCollectionCellMediator>(
-        mediator mediatorType: Mediator.Type,
-        _ builder: (inout Mediator) -> Void) -> CollectionCellBuilder {
-        var cell = Mediator.init()
-        builder(&cell)
-        lastSection.add(cell: cell)
-        return self
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyCollectionCellMediator>(
-        mediator mediatorType: Mediator.Type,
-        count: Int,
-        _ builder: (inout Mediator, Int) -> Void) -> CollectionCellBuilder {
-        for index in 0..<count {
-            var cell = Mediator.init()
-            builder(&cell, index)
-            lastSection.add(cell: cell)
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func next<Cell: UICollectionViewCell, Item>(
-        cell cellType: Cell.Type,
-        fromItems items: [Item],
-        _ builder: @escaping (Cell, Item) -> Void) -> CollectionCellBuilder {
-        for item in items {
-            lastSection.add(cell: CollectionClosureMediator<Cell> {
-                builder($0, item)
-            })
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func next<Cell: UICollectionViewCell, Item>(
-        cell cellType: Cell.Type,
-        fromItem item: Item,
-        _ builder: @escaping (Cell, Item) -> Void) -> CollectionCellBuilder {
-        return next(cell: cellType, fromItems: [item], builder)
-    }
-    
-    @discardableResult
-    public func next<Cell: UICollectionViewCell>(
-        cell cellType: Cell.Type,
-        _ builder: @escaping (Cell) -> Void) -> CollectionCellBuilder {
-        lastSection.add(cell: CollectionClosureMediator<Cell> {
-            builder($0)
-        })
-        return self
-    }
-    
-    @discardableResult
-    public func next<Cell: UICollectionViewCell>(
-        cell cellType: Cell.Type,
-        count: Int,
-        _ builder: @escaping (Cell, Int) -> Void) -> CollectionCellBuilder {
-        for index in 0..<count {
-            lastSection.add(cell: CollectionClosureMediator<Cell> {
-                builder($0, index)
-            })
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func nextEmptyCell(
-        with preferedSize: CGSize,
-        _ builder: ((UICollectionViewCell) -> Void)?) -> CollectionCellBuilder {
-        next(cell: EmptyCollectionCell.self, count: 1) { cell, _ in
-            cell.preferedSize = preferedSize
-            builder?(cell)
-        }
-    }
-    
-    @discardableResult
-    public func nextSection(_ section: UICollectionView.Section = .init()) -> CollectionCellBuilder {
-        sections.append(section)
-        return self
-    }
-    
-    @discardableResult
-    public func nextSection(_ sectionId: String) -> CollectionCellBuilder {
-        sections.append(.init(distinctIdentifier: sectionId))
-        return self
-    }
-    
-    public func build() -> [UICollectionView.Section] {
-        return sections
+public protocol CollectionSectionCompatible {
+    func getSection() -> CollectionSection?
+}
+
+public protocol CollectionCellCompatible: CollectionSectionCompatible {
+    func generateCellMediators() -> [AnyCollectionCellMediator]
+}
+
+extension CollectionCellCompatible {
+    public func getSection() -> CollectionSection? { nil }
+}
+
+extension UICollectionViewCell: CollectionCellCompatible { }
+
+public extension CollectionCellCompatible where Self: UICollectionViewCell {
+    func generateCellMediators() -> [AnyCollectionCellMediator] {
+        [CollectionCellMediator<Self>()]
     }
 }
 
-public extension Array where Element == UICollectionView.Section {
-    static func create(section: UICollectionView.Section = .init()) -> CollectionCellBuilder {
-        return .init(section: section)
+struct EmptyCollectionCellCompatible: CollectionCellCompatible {
+    func generateCellMediators() -> [AnyCollectionCellMediator] { [] }
+}
+
+struct ListCollectionCellCompatible: CollectionCellCompatible {
+    let compatibles: [CollectionCellCompatible]
+    func generateCellMediators() -> [AnyCollectionCellMediator] {
+        compatibles.reduce([]) { cells, compatible in
+            var mutableCells = cells
+            mutableCells.append(contentsOf: compatible.generateCellMediators())
+            return mutableCells
+        }
+    }
+}
+
+public struct ItemToCollectionMediator<Mediator: AnyCollectionCellMediator, Item>: CollectionCellCompatible {
+    public typealias Builder = (inout Mediator, Item) -> Void
+    let builder: Builder
+    let items: [Item]
+    
+    public init(items: [Item], to mediatorType: Mediator.Type, _ builder: @escaping Builder) {
+        self.items = items
+        self.builder = builder
     }
     
-    static func create(sectionId: String = .randomString()) -> CollectionCellBuilder {
-        return .init(sectionId: sectionId)
+    public func generateCellMediators() -> [AnyCollectionCellMediator] {
+        var cells: [AnyCollectionCellMediator] = []
+        for item in items {
+            var cell = Mediator.init()
+            builder(&cell, item)
+            cells.append(cell)
+        }
+        return cells
+    }
+}
+
+public struct ItemToCollectionCell<Cell: UICollectionViewCell, Item>: CollectionCellCompatible {
+    public typealias Builder = (inout Cell, Item) -> Void
+    let builder: Builder
+    let items: [Item]
+    
+    public init(items: [Item], to cellType: Cell.Type, _ builder: @escaping Builder) {
+        self.items = items
+        self.builder = builder
     }
     
-    func append() -> CollectionCellBuilder {
-        .init(sections: self)
+    public func generateCellMediators() -> [AnyCollectionCellMediator] {
+        items.compactMap { item in
+            CollectionClosureMediator<Cell> { cellBuilded in
+                var mutableCell = cellBuilded
+                builder(&mutableCell, item)
+            }
+        }
+    }
+}
+
+@resultBuilder
+public struct CollectionCellBuilder {
+    public typealias Component = CollectionCellCompatible
+    public typealias Result = [AnyCollectionCellMediator]
+    
+    public static func buildBlock(_ components: Component...) -> Result {
+        components.reduce([], { cells, compatible in
+            var mutableCells = cells
+            mutableCells.append(contentsOf: compatible.generateCellMediators())
+            return mutableCells
+        })
+    }
+    
+    public static func buildOptional(_ component: Component?) -> Component {
+        guard let component = component else {
+            return EmptyCollectionCellCompatible()
+        }
+        return component
+    }
+    
+    public static func buildEither(first component: Component) -> Component {
+        component
+    }
+    
+    public static func buildArray(_ components: [Component]) -> Component {
+        ListCollectionCellCompatible(compatibles: components)
+    }
+    
+    public static func buildEither(second component: Component) -> Component {
+        component
+    }
+}
+
+@resultBuilder
+public struct CollectionSectionBuilder {
+    public typealias Component = CollectionSectionCompatible
+    public typealias Result = [CollectionSection]
+    
+    public static func buildBlock(_ components: Component...) -> Result {
+        var anonymousSectionCount: Int = 0
+        var sections: Result = []
+        var firstOrphanCell: Bool = true
+        var lastSectionForOrphanCells = CollectionSection(identifier: anonymousSectionCount)
+        for component in components {
+            if let cell = component as? CollectionCellCompatible {
+                if firstOrphanCell {
+                    anonymousSectionCount += 1
+                    lastSectionForOrphanCells = CollectionSection(identifier: anonymousSectionCount)
+                    sections.append(lastSectionForOrphanCells)
+                    firstOrphanCell = false
+                }
+                lastSectionForOrphanCells.add(cells: cell.generateCellMediators())
+            } else if let section = component.getSection() {
+                firstOrphanCell = true
+                sections.append(section)
+            }
+        }
+        return sections
+    }
+    
+    public static func buildOptional(_ component: Component?) -> Component {
+        guard let component = component else {
+            return EmptyCollectionCellCompatible()
+        }
+        return component
+    }
+    
+    public static func buildEither(first component: Component) -> Component {
+        component
+    }
+    
+    public static func buildEither(second component: Component) -> Component {
+        component
     }
 }
 #endif

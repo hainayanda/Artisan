@@ -90,9 +90,10 @@ class MockEventService: EventService {
     ]
     
     func searchEvent(withSearchPhrase searchPhrase: String, then: @escaping ([Event]) -> Void) {
+        let mockData = MockEventService.mockData
         // mimicking network
         DispatchQueue.global().asyncAfter(deadline: .now() + .random(in: 0.1..<3)) {
-            then(MockEventService.mockData.filter {
+            then(mockData.filter {
                 searchPhrase.isEmpty ||
                     $0.name.lowercased().contains(searchPhrase.lowercased()) ||
                     $0.details.lowercased().contains(searchPhrase.lowercased())
@@ -101,9 +102,10 @@ class MockEventService: EventService {
     }
     
     func similarEvent(with event: Event, then: @escaping ([Event]) -> Void) {
+        let mockData = MockEventService.mockData
         // mimicking network
         DispatchQueue.global().asyncAfter(deadline: .now() + .random(in: 0.1..<3)) {
-            then(MockEventService.mockData.filter {
+            then(mockData.filter {
                 let eventNameComponents = event.name.components(separatedBy: .whitespaces)
                 for component in eventNameComponents
                 where $0.name.lowercased().contains(component.lowercased())

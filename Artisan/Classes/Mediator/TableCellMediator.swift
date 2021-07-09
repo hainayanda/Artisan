@@ -11,7 +11,7 @@ import UIKit
 import Draftsman
 import Pharos
 
-public protocol AnyTableCellMediator: CellMediator, Buildable {
+public protocol AnyTableCellMediator: TableCellCompatible, CellMediator, Buildable {
     func apply(cell: UITableViewCell)
     func customCellHeight(for cellWidth: CGFloat) -> CGFloat
     func didTap(cell: UITableViewCell)
@@ -68,6 +68,10 @@ open class TableCellMediator<Cell: UITableViewCell>: ViewMediator<Cell>, AnyTabl
     
     public func isCompatible<CellType: UIView>(with cell: CellType) -> Bool {
         cell is Cell
+    }
+    
+    public func generateCellMediators() -> [AnyTableCellMediator] {
+        [self]
     }
 }
 #endif

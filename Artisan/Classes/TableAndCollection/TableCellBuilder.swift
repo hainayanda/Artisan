@@ -9,154 +9,155 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 
-public class TableCellBuilder {
-    var sections: [TableSection]
-    var lastSection: TableSection {
-        guard let last = sections.last else {
-            let section: TableSection = .init()
-            sections.append(section)
-            return section
-        }
-        return last
-    }
-    
-    public init(sections: [TableSection]) {
-        self.sections = sections
-    }
-    
-    public init(section: TableSection = .init()) {
-        self.sections = [section]
-    }
-    
-    public init(sectionId: AnyHashable = String.randomString()) {
-        self.sections = [.init(distinctIdentifier: sectionId)]
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyTableCellMediator, Item>(
-        mediator mediatorType: Mediator.Type,
-        fromItems items: [Item],
-        _ builder: (inout Mediator, Item) -> Void) -> TableCellBuilder {
-        for item in items {
-            var cell = Mediator.init()
-            builder(&cell, item)
-            lastSection.add(cell: cell)
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyTableCellMediator, Item>(
-        mediator mediatorType: Mediator.Type,
-        fromItem item: Item,
-        _ builder: (inout Mediator, Item) -> Void) -> TableCellBuilder {
-        return next(mediator: mediatorType, fromItems: [item], builder)
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyTableCellMediator>(
-        mediator mediatorType: Mediator.Type,
-        _ builder: (inout Mediator) -> Void) -> TableCellBuilder {
-        var cell = Mediator.init()
-        builder(&cell)
-        lastSection.add(cell: cell)
-        return self
-    }
-    
-    @discardableResult
-    public func next<Mediator: AnyTableCellMediator>(
-        mediator mediatorType: Mediator.Type,
-        count: Int, _ builder: (inout Mediator, Int) -> Void) -> TableCellBuilder {
-        for index in 0..<count {
-            var cell = Mediator.init()
-            builder(&cell, index)
-            lastSection.add(cell: cell)
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func next<Cell: UITableViewCell, Item>(
-        cell cellType: Cell.Type,
-        fromItems items: [Item],
-        _ builder: @escaping (Cell, Item) -> Void) -> TableCellBuilder {
-        for item in items {
-            lastSection.add(cell: TableClosureMediator<Cell> {
-                builder($0, item)
-            })
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func next<Cell: UITableViewCell, Item>(
-        cell cellType: Cell.Type,
-        fromItem item: Item,
-        _ builder: @escaping (Cell, Item) -> Void) -> TableCellBuilder {
-        return next(cell: cellType, fromItems: [item], builder)
-    }
-    
-    @discardableResult
-    public func next<Cell: UITableViewCell>(
-        cell cellType: Cell.Type,
-        _ builder: @escaping (Cell) -> Void) -> TableCellBuilder {
-        lastSection.add(cell: TableClosureMediator<Cell> {
-            builder($0)
-        })
-        return self
-    }
-    
-    @discardableResult
-    public func next<Cell: UITableViewCell>(
-        cell cellType: Cell.Type,
-        count: Int,
-        _ builder: @escaping (Cell, Int) -> Void) -> TableCellBuilder {
-        for index in 0..<count {
-            lastSection.add(cell: TableClosureMediator<Cell> {
-                builder($0, index)
-            })
-        }
-        return self
-    }
-    
-    @discardableResult
-    public func nextEmptyCell(
-        with preferedHeight: CGFloat,
-        _ builder: ((UITableViewCell) -> Void)?) -> TableCellBuilder {
-        next(cell: EmptyTableCell.self, count: 1) { cell, _ in
-            cell.preferedHeight = preferedHeight
-            builder?(cell)
-        }
-    }
-    
-    @discardableResult
-    public func nextSection(_ section: TableSection = .init()) -> TableCellBuilder {
-        sections.append(section)
-        return self
-    }
-    
-    @discardableResult
-    public func nextSection(_ sectionId: String) -> TableCellBuilder {
-        sections.append(.init(distinctIdentifier: sectionId))
-        return self
-    }
-    
-    public func build() -> [TableSection] {
-        return sections
+public protocol TableSectionCompatible {
+    func getSection() -> TableSection?
+}
+
+public protocol TableCellCompatible: TableSectionCompatible {
+    func generateCellMediators() -> [AnyTableCellMediator]
+}
+
+extension TableCellCompatible {
+    public func getSection() -> TableSection? { nil }
+}
+
+extension UITableViewCell: TableCellCompatible { }
+
+public extension TableCellCompatible where Self: UITableViewCell {
+    func generateCellMediators() -> [AnyTableCellMediator] {
+        [TableCellMediator<Self>()]
     }
 }
 
-public extension Array where Element == TableSection {
-    static func create(section: TableSection = .init()) -> TableCellBuilder {
-        return .init(section: section)
+struct EmptyTableCellCompatible: TableCellCompatible {
+    func generateCellMediators() -> [AnyTableCellMediator] { [] }
+}
+
+struct ListTableCellCompatible: TableCellCompatible {
+    let compatibles: [TableCellCompatible]
+    func generateCellMediators() -> [AnyTableCellMediator] {
+        compatibles.reduce([]) { cells, compatible in
+            var mutableCells = cells
+            mutableCells.append(contentsOf: compatible.generateCellMediators())
+            return mutableCells
+        }
+    }
+}
+
+public struct ItemToTableMediator<Mediator: AnyTableCellMediator, Item>: TableCellCompatible {
+    public typealias Builder = (inout Mediator, Item) -> Void
+    let builder: Builder
+    let items: [Item]
+    
+    public init(items: [Item], to mediatorType: Mediator.Type, _ builder: @escaping Builder) {
+        self.items = items
+        self.builder = builder
     }
     
-    static func create(sectionId: String = .randomString()) -> TableCellBuilder {
-        return .init(sectionId: sectionId)
+    public func generateCellMediators() -> [AnyTableCellMediator] {
+        var cells: [AnyTableCellMediator] = []
+        for item in items {
+            var cell = Mediator.init()
+            builder(&cell, item)
+            cells.append(cell)
+        }
+        return cells
+    }
+}
+
+public struct ItemToTableCell<Cell: UITableViewCell, Item>: TableCellCompatible {
+    public typealias Builder = (inout Cell, Item) -> Void
+    let builder: Builder
+    let items: [Item]
+    
+    public init(items: [Item], to cellType: Cell.Type, _ builder: @escaping Builder) {
+        self.items = items
+        self.builder = builder
     }
     
-    func append() -> TableCellBuilder {
-        .init(sections: self)
+    public func generateCellMediators() -> [AnyTableCellMediator] {
+        items.compactMap { item in
+            TableClosureMediator<Cell> { cellBuilded in
+                var mutableCell = cellBuilded
+                builder(&mutableCell, item)
+            }
+        }
+    }
+}
+
+@resultBuilder
+public struct TableCellBuilder {
+    public typealias Component = TableCellCompatible
+    public typealias Result = [AnyTableCellMediator]
+    
+    public static func buildBlock(_ components: Component...) -> Result {
+        components.reduce([], { cells, compatible in
+            var mutableCells = cells
+            mutableCells.append(contentsOf: compatible.generateCellMediators())
+            return mutableCells
+        })
+    }
+    
+    public static func buildOptional(_ component: Component?) -> Component {
+        guard let component = component else {
+            return EmptyTableCellCompatible()
+        }
+        return component
+    }
+    
+    public static func buildEither(first component: Component) -> Component {
+        component
+    }
+    
+    public static func buildArray(_ components: [Component]) -> Component {
+        ListTableCellCompatible(compatibles: components)
+    }
+    
+    public static func buildEither(second component: Component) -> Component {
+        component
+    }
+}
+
+@resultBuilder
+public struct TableSectionBuilder {
+    public typealias Component = TableSectionCompatible
+    public typealias Result = [TableSection]
+    
+    public static func buildBlock(_ components: Component...) -> Result {
+        var anonymousSectionCount: Int = 0
+        var sections: Result = []
+        var firstOrphanCell: Bool = true
+        var lastSectionForOrphanCells = TableSection(identifier: anonymousSectionCount)
+        for component in components {
+            if let cell = component as? TableCellCompatible {
+                if firstOrphanCell {
+                    anonymousSectionCount += 1
+                    lastSectionForOrphanCells = TableSection(identifier: anonymousSectionCount)
+                    sections.append(lastSectionForOrphanCells)
+                    firstOrphanCell = false
+                }
+                lastSectionForOrphanCells.add(cells: cell.generateCellMediators())
+            } else if let section = component.getSection() {
+                firstOrphanCell = true
+                sections.append(section)
+            }
+        }
+        return sections
+    }
+    
+    public static func buildOptional(_ component: Component?) -> Component {
+        guard let component = component else {
+            return EmptyTableCellCompatible()
+        }
+        return component
+    }
+    
+    public static func buildEither(first component: Component) -> Component {
+        component
+    }
+    
+    public static func buildEither(second component: Component) -> Component {
+        component
     }
 }
 #endif

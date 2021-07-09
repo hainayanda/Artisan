@@ -11,9 +11,8 @@ import UIKit
 import Draftsman
 import Pharos
 
-public protocol AnyCollectionCellMediator: CellMediator, Buildable {
+public protocol AnyCollectionCellMediator: CollectionCellCompatible, CellMediator, Buildable {
     func apply(cell: UICollectionReusableView)
-    func customCellSize(for collectionContentSize: CGSize) -> CGSize
     func didTap(cell: UICollectionReusableView)
 }
 
@@ -52,11 +51,6 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
         guard let cell = cell as? Cell else {
             fatalError("UITableViewCell type is not compatible with Mediator")
         }
-        if let fragmentCell = cell as? CollectionFragmentCell {
-            fragmentCell.whenNeedCellSize { [weak self] contentSize in
-                self?.customCellSize(for: contentSize) ?? .automatic
-            }
-        }
         apply(to: cell)
     }
     
@@ -68,6 +62,10 @@ open class CollectionCellMediator<Cell: UICollectionViewCell>: ViewMediator<Cell
     
     public func isCompatible<CellType: UIView>(with cell: CellType) -> Bool {
         cell is Cell
+    }
+    
+    public func generateCellMediators() -> [AnyCollectionCellMediator] {
+        [self]
     }
 }
 #endif

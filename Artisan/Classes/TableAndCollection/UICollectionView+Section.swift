@@ -14,37 +14,57 @@ public typealias SupplementedCollectionSection = UICollectionView.SupplementedSe
 
 extension UICollectionView {
     
-    open class Section: Distinctable, Equatable {
+    open class Section: CollectionSectionCompatible, Distinctable, Equatable {
         public var index: String?
         public var cells: [AnyCollectionCellMediator]
         public var cellCount: Int { cells.count }
         public var distinctIdentifier: AnyHashable
         
-        public init(distinctIdentifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
-            self.distinctIdentifier = distinctIdentifier
+        public init(
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            cells: [AnyCollectionCellMediator] = []) {
+            self.distinctIdentifier = identifier
             self.cells = cells
             self.index = index
         }
         
-        public func add(cell: AnyCollectionCellMediator) {
+        public init(
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            @CollectionCellBuilder builder: () -> [AnyCollectionCellMediator]) {
+            self.distinctIdentifier = identifier
+            self.cells = builder()
+            self.index = index
+        }
+        
+        open func add(cell: AnyCollectionCellMediator) {
             cells.append(cell)
         }
         
-        public func add(cells: [AnyCollectionCellMediator]) {
+        open func add(cells: [AnyCollectionCellMediator]) {
             self.cells.append(contentsOf: cells)
+        }
+        
+        open func add(@CollectionCellBuilder _ builder: () -> [AnyCollectionCellMediator]) {
+            self.cells.append(contentsOf: builder())
+        }
+        
+        open func clear() {
+            cells.removeAll()
+        }
+        
+        open func copy() -> Section {
+            return Section(identifier: distinctIdentifier, cells: cells)
+        }
+        
+        public func getSection() -> CollectionSection? {
+            self
         }
         
         func isSameSection(with other: Section) -> Bool {
             if other === self { return true }
             return other.distinctIdentifier == distinctIdentifier
-        }
-        
-        public func clear() {
-            cells.removeAll()
-        }
-        
-        public func copy() -> Section {
-            return Section(distinctIdentifier: distinctIdentifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.Section, rhs: UICollectionView.Section) -> Bool {
@@ -59,19 +79,51 @@ extension UICollectionView {
         }
     }
     
-    public class SupplementedSection: Section {
+    open class SupplementedSection: Section {
         
         public var header: AnyCollectionCellMediator?
         public var footer: AnyCollectionCellMediator?
         
-        public init(header: AnyCollectionCellMediator? = nil, footer: AnyCollectionCellMediator? = nil, distinctIdentifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyCollectionCellMediator] = []) {
+        public init(
+            header: AnyCollectionCellMediator? = nil,
+            footer: AnyCollectionCellMediator? = nil,
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            cells: [AnyCollectionCellMediator] = []) {
             self.header = header
             self.footer = footer
-            super.init(distinctIdentifier: distinctIdentifier, index: index, cells: cells)
+            super.init(identifier: identifier, index: index, cells: cells)
         }
         
-        public override func copy() -> Section {
-            return SupplementedSection(header: header, footer: footer, distinctIdentifier: distinctIdentifier, cells: cells)
+        public init(
+            header: AnyCollectionCellMediator? = nil,
+            footer: AnyCollectionCellMediator? = nil,
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            @CollectionCellBuilder builder: () -> [AnyCollectionCellMediator]) {
+            self.header = header
+            self.footer = footer
+            super.init(identifier: identifier, index: index, builder: builder)
+        }
+        
+        open override func add(cell: AnyCollectionCellMediator) {
+            super.add(cell: cell)
+        }
+        
+        open override func add(cells: [AnyCollectionCellMediator]) {
+            super.add(cells: cells)
+        }
+        
+        open override func add(@CollectionCellBuilder _ builder: () -> [AnyCollectionCellMediator]) {
+            super.add(builder)
+        }
+        
+        open override func clear() {
+            super.clear()
+        }
+        
+        open override func copy() -> Section {
+            return SupplementedSection(header: header, footer: footer, identifier: distinctIdentifier, cells: cells)
         }
         
         public static func == (lhs: UICollectionView.SupplementedSection, rhs: UICollectionView.SupplementedSection) -> Bool {

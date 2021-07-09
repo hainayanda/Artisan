@@ -20,8 +20,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-- Swift 5.1 or higher
+- Swift 5.3 or higher (Swift 5.1 for version 3.1.1 or lower)
 - iOS 10.0 or higher
+- XCode 12.5 or higher (XCode 11 for version 3.1.1 or lower)
+
 
 ## Installation
 
@@ -31,16 +33,24 @@ Artisan is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
+pod 'Artisan', '~> 4.0.0'
+pod 'Draftsman', '~> 2.0.0'
+pod 'Pharos', '~> 1.2.2'
+```
+
+or for Swift 5.1 and XCode 11
+
+```ruby
 pod 'Artisan', '~> 3.1.1'
 pod 'Draftsman', '~> 1.1.1'
-pod 'Pharos', '~> 1.2.0'
+pod 'Pharos', '~> 1.2.2'
 ```
 
 ### Swift Package Manager from XCode
 
+- Set rules at **version**, with **Up to Next Major** option and put **4.0.0** or **3.1.1** for Swift 5.1 and XCode 11 as its version
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/nayanda1/Artisan.git** as Swift Package URL
-- Set rules at **version**, with **Up to Next Major** option and put **3.1.1** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -49,7 +59,15 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.1.1"))
+    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "4.0.0"))
+]
+```
+
+or for Swift 5.1 and XCode 11
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/nayanda1/Draftsman.git", .upToNextMajor(from: "3.1.1"))
 ]
 ```
 
@@ -98,15 +116,16 @@ class MyCell: TableFragmentCell {
         .textAlignment(.left)
         .textColor(.main)
         .build()
-    
+        
     // MARK: Dimensions
     var margin: UIEdgeInsets = .init(insets: 16)
     var spacing: CGFloat = 6
     
-    override func planContent(_ plan: InsertablePlan) {
-        plan.fit(title)
+    @LayoutPlan
+    var viewPlan: ViewPlan {
+        title.plan
             .at(.fullTop, .equalTo(margin), to: .parent)
-        plan.fit(subTitle)
+        subTitle.plan
             .at(.bottomOf(title), .equalTo(spacing))
             .at(.fullBottom, .equalTo(margin), to: .parent)
     }
@@ -162,7 +181,7 @@ class MyViewController: UIViewController {
 
 It will automatically run getData when the user type in searchBar, with a minimum interval between method calls, is 1 second and will update table cells with new data on Main Thread every time you get data from API
 
-For more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
+You can clone and check the [Example folder](https://github.com/nayanda1/Artisan/tree/main/Example) or for more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
 
 ## Contribute
 

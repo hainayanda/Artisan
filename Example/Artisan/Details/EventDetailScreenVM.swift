@@ -30,21 +30,18 @@ extension EventDetailScreenVM {
     
     func change(event: Changes<Event?>) {
         bondedView?.title = event.new?.name
-        bondedView?.tableView.sections = buildCells(from: event.new)
-    }
-    
-    func buildCells(from event: Event?) -> [UITableView.Section] {
-        return TableCellBuilder(sectionId: "header")
-            .next(mediator: EventCellVM<EventHeaderCell>.self, fromItem: event) { mediator, event in
-                mediator.distinctIdentifier = "header"
-                mediator.event = event
-            }.nextSection(UITableView.TitledSection(title: "Similar Event", distinctIdentifier: "similar"))
-            .next(mediator: SimilarEventCellVM.self, fromItem: event) { mediator, event in
-                mediator.distinctIdentifier = "similar"
-                mediator.event = event
-                mediator.whenDidTapped { [weak self] _, event in
-                    self?.didTapSimilar(event: event)
-                }
-            }.build()
+        bondedView?.tableView.reloadWith{
+            TableSection(identifier: "header") {
+                EventCellVM<EventHeaderCell>(event: event.new)
+                    .with(identifier: "header")
+            }
+            TableTitledSection(title: "Similar Event", identifier: "similar") {
+                SimilarEventCellVM(event: event.new)
+                    .with(identifier: "similar")
+                    .whenDidTapped { [weak self] _, event in
+                        self?.didTapSimilar(event: event)
+                    }
+            }
+        }
     }
 }

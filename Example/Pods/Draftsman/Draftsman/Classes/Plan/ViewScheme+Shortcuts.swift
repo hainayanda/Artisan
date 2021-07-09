@@ -1,35 +1,20 @@
 //
-//  Planable+Extensions.swift
+//  ViewScheme+Shortcuts.swift
 //  Draftsman
 //
-//  Created by Nayanda Haberty (ID) on 27/08/20.
+//  Created by Nayanda Haberty on 07/07/21.
 //
 
 import Foundation
 #if canImport(UIKit)
-import Clavier
 import UIKit
 
-extension Planer {
+public extension ViewScheme {
     
-    func identifier(ofSecondItemIn constraint: NSLayoutConstraint) -> String {
-        let relatedKey = (constraint.secondItem as? UIView)?.uniqueKey ?? constraint.uniqueKey
-        return "\(relatedKey)_\(constraint.secondAttribute.asString)"
-    }
-    
-    func getView(from anonymousRelation: AnonymousRelation) -> UIView? {
-        switch anonymousRelation {
-        case .parent, .safeArea, .keyboard, .keyboardSafeArea:
-            return view.superview ?? context.delegate.planer(viewHaveNoSuperview: view)
-        case .myself, .mySafeArea:
-            return view
-        case .previous, .previousSafeArea:
-            return context.previousView
-        }
-    }
+    // MARK: Center Anchor
     
     @discardableResult
-    public func center(
+    func center(
         _ relation: LayoutRelation<CoordinateOffsets>,
         to view: UIView,
         priority: UILayoutPriority? = nil) -> Self {
@@ -40,7 +25,7 @@ extension Planer {
     }
     
     @discardableResult
-    public func center(
+    func center(
         _ relation: LayoutRelation<CoordinateOffsets>,
         to anchor: AnonymousRelation,
         priority: UILayoutPriority? = nil) -> Self {
@@ -53,7 +38,7 @@ extension Planer {
     // MARK: Vertical Anchor
     
     @discardableResult
-    public func vertical(
+    func vertical(
         _ relation: LayoutRelation<InsetsConvertible>,
         to anchor: AnonymousRelation,
         priority: UILayoutPriority? = nil) -> Self {
@@ -64,7 +49,7 @@ extension Planer {
     }
     
     @discardableResult
-    public func vertical(
+    func vertical(
         _ relation: LayoutRelation<InsetsConvertible>,
         to view: UIView,
         priority: UILayoutPriority? = nil) -> Self {
@@ -77,7 +62,7 @@ extension Planer {
     // MARK: Horizontal Anchor
     
     @discardableResult
-    public func horizontal(
+    func horizontal(
         _ relation: LayoutRelation<InsetsConvertible>,
         to view: UIView,
         priority: UILayoutPriority? = nil) -> Self {
@@ -88,7 +73,7 @@ extension Planer {
     }
     
     @discardableResult
-    public func horizontal(
+    func horizontal(
         _ relation: LayoutRelation<InsetsConvertible>,
         to anchor: AnonymousRelation,
         priority: UILayoutPriority? = nil) -> Self {
@@ -101,7 +86,7 @@ extension Planer {
     // MARK: Edges Anchor
     
     @discardableResult
-    public func edges(
+    func edges(
         _ relation: LayoutRelation<InsetsConvertible>,
         to anchor: AnonymousRelation,
         priority: UILayoutPriority? = nil) -> Self {
@@ -114,7 +99,7 @@ extension Planer {
     // MARK: Size Anchor
     
     @discardableResult
-    public func size(
+    func size(
         _ relation: InterRelation<CGSize>,
         priority: UILayoutPriority? = nil) -> Self {
         let priority: UILayoutPriority = priority ?? context.mutatingPriority
@@ -124,7 +109,7 @@ extension Planer {
     }
     
     @discardableResult
-    public func size(
+    func size(
         _ relation: InterRelation<UIView>,
         multiplyBy multipier: CGFloat = 1,
         constant: CGFloat = 0,
@@ -138,7 +123,7 @@ extension Planer {
     // MARK: Position Anchor
     
     @discardableResult
-    public func at(
+    func at(
         _ positions: [LayoutEdge],
         _ relation: LayoutRelation<InsetsConvertible>,
         to anchor: AnonymousRelation,
@@ -160,7 +145,7 @@ extension Planer {
     }
     
     @discardableResult
-    public func at(
+    func at(
         _ viewRelation: RelatedPosition,
         _ relation: LayoutRelation<InsetsConvertible>,
         priority: UILayoutPriority? = nil) -> Self {
@@ -191,7 +176,7 @@ extension Planer {
     // MARK: Between Anchor
     
     @discardableResult
-    public func inBetween(
+    func inBetween(
         of view: UIView,
         and otherView: UIView,
         _ position: MiddlePosition,
@@ -207,7 +192,6 @@ extension Planer {
         }
         return self
     }
-    
 }
 
 public extension Array where Element == LayoutEdge {
