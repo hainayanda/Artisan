@@ -71,7 +71,7 @@ extension UITableView.Mediator {
     }
 }
 
-public class TableMediatorSectionReloader: DiffReloaderWorker {
+public final class TableMediatorSectionReloader: DiffReloaderWorker {
     let table: UITableView
     let animationSet: UITableView.AnimationSet
     let forceRefresh: Bool
@@ -121,7 +121,7 @@ public class TableMediatorSectionReloader: DiffReloaderWorker {
     }
 }
 
-public class TableMediatorCellReloader: DiffReloaderWorker {
+public final class TableMediatorCellReloader: DiffReloaderWorker {
     let table: UITableView
     let animationSet: UITableView.AnimationSet
     let section: Int

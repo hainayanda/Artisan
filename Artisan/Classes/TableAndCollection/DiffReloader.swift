@@ -34,7 +34,7 @@ public protocol DiffReloaderWorker {
     func diffReloader(_ diffReloader: DiffReloader, failWith error: ArtisanError)
 }
 
-public class DiffReloader {
+public final class DiffReloader {
     let worker: DiffReloaderWorker
     var sequenceLoader: [() -> Void] = []
     

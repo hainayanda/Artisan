@@ -123,7 +123,7 @@ extension UITableView {
 
 extension UITableView {
     
-    public class Mediator: ViewMediator<UITableView> {
+    public final class Mediator: ViewMediator<UITableView> {
         var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
             $0.numberOfTouchesRequired = 1
             $0.isEnabled = true
