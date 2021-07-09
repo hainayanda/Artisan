@@ -22,6 +22,7 @@ extension UITableViewCell {
 }
 
 open class TableFragmentCell: UITableViewCell, FragmentCell {
+    
     var _layoutPhase: CellLayoutingPhase = .firstLoad
     public internal(set) var layoutPhase: CellLayoutingPhase {
         get {
@@ -38,7 +39,8 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
     
     open var planningBehavior: CellPlanningBehavior { .planOnce }
     
-    open func planContent(_ plan: InsertablePlan) { }
+    @LayoutPlan
+    open var viewPlan: ViewPlan { VoidViewPlan() }
     
     open func fragmentWillPlanContent() {}
     
@@ -57,9 +59,9 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
             return false
         }
         fragmentWillPlanContent()
-        contentView.planContent(planningOption(on: layoutPhase)) { content in
-            planContent(content)
-        }
+        let plan = RootViewPlan(subPlan: viewPlan.subPlan)
+        plan.planOption = planningOption(on: layoutPhase)
+        plan.apply(for: contentView)
         fragmentDidPlanContent()
         return true
     }
@@ -72,7 +74,10 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         customHeightCalculator = calculate
     }
     
-    open override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+    open override func systemLayoutSizeFitting(
+        _ targetSize: CGSize,
+        withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority,
+        verticalFittingPriority: UILayoutPriority) -> CGSize {
         let layouted = layoutContentIfNeeded()
         if layouted {
             setNeedsDisplay()
@@ -102,7 +107,7 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
         case .firstLoad:
             return .append
         default:
-            return .startFresh
+            return .startClean
         }
     }
     
@@ -133,12 +138,6 @@ open class TableFragmentCell: UITableViewCell, FragmentCell {
     }
 }
 
-extension UICollectionViewCell {
-    
-    @objc open class func defaultCellSize(for collectionContentSize: CGSize) -> CGSize { .automatic }
-    
-}
-
 open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
     var _layoutPhase: CellLayoutingPhase = .firstLoad
     public internal(set) var layoutPhase: CellLayoutingPhase {
@@ -156,7 +155,8 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
     
     open var planningBehavior: CellPlanningBehavior { .planOnce }
     
-    open func planContent(_ layout: InsertablePlan) { }
+    @LayoutPlan
+    open var viewPlan: ViewPlan { VoidViewPlan() }
     
     open func fragmentWillPlanContent() {}
     
@@ -175,48 +175,11 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
             return false
         }
         fragmentWillPlanContent()
-        contentView.planContent(planningOption(on: layoutPhase)) { content in
-            planContent(content)
-        }
+        let plan = RootViewPlan(subPlan: viewPlan.subPlan)
+        plan.planOption = planningOption(on: layoutPhase)
+        plan.apply(for: contentView)
         fragmentDidPlanContent()
         return true
-    }
-    
-    open override class func defaultCellSize(for layoutItemSize: CGSize) -> CGSize { .automatic }
-    
-    open func calculatedCellSize(for layoutItemSize: CGSize) -> CGSize { .automatic }
-    
-    public func whenNeedCellSize(calculate: @escaping (CGSize) -> CGSize) {
-        customSizeCalculator = calculate
-    }
-    
-    open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        let layouted = layoutContentIfNeeded()
-        if layouted {
-            setNeedsDisplay()
-        }
-        let calculatedSize = getSize(for: layoutAttributes.size)
-        let automatedSize = contentView.systemLayoutSizeFitting(layoutAttributes.size)
-        let size: CGSize = .init(
-            width: calculatedSize.width.isAutomatic || calculatedSize.isAutomatic ?
-                automatedSize.width : calculatedSize.width,
-            height: calculatedSize.height.isAutomatic || calculatedSize.isAutomatic ?
-                automatedSize.height : calculatedSize.height
-        )
-        var newFrame = layoutAttributes.frame
-        newFrame.size = size
-        layoutAttributes.frame = newFrame
-        return layoutAttributes
-    }
-    
-    func getSize(for layoutItemSize: CGSize) -> CGSize {
-        let customSize = customSizeCalculator(layoutItemSize)
-        guard customSize.isAutomatic else {
-            return customSize
-        }
-        let defaultSize = Self.defaultCellSize(for: layoutItemSize)
-        let calculatedSize = calculatedCellSize(for: layoutItemSize)
-        return calculatedSize.isCalculated ? calculatedSize : defaultSize
     }
     
     open func planningOption(on phase: CellLayoutingPhase) -> PlanningOption {
@@ -224,7 +187,7 @@ open class CollectionFragmentCell: UICollectionViewCell, FragmentCell {
         case .firstLoad:
             return .append
         default:
-            return .startFresh
+            return .startClean
         }
     }
     

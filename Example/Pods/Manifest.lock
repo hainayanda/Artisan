@@ -1,9 +1,9 @@
 PODS:
-  - Artisan (3.1.1):
-    - Draftsman (~> 1.1.1)
-    - Pharos (~> 1.2.0)
+  - Artisan (4.0.0):
+    - Draftsman (~> 2.0.0)
+    - Pharos (~> 1.2.2)
   - Clavier (1.0.1)
-  - Draftsman (1.1.1):
+  - Draftsman (2.0.0):
     - Clavier (~> 1.0.1)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
@@ -21,7 +21,7 @@ PODS:
   - Nimble-Snapshots/Core (9.1.0):
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
-  - Pharos (1.2.0)
+  - Pharos (1.2.2)
   - Quick (4.0.0)
 
 DEPENDENCIES:
@@ -47,14 +47,14 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Artisan: cd0b21adbf2e3bab2c47d0dd566f5d97d54931b3
+  Artisan: e1eb36ddc141c881cfe81f295633e13263df2838
   Clavier: 03e31d9184a083cc30569d46ef9358aa9568052a
-  Draftsman: abf7d010a5eb140a7ad22f5412b8c417a1e336fe
+  Draftsman: f2a4637189f0792b3f85bc000c3500df3438b679
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Nimble: 4f4a345c80b503b3ea13606a4f98405974ee4d0b
   Nimble-Snapshots: 6605431525245f967ca9d558bb12a49da3d040e3
-  Pharos: c21e7ded1efe9e00c226324220f1d67df34cf295
+  Pharos: 7c748b396d4c6eb87a8f73b292c6fb3b87460ccd
   Quick: 6473349e43b9271a8d43839d9ba1c442ed1b7ac4
 
 PODFILE CHECKSUM: bb611fdaaf36af3dbbd770a0e687cfb998d6a73d

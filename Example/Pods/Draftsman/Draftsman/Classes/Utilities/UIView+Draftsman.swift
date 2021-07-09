@@ -11,6 +11,33 @@ import UIKit
 
 public extension UIView {
     
+    var cornerRadius: CGFloat {
+        get {
+            layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+        }
+    }
+    
+    var borderWidth: CGFloat {
+        get {
+            layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    var borderColor: CGColor? {
+        get {
+            layer.borderColor
+        }
+        set {
+            layer.borderColor = newValue
+        }
+    }
+    
     func cleanSubViews() {
         let subViews = subviews
         for subView in subViews {
@@ -59,6 +86,43 @@ public extension UIView {
             currentParent = parent
         }
         return currentParent
+    }
+}
+
+public extension UIStackView {
+    
+    convenience init(
+        axis: NSLayoutConstraint.Axis,
+        distribution: UIStackView.Distribution = .fill,
+        alignment: UIStackView.Alignment = .fill,
+        spacing: CGFloat = .zero) {
+        self.init()
+        self.axis = axis
+        self.distribution = distribution
+        self.alignment = alignment
+        self.spacing = spacing
+    }
+}
+
+public extension UILabel {
+    
+    convenience init(text: String?) {
+        self.init()
+        self.text = text
+    }
+    
+    convenience init(text: String?, font: UIFont) {
+        self.init()
+        self.text = text
+        self.font = font
+    }
+}
+
+public extension UIButton {
+    
+    convenience init(text: String?) {
+        self.init()
+        self.setTitle(text, for: .normal)
     }
 }
 #endif
