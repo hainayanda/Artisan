@@ -72,24 +72,18 @@ extension UITableView {
         return customCellHeight.isCalculated ? customCellHeight : heightFromActualCell
     }
     
-    public func appendWithCell(_ builder: (TableCellBuilder) -> Void) {
-        guard !sections.isEmpty else {
-            buildWithCells(builder)
+    public func reloadWith(@TableSectionBuilder _ builder: () -> [TableSection]) {
+        sections = builder()
+    }
+    
+    public func appendCells(@TableCellBuilder _ builder: () -> [AnyTableCellMediator]) {
+        let currentSections = sections
+        guard let lastSection = sections.last else {
+            cells = builder()
             return
         }
-        let collectionBuilder = TableCellBuilder(sections: sections)
-        builder(collectionBuilder)
-        sections = collectionBuilder.build()
-    }
-    
-    public func buildWithCells(withFirstSectionId firstSection: String, _ builder: (TableCellBuilder) -> Void) {
-        buildWithCells(withFirstSection: Section(distinctIdentifier: firstSection), builder)
-    }
-    
-    public func buildWithCells(withFirstSection firstSection: UITableView.Section? = nil, _ builder: (TableCellBuilder) -> Void) {
-        let collectionBuilder = TableCellBuilder(section: firstSection ?? Section(distinctIdentifier: "first_section"))
-        builder(collectionBuilder)
-        sections = collectionBuilder.build()
+        lastSection.add(builder)
+        sections = currentSections
     }
     
     public func whenDidReloadCells(then: ((Bool) -> Void)?) {
@@ -161,7 +155,7 @@ extension UITableView {
             _cells.mutator { [weak self] in
                 self?.sections.first?.cells ?? []
             } set: { newValue in
-                self.sections = [Section(distinctIdentifier: "single_section", cells: newValue)]
+                self.sections = [Section(identifier: "single_section", cells: newValue)]
             }
         }
         

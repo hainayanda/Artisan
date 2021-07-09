@@ -11,37 +11,57 @@ import UIKit
 
 extension UITableView {
     
-    open class Section: Distinctable, Equatable {
+    open class Section: TableSectionCompatible, Distinctable, Equatable {
         public var index: String?
         public var cells: [AnyTableCellMediator]
         public var cellCount: Int { cells.count }
         public var distinctIdentifier: AnyHashable
         
-        public init(distinctIdentifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
-            self.distinctIdentifier = distinctIdentifier
+        public init(
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            cells: [AnyTableCellMediator] = []) {
+            self.distinctIdentifier = identifier
             self.cells = cells
             self.index = index
         }
         
-        public func add(cell: AnyTableCellMediator) {
+        public init(
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            @TableCellBuilder builder: () -> [AnyTableCellMediator]) {
+            self.distinctIdentifier = identifier
+            self.cells = builder()
+            self.index = index
+        }
+        
+        open func add(cell: AnyTableCellMediator) {
             cells.append(cell)
         }
         
-        public func add(cells: [AnyTableCellMediator]) {
+        open func add(cells: [AnyTableCellMediator]) {
             self.cells.append(contentsOf: cells)
+        }
+        
+        open func add(@TableCellBuilder _ builder: () -> [AnyTableCellMediator]) {
+            self.cells.append(contentsOf: builder())
+        }
+        
+        open func clear() {
+            cells.removeAll()
+        }
+        
+        open func copy() -> Section {
+            return Section(identifier: distinctIdentifier, cells: cells)
+        }
+        
+        public func getSection() -> TableSection? {
+            self
         }
         
         func isSameSection(with other: Section) -> Bool {
             if other === self { return true }
             return other.distinctIdentifier == distinctIdentifier
-        }
-        
-        public func clear() {
-            cells.removeAll()
-        }
-        
-        public func copy() -> Section {
-            return Section(distinctIdentifier: distinctIdentifier, cells: cells)
         }
         
         public static func == (lhs: UITableView.Section, rhs: UITableView.Section) -> Bool {
@@ -56,17 +76,46 @@ extension UITableView {
         }
     }
     
-    public class TitledSection: Section {
+    open class TitledSection: Section {
         
         public var title: String
         
-        public init(title: String, distinctIdentifier: AnyHashable = String.randomString(), index: String? = nil, cells: [AnyTableCellMediator] = []) {
+        public init(
+            title: String,
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            cells: [AnyTableCellMediator] = []) {
             self.title = title
-            super.init(distinctIdentifier: distinctIdentifier, index: index, cells: cells)
+            super.init(identifier: identifier, index: index, cells: cells)
         }
         
-        public override func copy() -> Section {
-            return TitledSection(title: title, distinctIdentifier: distinctIdentifier, cells: cells)
+        public init(
+            title: String,
+            identifier: AnyHashable = String.randomString(),
+            index: String? = nil,
+            @TableCellBuilder builder: () -> [AnyTableCellMediator]) {
+            self.title = title
+            super.init(identifier: identifier, index: index, builder: builder)
+        }
+        
+        open override func add(cell: AnyTableCellMediator) {
+            super.add(cell: cell)
+        }
+        
+        open override func add(cells: [AnyTableCellMediator]) {
+            super.add(cells: cells)
+        }
+        
+        open override func add(@TableCellBuilder _ builder: () -> [AnyTableCellMediator]) {
+            super.add(builder)
+        }
+        
+        open override func clear() {
+            super.clear()
+        }
+        
+        open override func copy() -> Section {
+            return TitledSection(title: title, identifier: distinctIdentifier, cells: cells)
         }
         
         public static func == (lhs: UITableView.TitledSection, rhs: UITableView.TitledSection) -> Bool {

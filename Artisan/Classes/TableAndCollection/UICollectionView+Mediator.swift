@@ -49,41 +49,18 @@ extension UICollectionView {
         }
     }
     
-    public func cellSizeFromMediator(at indexPath: IndexPath) -> CGSize {
-        let contentSize: CGSize = sizeOfContent
-        let collectionFlow = collectionViewLayout as? UICollectionViewFlowLayout
-        let estimatedSize = collectionFlow?.estimatedItemSize
-        let itemSize = collectionFlow?.itemSize
-        let flowSize = (itemSize ?? estimatedSize) ?? .automatic
-        let collectionCell = cellForItem(at: indexPath)
-        let currentSize = collectionCell?.bounds.size ?? .zero
-        let calculatedSize = collectionCell?.sizeThatFits(sizeOfContent) ?? .zero
-        let actualSizeFromCell = currentSize.isVisible ? currentSize : (calculatedSize.isVisible ? calculatedSize : .zero)
-        guard let cell = sections[safe: indexPath.section]?.cells[safe: indexPath.item] else {
-            return flowSize.isCalculated ? flowSize : actualSizeFromCell
-        }
-        let customCellSize = cell.customCellSize(for: contentSize)
-        return customCellSize.isCalculated ? customCellSize : (flowSize.isCalculated ? flowSize : actualSizeFromCell)
+    public func reloadWith(@CollectionSectionBuilder _ builder: () -> [CollectionSection]) {
+        sections = builder()
     }
     
-    public func appendWithCell(_ builder: (CollectionCellBuilder) -> Void) {
-        guard !sections.isEmpty else {
-            buildWithCells(builder)
+    public func appendCells(@CollectionCellBuilder _ builder: () -> [AnyCollectionCellMediator]) {
+        let currentSections = sections
+        guard let lastSection = sections.last else {
+            cells = builder()
             return
         }
-        let collectionBuilder = CollectionCellBuilder(sections: sections)
-        builder(collectionBuilder)
-        sections = collectionBuilder.build()
-    }
-    
-    public func buildWithCells(withFirstSectionId firstSection: String, _ builder: (CollectionCellBuilder) -> Void) {
-        buildWithCells(withFirstSection: Section(distinctIdentifier: firstSection), builder)
-    }
-    
-    public func buildWithCells(withFirstSection firstSection: UICollectionView.Section? = nil, _ builder: (CollectionCellBuilder) -> Void) {
-        let collectionBuilder = CollectionCellBuilder(section: firstSection ?? Section(distinctIdentifier: "first_section"))
-        builder(collectionBuilder)
-        sections = collectionBuilder.build()
+        lastSection.add(builder)
+        sections = currentSections
     }
     
     public func whenDidReloadCells(then: ((Bool) -> Void)?) {
@@ -125,7 +102,7 @@ extension UICollectionView {
             _cells.mutator { [weak self] in
                 self?.sections.first?.cells ?? []
             } set: { newValue in
-                self.sections = [Section(distinctIdentifier: "single_section", cells: newValue)]
+                self.sections = [Section(identifier: "single_section", cells: newValue)]
             }
         }
         
