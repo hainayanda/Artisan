@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Artisan'
-  s.version          = '4.0.0'
+  s.version          = '4.0.1'
   s.summary          = 'Artisan is a DSL, MVVM and Data Binding framework for Swift'
 
 # This description is used to generate tags and improve search results.
@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
   Artisan is a DSL, MVVM and Data Binding framework for Swift. But its more than that.
                        DESC
 
-  s.homepage         = 'https://github.com/nayanda1/Artisan'
+  s.homepage         = 'https://github.com/hainayanda/Artisan'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'nayanda' => 'nayanda1@outlook.com' }
-  s.source           = { :git => 'https://github.com/nayanda1/Artisan.git', :tag => s.version.to_s }
+  s.author           = { 'nayanda' => 'hainayanda@outlook.com' }
+  s.source           = { :git => 'https://github.com/hainayanda/Artisan.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'Draftsman', '~> 2.0.0'
-  s.dependency 'Pharos', '~> 1.2.2'
+  s.dependency 'Draftsman', '~> 2.0.2'
+  s.dependency 'Pharos', '~> 1.2.3'
   s.swift_version = '5.3'
 end

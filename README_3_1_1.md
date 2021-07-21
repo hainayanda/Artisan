@@ -1,6 +1,6 @@
 # Artisan 3.1.1
 
-This is README intended for old Artisan version 3.1.1. For the new version, check this [README](https://github.com/nayanda1/Artisan/blob/main/README.md) instead.
+This is README intended for old Artisan version 3.1.1. For the new version, check this [README](https://github.com/hainayanda/Artisan/blob/main/README.md) instead.
 
 ## Example
 
@@ -27,7 +27,7 @@ pod 'Pharos', '~> 1.2.2'
 ### Swift Package Manager from XCode
 
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
-- Add **https://github.com/nayanda1/Artisan.git** as Swift Package URL
+- Add **https://github.com/hainayanda/Artisan.git** as Swift Package URL
 - Set rules at **version**, with **Up to Next Major** option and put **3.1.1** as its version
 - Click next and wait
 
@@ -37,7 +37,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nayanda1/Artisan.git", .upToNextMajor(from: "3.1.1"))
+    .package(url: "https://github.com/hainayanda/Artisan.git", .upToNextMajor(from: "3.1.1"))
 ]
 ```
 
@@ -52,7 +52,7 @@ Use it in your target as `Artisan`
 
 ## Author
 
-Nayanda Haberty, nayanda1@outlook.com
+Nayanda Haberty, hainayanda@outlook.com
 
 ## License
 
@@ -60,7 +60,7 @@ Artisan is available under the MIT license. See the [LICENSE](LICENSE) file for 
 
 ## Usage
 
-Read [wiki](https://github.com/nayanda1/Artisan/wiki) for more detailed information.
+Read [wiki](https://github.com/hainayanda/Artisan/wiki) for more detailed information.
 
 ### Basic Usage
 
@@ -150,7 +150,7 @@ class MyViewController: UIViewController {
 
 It will automatically run getData when the user type in searchBar, with a minimum interval between method calls, is 1 second and will update table cells with new data on Main Thread every time you get data from API
 
-For more wiki, go to [here](https://github.com/nayanda1/Artisan/wiki)
+For more wiki, go to [here](https://github.com/hainayanda/Artisan/wiki)
 
 ## Contribute
 

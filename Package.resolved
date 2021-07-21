@@ -3,11 +3,11 @@
     "pins": [
       {
         "package": "Clavier",
-        "repositoryURL": "https://github.com/nayanda1/Clavier.git",
+        "repositoryURL": "https://github.com/hainayanda/Clavier.git",
         "state": {
           "branch": null,
-          "revision": "1e82b67e855af437f78271d421842da65e76722d",
-          "version": "1.0.1"
+          "revision": "f3b7bbf8c83022ffa9b2cc74b952641b0dd6a217",
+          "version": "1.0.2"
         }
       },
       {
@@ -30,11 +30,11 @@
       },
       {
         "package": "Draftsman",
-        "repositoryURL": "https://github.com/nayanda1/Draftsman.git",
+        "repositoryURL": "https://github.com/hainayanda/Draftsman.git",
         "state": {
           "branch": null,
-          "revision": "2243c031f5a29eacefa64c1bdf64cfdc7c7310f7",
-          "version": "2.0.0"
+          "revision": "3e31904edcf041bf51ee245b8ae9f08747205ec2",
+          "version": "2.0.2"
         }
       },
       {
@@ -48,11 +48,11 @@
       },
       {
         "package": "Pharos",
-        "repositoryURL": "https://github.com/nayanda1/Pharos.git",
+        "repositoryURL": "https://github.com/hainayanda/Pharos.git",
         "state": {
           "branch": null,
-          "revision": "9aa4350cc3b4a7c90cd33b106998540d4c4ff69b",
-          "version": "1.2.2"
+          "revision": "e6213c19275a72839c5e6717d19a40b8ee9a3891",
+          "version": "1.2.3"
         }
       },
       {
