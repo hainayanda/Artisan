@@ -125,17 +125,20 @@ extension UITableView {
 extension UITableView {
     
     public final class Mediator: ViewMediator<UITableView> {
-        var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
-            $0.numberOfTouchesRequired = 1
-            $0.isEnabled = true
-            $0.cancelsTouchesInView = false
-        }
+        var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:))))
+            .numberOfTouchesRequired(1)
+            .isEnabled(true)
+            .cancelsTouchesInView(false)
+            .build()
+    
         var applicableSections: [Section] = []
+        var pendingSections: [Section]?
         @Observable public var sections: [Section] = []
         @Observable public var cells: [AnyTableCellMediator] = []
         public var animationSet: UITableView.AnimationSet = .init()
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
+        var lock: NSLock = NSLock()
         
         public override func willBonded(with view: UITableView) {
             view.dataSource = self
@@ -144,15 +147,7 @@ extension UITableView {
         
         public override func bonding(with view: UITableView) {
             $sections.observe(on: .main)
-                .syncWhenInSameThread()
-                .whenDidSet { [weak self, weak view] changes in
-                guard let self = self, let view = view else { return }
-                let newSection = changes.new
-                view.registerNewCell(from: newSection)
-                let oldSection = self.applicableSections
-                self.applicableSections = newSection
-                self.reload(view, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
-            }
+                .whenDidSet(invoke: self, method: Mediator.reload(with:))
             _cells.mutator { [weak self] in
                 self?.sections.first?.cells ?? []
             } set: { newValue in
@@ -177,6 +172,27 @@ extension UITableView {
                 return
             }
             mediator.didTap(cell: cell)
+        }
+        
+        func reload(with changes: Changes<[Section]>) {
+            let lock = self.lock
+            guard lock.try() else {
+                pendingSections = changes.new
+                return
+            }
+            self.load(sections: changes.new)
+            while let pending = self.pendingSections {
+                self.load(sections: pending)
+            }
+            lock.unlock()
+        }
+        
+        func load(sections: [Section]) {
+            let oldSections = applicableSections
+            applicableSections = sections
+            guard let view = bondedView else { return }
+            view.registerNewCell(from: sections)
+            reload(view, with: sections, oldSections: oldSections, completion: self.didReloadAction)
         }
     }
 }
