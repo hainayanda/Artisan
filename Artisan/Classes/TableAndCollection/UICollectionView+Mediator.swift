@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Draftsman
 import Pharos
+import Builder
 
 extension UICollectionView {
     

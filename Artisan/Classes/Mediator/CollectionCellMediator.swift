@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Draftsman
 import Pharos
+import Builder
 
 public protocol AnyCollectionCellMediator: CollectionCellCompatible, CellMediator, Buildable {
     func apply(cell: UICollectionReusableView)

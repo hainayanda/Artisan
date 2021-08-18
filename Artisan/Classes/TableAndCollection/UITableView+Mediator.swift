@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Draftsman
 import Pharos
+import Builder
 
 public typealias TableSection = UITableView.Section
 public typealias TableTitledSection = UITableView.TitledSection

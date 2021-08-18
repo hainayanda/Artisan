@@ -11,6 +11,7 @@ import UIKit
 import Artisan
 import Pharos
 import Draftsman
+import Builder
 
 class KeywordCell: TableFragmentCell {
     lazy var keywordLabel = builder(UILabel.self)

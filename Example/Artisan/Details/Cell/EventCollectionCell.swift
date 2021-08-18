@@ -11,6 +11,7 @@ import UIKit
 import Artisan
 import Draftsman
 import Pharos
+import Builder
 
 class EventCollectionCell: CollectionFragmentCell {
     lazy var banner: UIImageView = builder {
