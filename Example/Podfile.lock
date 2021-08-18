@@ -1,9 +1,11 @@
 PODS:
-  - Artisan (4.0.1):
-    - Draftsman (~> 2.0.2)
+  - Artisan (4.0.2):
+    - Builder (~> 1.0.1)
+    - Draftsman (~> 2.0.3)
     - Pharos (~> 1.2.3)
+  - Builder (1.0.1)
   - Clavier (1.0.2)
-  - Draftsman (2.0.2):
+  - Draftsman (2.0.3):
     - Clavier (~> 1.0.2)
   - FBSnapshotTestCase (2.1.4):
     - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
@@ -33,6 +35,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Builder
     - Clavier
     - Draftsman
     - FBSnapshotTestCase
@@ -47,9 +50,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Artisan: 3e09f817121bae7911dbe1006025e5a1a9212ae3
+  Artisan: ac25dd8659a0f8146d09e98c2b6898bc823e25f1
+  Builder: 66effa998c9ff4b327b129de18d6218026b7071f
   Clavier: 5ff754d3cc20b75e9ebe4412517a72cc47877939
-  Draftsman: b1a1ab6e77d2bd5251ad51317784a9347f94d6df
+  Draftsman: 33fc53bddb94328ce3a6068bd63851bf6382a9fe
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Nimble: 4f4a345c80b503b3ea13606a4f98405974ee4d0b
