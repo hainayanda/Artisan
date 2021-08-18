@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Draftsman
 import Pharos
+import Builder
 
 extension UICollectionView {
     
@@ -71,14 +72,17 @@ extension UICollectionView {
 extension UICollectionView {
     
     public final class Mediator: ViewMediator<UICollectionView> {
-        var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))) {
-            $0.numberOfTouchesRequired = 1
-            $0.isEnabled = true
-            $0.cancelsTouchesInView = false
-        }
+        var tapGestureRecognizer: UITapGestureRecognizer = builder(UITapGestureRecognizer(target: self, action: #selector(didTap(_:))))
+            .numberOfTouchesRequired(1)
+            .isEnabled(true)
+            .cancelsTouchesInView(false)
+            .build()
+        
         var applicableSections: [Section] = []
+        var pendingSections: [Section]?
         @Observable public var sections: [Section] = []
         @Observable public var cells: [AnyCollectionCellMediator] = []
+        var lock: NSLock = NSLock()
         
         public var reloadStrategy: CellReloadStrategy = .reloadArrangementDifference
         var didReloadAction: ((Bool) -> Void)?
@@ -90,15 +94,7 @@ extension UICollectionView {
         
         public override func bonding(with view: UICollectionView) {
             $sections.observe(on: .main)
-                .syncWhenInSameThread()
-                .whenDidSet { [weak self, weak view] changes in
-                    guard let self = self, let collection = view else { return }
-                    let newSection = changes.new
-                    collection.registerNewCell(from: newSection)
-                    let oldSection = self.applicableSections
-                    self.applicableSections = newSection
-                    self.reload(collection, with: newSection, oldSections: oldSection, completion: self.didReloadAction)
-                }
+                .whenDidSet(invoke: self, method: Mediator.reload(with:))
             _cells.mutator { [weak self] in
                 self?.sections.first?.cells ?? []
             } set: { newValue in
@@ -123,6 +119,27 @@ extension UICollectionView {
                 return
             }
             mediator.didTap(cell: cell)
+        }
+        
+        func reload(with changes: Changes<[Section]>) {
+            let lock = self.lock
+            guard lock.try() else {
+                pendingSections = changes.new
+                return
+            }
+            self.load(sections: changes.new)
+            while let pending = self.pendingSections {
+                self.load(sections: pending)
+            }
+            lock.unlock()
+        }
+        
+        func load(sections: [Section]) {
+            let oldSections = applicableSections
+            applicableSections = sections
+            guard let view = bondedView else { return }
+            view.registerNewCell(from: sections)
+            reload(view, with: sections, oldSections: oldSections, completion: self.didReloadAction)
         }
     }
 }

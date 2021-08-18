@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import Pharos
 import Draftsman
+import Builder
 
 open class ViewMediator<View: NSObject>: NSObject, AnyMediator, Buildable {
     

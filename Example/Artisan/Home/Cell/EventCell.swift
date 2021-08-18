@@ -11,6 +11,7 @@ import Artisan
 import UIKit
 import Draftsman
 import Pharos
+import Builder
 
 class EventCell: TableFragmentCell {
     lazy var bannerBackground: UIView = builder {
