@@ -4,7 +4,7 @@
 
 # Artisan
 
-Artisan is an MVVM framework for Swift using the bonding features from [Pharos](https://github.com/hainayanda/Pharos) and constraints builder from [Draftsman](https://github.com/hainayanda/Draftsman).
+Artisan is an MVVM framework for Swift using the bonding features from [Pharos](https://github.com/hainayanda/Pharos), constraints builder from [Draftsman](https://github.com/hainayanda/Draftsman) and builder pattern from [Builder](https://github.com/hainayanda/Builder).
 
 [![codebeat badge](https://codebeat.co/badges/a3e6f380-c48e-44bb-997c-56b9615c64b3)](https://codebeat.co/projects/github-com-hainayanda-artisan-main)
 ![build](https://github.com/hainayanda/Artisan/workflows/build/badge.svg)
@@ -103,6 +103,7 @@ import Artisan
 import UIKit
 import Draftsman
 import Pharos
+import Builder
 
 class MyCell: TableFragmentCell {
     lazy var title = builder(UILabel.self)
