@@ -17,11 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow()
         let homeScreen = EventSearchScreen()
-        let homeMediator = EventSearchScreenVM()
-        homeMediator.apply(to: homeScreen)
+        let homeViewModel = EventSearchScreenVM(
+            router: EventRouter(screen: homeScreen),
+            service: MockEventService()
+        )
         let navigationVC = UINavigationController(rootViewController: homeScreen)
         window.rootViewController = navigationVC
         window.makeKeyAndVisible()
+        homeScreen.bind(with: homeViewModel)
         self.window = window
         return true
     }

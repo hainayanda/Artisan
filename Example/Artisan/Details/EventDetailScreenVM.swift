@@ -11,37 +11,27 @@ import UIKit
 import Artisan
 import Pharos
 
-class EventDetailScreenVM: ViewMediator<EventDetailsScreen> {
-    var router: Router = ExampleRouter()
+class EventDetailScreenVM: EventDetailsScreenViewModel {
+    typealias DataBinding = EventDetailsScreenDataBinding
+    typealias Subscriber = EventDetailsScreenSubscriber
     
-    @Observable var event: Event?
+    @Subject var event: Event?
+    var eventObservable: Observable<Event?> { $event }
     
-    override func bonding(with view: EventDetailsScreen) {
-        $event.whenDidSet(invoke: self, method: EventDetailScreenVM.change(event:))
+    var router: EventRouting
+    var service: EventService
+    
+    init(event: Event, router: EventRouting, service: EventService) {
+        self.event = event
+        self.router = router
+        self.service = service
     }
-}
-
-extension EventDetailScreenVM {
     
-    func didTapSimilar(event: Event) {
-        guard let view = self.bondedView else { return }
-        router.routeToDetails(of: event, from: view)
+    func apply(_ headerCell: EventHeaderCell, with event: Event) {
+        headerCell.bind(with: EventCellVM(event: event))
     }
     
-    func change(event: Changes<Event?>) {
-        bondedView?.title = event.new?.name
-        bondedView?.tableView.reloadWith{
-            TableSection(identifier: "header") {
-                EventCellVM<EventHeaderCell>(event: event.new)
-                    .with(identifier: "header")
-            }
-            TableTitledSection(title: "Similar Event", identifier: "similar") {
-                SimilarEventCellVM(event: event.new)
-                    .with(identifier: "similar")
-                    .whenDidTapped { [weak self] _, event in
-                        self?.didTapSimilar(event: event)
-                    }
-            }
-        }
+    func apply(_ similarCell: SimilarEventCell, with event: Event) {
+        similarCell.bind(with: SimilarEventCellVM(event: event, service: service))
     }
 }

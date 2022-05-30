@@ -13,12 +13,23 @@ import Draftsman
 import Pharos
 import Builder
 
-class EventCollectionCell: CollectionFragmentCell {
-    lazy var banner: UIImageView = builder {
-        $0.layer.cornerRadius = .x4
-        $0.clipsToBounds = true
-        $0.contentMode = .scaleAspectFill
-    }
+protocol EventCollectionCellDataBinding {
+    var bannerImageObservable: Observable<UIImage?> { get }
+    var eventNameObservable: Observable<String?> { get }
+}
+
+typealias EventCollectionCellViewModel = ViewModel & EventCollectionCellDataBinding
+
+class EventCollectionCell: UICollectionPlannedCell, ViewBinding {
+    typealias DataBinding = EventCollectionCellDataBinding
+    typealias Subscriber = Void
+    
+    lazy var banner: UIImageView = builder(UIImageView.self)
+        .layer.cornerRadius(.x4)
+        .clipsToBounds(true)
+        .contentMode(.scaleAspectFill)
+        .build()
+    
     lazy var title = builder(UILabel.self)
         .font(titleFont)
         .numberOfLines(1)
@@ -33,39 +44,37 @@ class EventCollectionCell: CollectionFragmentCell {
     var titleFont: UIFont = .mediumContent
     
     @LayoutPlan
-    override var viewPlan: ViewPlan {
-        banner.plan
-            .at(.fullTop, .equalTo(margin), to: .parent)
-        title.plan
-            .at(.bottomOf(banner), .equalTo(spacing))
-            .at(.fullBottom, .equalTo(margin), to: .parent)
+    var contentViewPlan: ViewPlan {
+        banner.drf
+            .top.horizontal.equal(with: .parent).offsetted(using: margin)
+        title.drf
+            .top.equal(to: banner.drf.bottom).offset(by: spacing)
+            .bottom.horizontal.equal(with: .parent).offsetted(using: margin)
+    }
+    
+    func bindData(from dataBinding: DataBinding) {
+        dataBinding.bannerImageObservable
+            .relayChanges(to: banner.bindables.image)
+            .retained(by: self)
+        dataBinding.eventNameObservable
+            .relayChanges(to: title.bindables.text)
+            .retained(by: self)
     }
 }
 
-class EventCollectionCellVM: CollectionCellMediator<EventCollectionCell> {
-    @Observable var event: Event?
-    @Observable var bannerImage: UIImage?
-    @Observable var eventName: String?
+class EventCollectionCellVM: EventCollectionCellViewModel {
+    typealias DataBinding = EventCollectionCellDataBinding
+    typealias Subscriber = Void
+    
+    @Subject var event: Event?
+    var bannerImageObservable: Observable<UIImage?> {
+        $event.mapped { $0?.image }
+    }
+    var eventNameObservable: Observable<String?> {
+        $event.mapped { $0?.name }
+    }
     
     init(event: Event?) {
         self.event = event
-        super.init()
-    }
-    
-    required init() {
-        super.init()
-    }
-    
-    override func bonding(with view: EventCollectionCell) {
-        $event.whenDidSet(invoke: self, method: EventCollectionCellVM.set(eventChanges:))
-        $bannerImage.relayValue(to: view.banner.bearerRelays.image)
-        $eventName.relayValue(to: view.title.bearerRelays.text)
-    }
-    
-    func set(eventChanges: Changes<Event?>) {
-        let event = eventChanges.new
-        distinctIdentifier = event?.name
-        bannerImage = event?.image
-        eventName = event?.name
     }
 }

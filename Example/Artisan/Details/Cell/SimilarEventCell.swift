@@ -11,56 +11,87 @@ import UIKit
 import Artisan
 import Draftsman
 import Pharos
+import Builder
 
-class SimilarEventCell: TableFragmentCell {
-    lazy var collectionLayout: UICollectionViewFlowLayout = .init()
-    lazy var collectionView: UICollectionView = .init(frame: .zero, collectionViewLayout: collectionLayout)
+protocol SimilarEventCellDataBinding {
+    var eventsObservable: Observable<[Event]> { get }
+}
+
+protocol SimilarEventCellSubscriber {
+    func didTap(_ event: Event, at indexPath: IndexPath)
+    func apply(_ eventCell: EventCollectionCell, with event: Event)
+}
+
+typealias SimilarEventCellViewModel = ViewModel & SimilarEventCellDataBinding & SimilarEventCellSubscriber
+
+class SimilarEventCell: UITablePlannedCell, ViewBinding {
+    typealias DataBinding = SimilarEventCellDataBinding
+    typealias Subscriber = SimilarEventCellSubscriber
+    
+    @Subject var events: [Event] = []
+    
+    lazy var collectionLayout: UICollectionViewFlowLayout = builder(UICollectionViewFlowLayout())
+        .scrollDirection(.horizontal)
+        .itemSize(CGSize(width: .x64, height: .x48))
+        .minimumLineSpacing(.zero)
+        .minimumInteritemSpacing(.zero)
+        .build()
+    
+    lazy var collectionView: UICollectionView = builder(UICollectionView(frame: .zero, collectionViewLayout: collectionLayout))
+        .allowsSelection(true)
+        .backgroundColor(.clear)
+        .delegate(self)
+        .build()
     
     @LayoutPlan
-    override var viewPlan: ViewPlan {
-        collectionView.plan
-            .edges(.equal, to: .parent)
-            .height(.equalTo(.x48))
+    var contentViewPlan: ViewPlan {
+        collectionView.drf
+            .edges.equal(with: .parent)
+            .height.equal(to: .x48)
+            .cells(from: $events) { [weak self] _, event in
+                Cell(from: EventCollectionCell.self) { cell, _ in
+                    self?.subscriber?.apply(cell, with: event)
+                }
+            }
     }
     
-    override func fragmentWillPlanContent() {
-        collectionView.allowsSelection = true
-        collectionView.backgroundColor = .clear
-        collectionView.allowsSelection = true
-        collectionLayout.scrollDirection = .horizontal
-        collectionLayout.itemSize = .init(width: .x64, height: .x48)
-        collectionLayout.minimumInteritemSpacing = .zero
-        collectionLayout.minimumLineSpacing = .zero
-    }
-    
-    override func calculatedCellHeight(for cellWidth: CGFloat) -> CGFloat {
-        .x48
+    func bindData(from dataBinding: DataBinding) {
+        dataBinding.eventsObservable
+            .relayChanges(to: $events)
+            .retained(by: self)
     }
 }
 
-class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
+extension SimilarEventCell: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        guard indexPath.item < events.count else { return }
+        subscriber?.didTap(events[indexPath.item], at: indexPath)
+    }
+}
+
+class SimilarEventCellVM: SimilarEventCellViewModel {
+    typealias DataBinding = SimilarEventCellDataBinding
+    typealias Subscriber = SimilarEventCellSubscriber
     typealias TapAction = (SimilarEventCellVM, Event) -> Void
-    var service: EventService = MockEventService()
     
-    @Observable var event: Event?
-    @Observable var events: [Event] = []
+    var service: EventService
+    
+    @Subject var event: Event?
+    @Subject var events: [Event] = []
+    var eventsObservable: Observable<[Event]> { $events }
     
     private var tapObserver: TapAction?
     
-    init(event: Event?) {
+    init(event: Event?, service: EventService) {
         self.event = event
-        super.init()
-    }
-    
-    required init() {
-        super.init()
-    }
-    
-    override func bonding(with view: SimilarEventCell) {
-        $event.whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventChanges:))
-        $events.observe(on: .main)
-            .whenDidSet(invoke: self, method: SimilarEventCellVM.set(eventsChanges:))
-        view.collectionView.delegate = self
+        self.service = service
+        $event.whenDidSet { [unowned self] changes in
+            guard let new = changes.new else { return }
+            service.similarEvent(with: new) { [weak self] similars in
+                self?.events = similars
+            }
+        }.retained(by: self)
     }
     
     @discardableResult
@@ -69,33 +100,11 @@ class SimilarEventCellVM: TableCellMediator<SimilarEventCell> {
         return self
     }
     
-    func set(eventChanges: Changes<Event?>) {
-        guard let event = eventChanges.new else {
-            bondedView?.collectionView.cells = []
-            return
-        }
-        service.similarEvent(with: event) { [weak self] events in
-            self?.events = events
-        }
+    func didTap(_ event: Event, at indexPath: IndexPath) {
+        tapObserver?(self, event)
     }
     
-    func set(eventsChanges: Changes<[Event]>) {
-        bondedView?.collectionView.reloadWith {
-            ItemToCollectionMediator(items: eventsChanges.new, to: EventCollectionCellVM.self) { cell, item in
-                cell.distinctIdentifier = item.name
-                cell.event = item
-            }
-        }
-    }
-}
-
-extension SimilarEventCellVM: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-        guard let viewModel = collectionView.cellForItem(at: indexPath)?.getMediator() as? EventCollectionCellVM,
-              let event = viewModel.event else {
-            return
-        }
-        tapObserver?(self, event)
+    func apply(_ eventCell: EventCollectionCell, with event: Event) {
+        eventCell.bind(with: EventCollectionCellVM(event: event))
     }
 }

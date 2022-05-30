@@ -12,8 +12,8 @@ import UIKit
 
 class EventHeaderCell: EventCell {
     
-    override func fragmentWillPlanContent() {
-        super.fragmentWillPlanContent()
+    override func didInit() {
+        super.didInit()
         title.numberOfLines = 0
         subTitle.numberOfLines = 0
         subTitle.textColor = .secondary
