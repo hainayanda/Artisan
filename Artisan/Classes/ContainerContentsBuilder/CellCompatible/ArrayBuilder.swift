@@ -6,16 +6,6 @@
 //
 
 import Foundation
-#if canImport(UIKit)
-import UIKit
-
-public typealias CellPlan<CellType: ContentCellCompatible> = ArrayBuilder<Cell<CellType>> where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
-public typealias SectionPlan<CellType: ContentCellCompatible> = ArrayBuilder<Section<CellType>> where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
-public typealias TableCellPlan = CellPlan<UITableViewCell>
-public typealias CollectionCellPlan = CellPlan<UICollectionViewCell>
-public typealias TableSectionPlan = SectionPlan<UITableViewCell>
-public typealias CollectionSectionPlan = SectionPlan<UICollectionViewCell>
-#endif
 
 @resultBuilder
 public struct ArrayBuilder<Element> {

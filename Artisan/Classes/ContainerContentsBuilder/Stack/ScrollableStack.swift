@@ -70,6 +70,5 @@ extension ScrollableStack: StackCompatible {
     public func customSpacing(after arrangedSubview: UIView) -> CGFloat {
         stackView.customSpacing(after: arrangedSubview)
     }
-    
 }
 #endif

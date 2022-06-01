@@ -10,134 +10,162 @@ import Foundation
 import UIKit
 import Pharos
 import DiffableDataSources
+import Chary
 
-public typealias Sections<CellType: ContentCellCompatible> = [Section<CellType>] where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
-public typealias SectionProvider<Item: Hashable, CellType: ContentCellCompatible> = (Int, Item) -> Sections<CellType> where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
-public typealias SingleSectionProvider<Item: Hashable, CellType: ContentCellCompatible> = (Item) -> Sections<CellType> where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
-public typealias Cells<CellType: ContentCellCompatible> = [Cell<CellType>] where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
-public typealias CellProvider<Item: Hashable, CellType: ContentCellCompatible> = (Int, Item) -> Cells<CellType> where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType
+enum CellBuildingState {
+    case applying
+    case free
+}
 
 class CellBuilder<Item: Hashable, CellType: ContentCellCompatible>: ObjectRetainer where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType {
-    
     typealias DataBinding = CellType.Container.DataBinding
     typealias CellItem = Cell<CellType>
     
+    lazy var dispatcher: DispatchQueue = DispatchQueue(label: "Artisan-CellBuilder_\(ObjectIdentifier(self).hashValue)")
+    
+    @Atomic var state: CellBuildingState = .free {
+        didSet {
+            applyPendingIfNeeded()
+        }
+    }
+    
+    @Atomic var pendingSnapshot: DiffableDataSourceSnapshot<Section<CellType>, Cell<CellType>>?
+    
     var dataSource: DataBinding
     
-    init(
-        for container: CellType.Container,
-        observableSectionItems: Observable<[Item]>,
-        @SectionPlan<CellType> sectionProvider: @escaping SectionProvider<Item, CellType>) {
-            let dataSource = Self.createDataSource(for: container)
-            self.dataSource = dataSource
-            container.dataSource = dataSource
-            observableSectionItems
-                .ignoreSameValue()
-                .whenDidSet { [unowned self] changes in
-                    let snapshot = changes.new.toSnapShot(using: sectionProvider)
-                    DispatchQueue.main.async { [weak self] in
-                        self?.apply(snapshot: snapshot)
-                    }
-                }.retained(by: self)
-                .notifyWithCurrentValue()
-        }
+    init(for container: CellType.Container) {
+        self.dataSource = Self.createDataSource(for: container)
+        container.dataSource = dataSource
+        $state = dispatcher
+        $pendingSnapshot = dispatcher
+    }
     
-    init(
-        for container: CellType.Container,
-        sectionItems: [Item],
-        @SectionPlan<CellType> sectionProvider: @escaping SectionProvider<Item, CellType>) {
-            let dataSource = Self.createDataSource(for: container)
-            self.dataSource = dataSource
-            container.dataSource = dataSource
-            self.apply(snapshot: sectionItems.toSnapShot(using: sectionProvider))
-        }
-    
-    init(
-        for container: CellType.Container,
-        observableSectionItem: Observable<Item>,
-        @SectionPlan<CellType> sectionProvider: @escaping SingleSectionProvider<Item, CellType>) {
-            let dataSource = Self.createDataSource(for: container)
-            self.dataSource = dataSource
-            container.dataSource = dataSource
-            observableSectionItem
-                .ignoreSameValue()
-                .whenDidSet { [unowned self] changes in
-                    var snapshot = DiffableDataSourceSnapshot<Section<CellType>, Cell<CellType>>()
-                    sectionProvider(changes.new).enumerated().forEach { sectionIndex, section in
-                            section.addForHash(itemIndex: 0, index: sectionIndex)
-                            snapshot.appendSections([section])
-                            snapshot.appendItems(section.cellItems)
+    func applyIfFree(for snapshot: DiffableDataSourceSnapshot<Section<CellType>, Cell<CellType>>) {
+        dispatcher.safeSync {
+            switch state {
+            case .applying:
+                pendingSnapshot = snapshot
+                return
+            case .free:
+                self.state = .applying
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.apply(snapshot: snapshot) {
+                        self.state = .free
                     }
-                    DispatchQueue.main.async { [weak self] in
-                        self?.apply(snapshot: snapshot)
-                    }
-                }.retained(by: self)
-                .notifyWithCurrentValue()
-        }
-    
-    init(
-        for container: CellType.Container,
-        sectionItem: Item,
-        @SectionPlan<CellType> sectionProvider: @escaping SingleSectionProvider<Item, CellType>) {
-            let dataSource = Self.createDataSource(for: container)
-            self.dataSource = dataSource
-            container.dataSource = dataSource
-            var snapshot = DiffableDataSourceSnapshot<Section<CellType>, Cell<CellType>>()
-            sectionProvider(sectionItem).enumerated().forEach { sectionIndex, section in
-                    section.addForHash(itemIndex: 0, index: sectionIndex)
-                    snapshot.appendSections([section])
-                    snapshot.appendItems(section.cellItems)
-            }
-            DispatchQueue.main.async { [weak self] in
-                self?.apply(snapshot: snapshot)
+                }
             }
         }
+    }
     
-    init(
-        for container: CellType.Container,
-        observableItems: Observable<[Item]>,
-        @CellPlan<CellType> cellProvider: @escaping CellProvider<Item, CellType>) {
-            let dataSource = Self.createDataSource(for: container)
-            self.dataSource = dataSource
-            container.dataSource = dataSource
-            observableItems
-                .ignoreSameValue()
-                .whenDidSet { changes in
-                    var snapshot =  DiffableDataSourceSnapshot<Section<CellType>, CellItem>()
-                    let section = Section(items: changes.new, provider: cellProvider)
-                    snapshot.appendSections([section])
-                    snapshot.appendItems(section.cellItems)
-                    DispatchQueue.main.async { [weak self] in
-                        self?.apply(snapshot: snapshot)
-                    }
-                }.retained(by: self)
-                .notifyWithCurrentValue()
-        }
-    
-    init(
-        for container: CellType.Container,
-        items: [Item],
-        @CellPlan<CellType> cellProvider: @escaping CellProvider<Item, CellType>) {
-            let dataSource = Self.createDataSource(for: container)
-            self.dataSource = dataSource
-            container.dataSource = dataSource
-            var snapshot =  DiffableDataSourceSnapshot<Section<CellType>, CellItem>()
-            let section = Section(items: items, provider: cellProvider)
-            snapshot.appendSections([section])
-            snapshot.appendItems(section.cellItems)
-            DispatchQueue.main.async { [weak self] in
-                self?.apply(snapshot: snapshot)
+    func applyPendingIfNeeded() {
+        dispatcher.safeSync {
+            guard let pending = pendingSnapshot else { return }
+            switch state {
+            case .applying:
+                return
+            case .free:
+                pendingSnapshot = nil
+                applyIfFree(for: pending)
             }
         }
+    }
     
     class func createDataSource(for container: CellType.Container) -> DataBinding {
         fatalError("createDataSource() should be overridden")
     }
     
-    func apply(snapshot: DiffableDataSourceSnapshot<Section<CellType>, Cell<CellType>>) {
+    func apply(snapshot: DiffableDataSourceSnapshot<Section<CellType>, Cell<CellType>>, completion: @escaping () -> Void) {
         fatalError("apply(snapshot:) should be overridden")
     }
 }
+
+extension CellBuilder {
+    
+    // MARK: Sectioned Init
+    
+    convenience init(
+        for container: CellType.Container,
+        observableSectionItems: Observable<[Item]>,
+        @SectionPlan<CellType> sectionProvider: @escaping SectionProvider<Item, CellType>
+    ) {
+        self.init(for: container)
+        observableSectionItems
+            .ignoreSameValue()
+            .whenDidSet { [unowned self] changes in
+                self.applyIfFree(for: changes.new.toSnapShot(using: sectionProvider))
+            }.observe(on: .global(qos: .background))
+            .retained(by: self)
+            .fire()
+    }
+    
+    convenience init(
+        for container: CellType.Container,
+        sectionItems: [Item],
+        @SectionPlan<CellType> sectionProvider: @escaping SectionProvider<Item, CellType>
+    ) {
+        self.init(for: container)
+        self.applyIfFree(for: sectionItems.toSnapShot(using: sectionProvider))
+    }
+    
+    convenience init(
+        for container: CellType.Container,
+        observableSectionItem: Observable<Item>,
+        @SectionPlan<CellType> sectionProvider: @escaping SingleSectionProvider<Item, CellType>
+    ) {
+        self.init(
+            for: container,
+            observableSectionItems: observableSectionItem.mapped { [$0] }) { _, item in
+                return sectionProvider(item)
+            }
+    }
+    
+    convenience init(
+        for container: CellType.Container,
+        sectionItem: Item,
+        @SectionPlan<CellType> sectionProvider: @escaping SingleSectionProvider<Item, CellType>
+    ) {
+        self.init(for: container, sectionItems: [sectionItem]) { _, item in
+            return sectionProvider(item)
+        }
+    }
+    
+    // MARK: No Section Init
+    
+    convenience init(
+        for container: CellType.Container,
+        observableItems: Observable<[Item]>,
+        @CellPlan<CellType> cellProvider: @escaping CellProvider<Item, CellType>
+    ) {
+        self.init(for: container)
+        observableItems
+            .ignoreSameValue()
+            .whenDidSet { [unowned self] changes in
+                var snapshot =  DiffableDataSourceSnapshot<Section<CellType>, CellItem>()
+                let section = Section(items: changes.new, provider: cellProvider)
+                snapshot.appendSections([section])
+                snapshot.appendItems(section.cellItems)
+                self.applyIfFree(for: snapshot)
+            }.observe(on: .global(qos: .background))
+            .retained(by: self)
+            .fire()
+    }
+    
+    convenience init(
+        for container: CellType.Container,
+        items: [Item],
+        @CellPlan<CellType> cellProvider: @escaping CellProvider<Item, CellType>
+    ) {
+        self.init(for: container)
+        var snapshot =  DiffableDataSourceSnapshot<Section<CellType>, CellItem>()
+        let section = Section(items: items, provider: cellProvider)
+        snapshot.appendSections([section])
+        snapshot.appendItems(section.cellItems)
+        self.applyIfFree(for: snapshot)
+    }
+}
+
+// MARK: Collection
 
 class CollectionCellBuilder<Item: Hashable>: CellBuilder<Item, UICollectionViewCell> {
     override class func createDataSource(for container: UICollectionView) -> DataBinding {
@@ -146,10 +174,15 @@ class CollectionCellBuilder<Item: Hashable>: CellBuilder<Item, UICollectionViewC
         }
     }
     
-    override func apply(snapshot: DiffableDataSourceSnapshot<Section<UICollectionViewCell>, Cell<UICollectionViewCell>>) {
-        (dataSource as? CollectionViewDiffableDataSource<Section<UICollectionViewCell>, CellItem>)?.apply(snapshot)
+    override func apply(snapshot: DiffableDataSourceSnapshot<Section<UICollectionViewCell>, Cell<UICollectionViewCell>>, completion: @escaping () -> Void) {
+        guard let dataSource = self.dataSource as? CollectionViewDiffableDataSource<Section<UICollectionViewCell>, CellItem> else {
+            return
+        }
+        dataSource.apply(snapshot, animatingDifferences: true, completion: completion)
     }
 }
+
+// MARK: Table
 
 class TableCellBuilder<Item: Hashable>: CellBuilder<Item, UITableViewCell> {
     override class func createDataSource(for container: UITableView) -> DataBinding {
@@ -158,11 +191,11 @@ class TableCellBuilder<Item: Hashable>: CellBuilder<Item, UITableViewCell> {
         }
     }
     
-    override func apply(snapshot: DiffableDataSourceSnapshot<Section<UITableViewCell>, Cell<UITableViewCell>>) {
+    override func apply(snapshot: DiffableDataSourceSnapshot<Section<UITableViewCell>, Cell<UITableViewCell>>, completion: @escaping () -> Void) {
         guard let dataSource = self.dataSource as? ArtisanTableDiffableDataSource else {
             return
         }
-        dataSource.apply(snapshot)
+        dataSource.apply(snapshot, animatingDifferences: true, completion: completion)
     }
 }
 
@@ -186,8 +219,8 @@ class ArtisanTableDiffableDataSource: TableViewDiffableDataSource<Section<UITabl
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         let indexTitles: [String] = snapshot().sectionIdentifiers.map {
             guard let titledSection = $0 as? TitledSection,
-                    titledSection.indexed,
-                    let firstCharacter = titledSection.title?.first ?? titledSection.footer?.first else {
+                  titledSection.indexed,
+                  let firstCharacter = titledSection.title?.first ?? titledSection.footer?.first else {
                 return ""
             }
             return "\(firstCharacter)"
@@ -202,9 +235,9 @@ class ArtisanTableDiffableDataSource: TableViewDiffableDataSource<Section<UITabl
 extension Array where Element == String {
     var isAllEmptyString: Bool {
         for element in self where !element.isEmpty {
-            return true
+            return false
         }
-        return false
+        return true
     }
 }
 #endif

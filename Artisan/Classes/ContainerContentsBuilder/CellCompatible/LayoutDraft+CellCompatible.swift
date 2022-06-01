@@ -13,10 +13,6 @@ import Pharos
 
 // MARK: Table
 
-public typealias TableCellProvider<Item: Hashable> = CellProvider<Item, UITableViewCell>
-public typealias TableSectionProvider<Item: Hashable> = SectionProvider<Item, UITableViewCell>
-public typealias TableSingleSectionProvider<Item: Hashable> = SingleSectionProvider<Item, UITableViewCell>
-
 fileprivate var tableBuilderAssociatedKey: String = "tableBuilderAssociatedKey"
 
 public protocol TableDraft: ViewDraft {
@@ -114,10 +110,6 @@ extension ConstraintBuilderRootRecoverable where Root: TableDraft {
 }
 
 // MARK: Collection
-
-public typealias CollectionCellProvider<Item: Hashable> = CellProvider<Item, UICollectionViewCell>
-public typealias CollectionSectionProvider<Item: Hashable> = SectionProvider<Item, UICollectionViewCell>
-public typealias SingleCollectionSectionProvider<Item: Hashable> = SingleSectionProvider<Item, UICollectionViewCell>
 
 fileprivate var collectionBuilderAssociatedKey: String = "collectionBuilderAssociatedKey"
 

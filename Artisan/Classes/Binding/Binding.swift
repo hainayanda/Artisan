@@ -93,6 +93,9 @@ public protocol ViewModel: BindableModel {
 extension ViewModel {
 
     public var asSubscriber: Subscriber {
+        if Subscriber.self == Void.self {
+            return Void() as! Self.Subscriber
+        }
         guard let asSubscriber = self as? Subscriber else {
             fatalError("Please implement Responder protocol into ViewModel or implement input manually")
         }
@@ -100,6 +103,9 @@ extension ViewModel {
     }
 
     public var asDataBinding: DataBinding {
+        if DataBinding.self == Void.self {
+            return Void() as! Self.DataBinding
+        }
         guard let asDataBinding = self as? DataBinding else {
             fatalError("Please implement DataSource protocol into ViewModel or implement output manually")
         }

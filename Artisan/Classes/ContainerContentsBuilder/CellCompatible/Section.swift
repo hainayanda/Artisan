@@ -28,10 +28,10 @@ public class Section<CellType: ContentCellCompatible>: Hashable where CellType.C
     public func hash(into hasher: inout Hasher) {
         // use position if section have no overridden identifier
         if identifier == sectionDefaultNoIdentifier {
-            hasher.combine(index)
+            hasher.combine(itemIndex)
             hasher.combine(index)
         } else {
-            identifier.hash(into: &hasher)
+            hasher.combine(identifier)
         }
     }
     
