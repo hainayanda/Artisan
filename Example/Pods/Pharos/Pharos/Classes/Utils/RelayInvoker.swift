@@ -15,10 +15,18 @@ final class RelayInvoker<State>: Invokable {
         self.relay = relay
     }
     
+    @available(*, deprecated, renamed: "fire")
     func notifyWithCurrentValue() {
+        fire()
+    }
+    
+    func fire() {
         guard let recent: State = self.relay.source?.recentState else {
             return
         }
-        self.relay.relay(changes: Changes(old: nil, new: recent, source: self))
+        self.relay.relay(
+            changes: Changes(old: nil, new: recent, source: self),
+            context: PharosContext()
+        )
     }
 }

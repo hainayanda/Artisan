@@ -9,11 +9,14 @@ import Foundation
 
 open class Publisher<Observed>: RootObservable<Observed> {
     
-    public override init() {
-        super.init()
+    public init() {
+        super.init(retainer: ContextRetainer())
     }
     
     open func publish(value: Observed) {
-        relay(changes: Changes(old: recentState, new: value, source: self))
+        relay(
+            changes: Changes(old: recentState, new: value, source: self),
+            context: PharosContext()
+        )
     }
 }

@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/hainayanda/Builder.git",
         "state": {
           "branch": null,
-          "revision": "524cae295b97c2f2639207c9e77024a402ef7f7f",
-          "version": "1.0.1"
+          "revision": "c901a96996b9ee2cf1e8d6619d4ee70e739774fa",
+          "version": "1.0.3"
         }
       },
       {
@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/hainayanda/Clavier.git",
         "state": {
           "branch": null,
-          "revision": "f3b7bbf8c83022ffa9b2cc74b952641b0dd6a217",
-          "version": "1.0.2"
+          "revision": "a646111440bf434b9ea709a7f1785372ae5731ec",
+          "version": "2.0.0"
         }
       },
       {
@@ -33,8 +33,26 @@
         "repositoryURL": "https://github.com/mattgallagher/CwlPreconditionTesting.git",
         "state": {
           "branch": null,
-          "revision": "02b7a39a99c4da27abe03cab2053a9034379639f",
-          "version": "2.0.0"
+          "revision": "c21f7bab5ca8eee0a9998bbd17ca1d0eb45d4688",
+          "version": "2.1.0"
+        }
+      },
+      {
+        "package": "DiffableDataSources",
+        "repositoryURL": "https://github.com/ra1028/DiffableDataSources.git",
+        "state": {
+          "branch": null,
+          "revision": "a457cf63456b3aeec2a3626af0230c98b0733927",
+          "version": "0.5.0"
+        }
+      },
+      {
+        "package": "DifferenceKit",
+        "repositoryURL": "https://github.com/ra1028/DifferenceKit.git",
+        "state": {
+          "branch": null,
+          "revision": "62745d7780deef4a023a792a1f8f763ec7bf9705",
+          "version": "1.2.0"
         }
       },
       {
@@ -42,8 +60,8 @@
         "repositoryURL": "https://github.com/hainayanda/Draftsman.git",
         "state": {
           "branch": null,
-          "revision": "3a3c47243b86b7ef296e45db63a8492fc2b3e353",
-          "version": "2.0.3"
+          "revision": "4c1e96b6a0076ed2a91099a7702ff3748ab8e4ce",
+          "version": "3.0.3"
         }
       },
       {
@@ -51,8 +69,8 @@
         "repositoryURL": "https://github.com/Quick/Nimble.git",
         "state": {
           "branch": null,
-          "revision": "af1730dde4e6c0d45bf01b99f8a41713ce536790",
-          "version": "9.2.0"
+          "revision": "c93f16c25af5770f0d3e6af27c9634640946b068",
+          "version": "9.2.1"
         }
       },
       {
@@ -60,8 +78,8 @@
         "repositoryURL": "https://github.com/hainayanda/Pharos.git",
         "state": {
           "branch": null,
-          "revision": "e6213c19275a72839c5e6717d19a40b8ee9a3891",
-          "version": "1.2.3"
+          "revision": "4c2cc2a23cb5c6c368b2e09f68ed93fdfa524cc5",
+          "version": "2.2.1"
         }
       },
       {

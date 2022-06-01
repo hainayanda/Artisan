@@ -52,13 +52,33 @@ class EventCollectionCell: UICollectionPlannedCell, ViewBinding {
             .bottom.horizontal.equal(with: .parent).offsetted(using: margin)
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        didInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        didInit()
+    }
+    
+    func didInit() {
+        backgroundColor = .background
+        contentView.backgroundColor = .background
+        applyPlan()
+    }
+    
     func bindData(from dataBinding: DataBinding) {
         dataBinding.bannerImageObservable
             .relayChanges(to: banner.bindables.image)
+            .observe(on: .main)
             .retained(by: self)
+            .fire()
         dataBinding.eventNameObservable
             .relayChanges(to: title.bindables.text)
+            .observe(on: .main)
             .retained(by: self)
+            .fire()
     }
 }
 
@@ -67,6 +87,7 @@ class EventCollectionCellVM: EventCollectionCellViewModel {
     typealias Subscriber = Void
     
     @Subject var event: Event?
+    
     var bannerImageObservable: Observable<UIImage?> {
         $event.mapped { $0?.image }
     }

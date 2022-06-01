@@ -3,8 +3,9 @@ PODS:
     - Builder (~> 1.0.3)
     - DiffableDataSources (~> 0.5.0)
     - Draftsman (~> 3.0.3)
-    - Pharos (~> 2.2.0)
+    - Pharos (~> 2.3.0)
   - Builder (1.0.3)
+  - Chary (1.0.1)
   - Clavier (2.0.0)
   - DiffableDataSources (0.5.0):
     - DifferenceKit/AppKitExtension (~> 1.1)
@@ -31,7 +32,8 @@ PODS:
   - Nimble-Snapshots/Core (9.1.1):
     - iOSSnapshotTestCase (~> 6.0)
     - Nimble
-  - Pharos (2.2.0)
+  - Pharos (2.3.0):
+    - Chary (~> 1.0.1)
   - Quick (5.0.1)
 
 DEPENDENCIES:
@@ -44,6 +46,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Builder
+    - Chary
     - Clavier
     - DiffableDataSources
     - DifferenceKit
@@ -60,8 +63,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Artisan: 9f6fc1ee7fd15b989ef424229a3d46e784a93b6f
+  Artisan: a67bae96b94793277122c4fba5ecb5d9bea417d0
   Builder: 2e97f87fe3ebb48ed8a228bc562017f3cf2b9d00
+  Chary: d776f18c773a8193988deaff7da4e0321c3555a7
   Clavier: d2290317782c9e68c41ffeae14be1ac1d7b47fc3
   DiffableDataSources: 1ddde2de1978cc02619b2c3bfafab20e68b57279
   DifferenceKit: 5659c430bb7fe45876fa32ce5cba5d6167f0c805
@@ -70,7 +74,7 @@ SPEC CHECKSUMS:
   iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
   Nimble: 5316ef81a170ce87baf72dd961f22f89a602ff84
   Nimble-Snapshots: 881d47f238c5462f38ffcccb1747b17c633b2c18
-  Pharos: 64fb06be4ad2207cf784ad4cd1fd4b23d5c31474
+  Pharos: 1a27409a2b19cbf79584bec1b46d456930cbf154
   Quick: 749aa754fd1e7d984f2000fe051e18a3a9809179
 
 PODFILE CHECKSUM: c83c7a3a5a5accf30eab4023b20d5ea8e1d2d4f4

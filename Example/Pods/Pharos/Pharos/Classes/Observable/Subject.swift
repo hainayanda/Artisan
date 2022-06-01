@@ -18,7 +18,10 @@ public final class Subject<Wrapped>: BindableObservable<Wrapped> {
         set {
             let oldValue = _wrappedValue
             _wrappedValue = newValue
-            relay(changes: Changes(old: oldValue, new: newValue, source: self))
+            relay(
+                changes: Changes(old: oldValue, new: newValue, source: self),
+                context: PharosContext()
+            )
         }
     }
     
@@ -32,7 +35,7 @@ public final class Subject<Wrapped>: BindableObservable<Wrapped> {
     
     public init(wrappedValue: Wrapped) {
         self._wrappedValue = wrappedValue
-        super.init()
+        super.init(retainer: ContextRetainer())
         self.callBack = { [weak self] changes in
             self?._wrappedValue = changes.new
         }

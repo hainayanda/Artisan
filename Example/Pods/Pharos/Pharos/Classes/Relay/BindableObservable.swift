@@ -14,35 +14,44 @@ open class BindableObservable<State>: RootObservable<State> {
     
     var callBack: CallBack
     
-    public init(callBack: @escaping CallBack = { _ in }) {
+    public init(retainer: ContextRetainer, callBack: @escaping CallBack = { _ in }) {
         self.callBack = callBack
+        super.init(retainer: retainer)
     }
     
     open func bind(with relay: BindableObservable<State>) -> Observed<State> {
-        relayChanges(to: relay)
-            .retained(by: temporaryRetainer)
-        return relay.relayChanges(to: self)
-    }
-    
-    override func relay(changes: Changes<State>) {
-        callRelayIfNeeded(for: changes)
-        callCallbackIfNeeded(for: changes)
-    }
-    
-    override func relay(changes: Changes<State>, skip: AnyStateRelay) {
-        callRelayIfNeeded(for: changes, skip: skip)
-        callCallbackIfNeeded(for: changes)
-    }
-    
-    func callRelayIfNeeded(for changes: Changes<State>, skip: AnyStateRelay? = nil) {
-        guard let skip = skip else {
-            super.relay(changes: changes)
-            return
+        let theirRelay = relay.relayChanges(to: self)
+        let myRelay = Observed(
+            source: self,
+            retainer: self.contextRetainer.added(with: theirRelay).added(with: self)
+        ) {
+            [weak relay] changes, context in
+            guard let relay = relay else { return }
+            relay.relay(changes: changes, context: context)
         }
-        super.relay(changes: changes, skip: skip)
+        relayGroup.addToGroup(WeakRelayRetainer<State>(wrapped: myRelay))
+        return myRelay
     }
     
-    func callCallbackIfNeeded(for changes: Changes<State>) {
+    override func relay(changes: Changes<State>, context: PharosContext) {
+        superRelay(changes, context)
+        callCallback(changes)
+    }
+    
+    public override func relayChanges(to relay: BindableObservable<State>) -> Observed<State> {
+        let observed = Observed(source: self, retainer: self.contextRetainer.added(with: self)) { [weak relay] changes, context in
+            guard let relay = relay else { return }
+            relay.relay(changes: changes, context: context)
+        }
+        relayGroup.addToGroup(WeakRelayRetainer<State>(wrapped: observed))
+        return observed
+    }
+    
+    func superRelay(_ changes: Changes<State>, _ context: PharosContext) {
+        super.relay(changes: changes, context: context)
+    }
+    
+    func callCallback(_ changes: Changes<State>) {
         callBack(changes)
     }
 }

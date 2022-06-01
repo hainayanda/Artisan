@@ -6,24 +6,52 @@
 //
 
 import Foundation
+import Chary
+
+final public class ContextRetainer {
+    var retained: [ObjectIdentifier: AnyObject]
+    
+    public init(retained: [ObjectIdentifier: AnyObject]) {
+        self.retained = retained
+    }
+    
+    public init() {
+        retained = [:]
+    }
+    
+    public func add(retainer: ContextRetainer) {
+        retainer.retained.forEach { (key, object) in
+            retained[key] = object
+        }
+    }
+    
+    public func added(with object: AnyObject) -> ContextRetainer {
+        let newSelf = ContextRetainer(retained: retained)
+        newSelf.retained.append(object)
+        return newSelf
+    }
+    
+    public func discard(object: AnyObject) {
+        retained.remove(object)
+    }
+}
 
 final public class Retainer: ObjectRetainer {
     
-    @Atomic var retained: [AnyObject] = []
+    @Atomic var retained: [ObjectIdentifier: AnyObject] = [:]
     
     public init() { }
     
     public func retain(_ object: AnyObject) {
-        guard !retained.contains(where: { $0 === object }) else { return }
         retained.append(object)
     }
     
     public func discardAll() {
-        retained = []
+        retained = [:]
     }
     
     public func discard(_ object: AnyObject) {
-        retained.removeAll { $0 === object }
+        retained.remove(object)
     }
 }
 
@@ -43,15 +71,11 @@ final class WeakRelayRetainer<Relayed>: StateRelay {
         self.wrapped = wrapped
     }
     
-    func relay(changes: Changes<Relayed>) {
-        self.wrapped?.tryRelay(changes: changes)
-    }
-    
-    func relay(changes: Changes<Relayed>, skip: AnyStateRelay) {
-        guard let wrapped = self.wrapped, !wrapped.isSameRelay(with: skip) else {
+    func relay(changes: Changes<Relayed>, context: PharosContext) {
+        guard let wrapped = wrapped else {
             return
         }
-        relay(changes: changes)
+        wrapped.tryRelay(changes: changes, context: context)
     }
     
     func isSameRelay(with anotherRelay: AnyStateRelay) -> Bool {
@@ -74,40 +98,41 @@ final class WeakRelayRetainer<Relayed>: StateRelay {
 
 final class RelayRetainerGroup<Relayed>: StateRelay {
     
-    @Atomic var relays: [AnyStateRelay] = []
+    @Atomic var relays: [ObjectIdentifier: AnyStateRelay] = [:]
     
-    func relay(changes: Changes<Relayed>) {
-        let copy = relays
-        for relay in copy {
-            relay.tryRelay(changes: changes)
-        }
-    }
-    
-    func relay(changes: Changes<Relayed>, skip: AnyStateRelay) {
-        let copy = relays
-        for relay in copy where !relay.isSameRelay(with: skip) {
-            relay.tryRelay(changes: changes)
+    func relay(changes: Changes<Relayed>, context: PharosContext) {
+        context.safeRun(for: self) {
+            let copy = relays
+            for relay in copy.values {
+                relay.tryRelay(changes: changes, context: context)
+            }
         }
     }
     
     func addToGroup(_ relay: AnyStateRelay) {
-        remove(relay)
-        relays.append(relay)
+        guard let weakRelay = relay as? WeakRelayRetainer<Relayed>,
+              let realRelay = weakRelay.wrapped else {
+            relays.append(relay)
+            return
+        }
+        relays[ObjectIdentifier(realRelay)] = weakRelay
     }
     
     func discard() {
-        relays = []
+        relays = [:]
     }
     
     @discardableResult
     func remove(_ relay: AnyStateRelay) -> Bool {
-        var found = false
-        relays.removeAll {
-            let sameRelay = $0.isSameRelay(with: relay)
-            found = sameRelay || found
-            return sameRelay
+        guard let weakRelay = relay as? WeakRelayRetainer<Relayed>,
+              let realRelay = weakRelay.wrapped else {
+            guard relays.contains(relay) else { return false }
+            relays.remove(relay)
+            return true
         }
-        return found
+        guard relays.contains(realRelay) else { return false }
+        relays.remove(realRelay)
+        return true
     }
     
     func isSameRelay(with anotherRelay: AnyStateRelay) -> Bool {
@@ -120,8 +145,9 @@ final class RelayRetainerGroup<Relayed>: StateRelay {
         guard myRelays.count == theirRelays.count else {
             return false
         }
-        for (index, relay) in myRelays.enumerated() {
-            guard theirRelays[index].isSameRelay(with: relay) else {
+        for (identifier, relay) in myRelays {
+            guard let their = theirRelays[identifier],
+                    their.isSameRelay(with: relay) else {
                 return false
             }
         }

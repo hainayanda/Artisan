@@ -1,6 +1,6 @@
 # Pharos
 
-Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper`. It could help a lot when designing Apps using reactive programming
+Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper`. It could help a lot when designing Apps using reactive programming. Under the hood, it utilize [Chary](https://github.com/hainayanda/Chary) as DispatchQueue utilities
 
 [![codebeat badge](https://codebeat.co/badges/0c30bd1d-542d-4d72-bfd3-c6ab9e88db46)](https://codebeat.co/projects/github-com-hainayanda-pharos-main)
 ![build](https://github.com/hainayanda/Pharos/workflows/build/badge.svg)
@@ -39,7 +39,7 @@ pod 'Pharos'
 
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
 - Add **<https://github.com/hainayanda/Pharos.git>** as Swift Package URL
-- Set rules at **version**, with **Up to Next Major** option and put **2.2.0** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **2.3.0** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -48,7 +48,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hainayanda/Pharos.git", .upToNextMajor(from: "2.2.0"))
+    .package(url: "https://github.com/hainayanda/Pharos.git", .upToNextMajor(from: "2.3.0"))
 ]
 ```
 
@@ -113,7 +113,7 @@ class MyClass {
 }
 ```
 
-if you want the observer to run using the current value, just invoke it:
+if you want the observer to run using the current value, just fire it:
 
 ```swift
 class MyClass {
@@ -124,7 +124,7 @@ class MyClass {
             print(changes.new)
             print(changes.old)
         }.retain()
-        .notifyWithCurrentValue()
+        .fire()
     }
 }
 ```
@@ -436,6 +436,22 @@ class MyClass {
             }.retain()
     }
 }
+```
+
+## Observable Block
+
+You can always create `Observable` from code block by using `ObservableBlock`:
+
+```swift
+let myObservableFromBlock = ObservableBlock { accept in
+    runSomethingAsync { result in
+        accept(result)
+    }
+}
+
+myObservableFromBlock.whenDidSet { changes in
+    print(changes)
+}.retain()
 ```
 
 ## Relay value to another Observable

@@ -32,6 +32,10 @@ class EventDetailScreenVM: EventDetailsScreenViewModel {
     }
     
     func apply(_ similarCell: SimilarEventCell, with event: Event) {
-        similarCell.bind(with: SimilarEventCellVM(event: event, service: service))
+        let vm = SimilarEventCellVM(event: event, service: service)
+        similarCell.bind(with: vm)
+        vm.whenDidTapped { [weak self] _, event in
+            self?.router.routeToDetails(of: event)
+        }
     }
 }

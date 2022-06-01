@@ -55,10 +55,28 @@ class SimilarEventCell: UITablePlannedCell, ViewBinding {
             }
     }
     
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        didInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        didInit()
+    }
+    
+    func didInit() {
+        backgroundColor = .background
+        contentView.backgroundColor = .background
+        applyPlan()
+    }
+    
     func bindData(from dataBinding: DataBinding) {
         dataBinding.eventsObservable
             .relayChanges(to: $events)
+            .observe(on: .main)
             .retained(by: self)
+            .fire()
     }
 }
 
@@ -92,6 +110,7 @@ class SimilarEventCellVM: SimilarEventCellViewModel {
                 self?.events = similars
             }
         }.retained(by: self)
+            .fire()
     }
     
     @discardableResult

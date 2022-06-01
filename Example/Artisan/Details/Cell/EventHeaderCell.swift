@@ -13,9 +13,9 @@ import UIKit
 class EventHeaderCell: EventCell {
     
     override func didInit() {
-        super.didInit()
         title.numberOfLines = 0
         subTitle.numberOfLines = 0
         subTitle.textColor = .secondary
+        super.didInit()
     }
 }

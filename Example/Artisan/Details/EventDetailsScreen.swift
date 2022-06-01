@@ -40,7 +40,7 @@ class EventDetailsScreen: UIPlannedController, ViewBinding {
     @LayoutPlan
     var viewPlan: ViewPlan {
         tableView.drf
-            .edges.equal(with: .safeArea)
+            .edges.equal(with: .parent)
             .sectioned(using: $event.compactMapped { $0 }) { [weak self] event in
                 Section(items: [event]) { _, _ in
                     Cell(from: EventHeaderCell.self) { cell, _ in
@@ -58,11 +58,6 @@ class EventDetailsScreen: UIPlannedController, ViewBinding {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
-        if #available(iOS 11.0, *) {
-            tableView.contentInset = view.safeAreaInsets
-        } else {
-            tableView.contentInset = view.layoutMargins
-        }
         navigationController?.navigationBar.tintColor = .main
         applyPlan()
     }
@@ -70,8 +65,9 @@ class EventDetailsScreen: UIPlannedController, ViewBinding {
     func bindData(from dataBinding: DataBinding) {
         dataBinding.eventObservable
             .relayChanges(to: $event)
+            .observe(on: .main)
             .retained(by: self)
-            .notifyWithCurrentValue()
+            .fire()
     }
 }
 

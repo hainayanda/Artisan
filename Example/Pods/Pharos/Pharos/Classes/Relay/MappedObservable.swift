@@ -24,33 +24,26 @@ final class MappedObservable<Original, Mapped>: Observable<Mapped>, StateRelay, 
     
     let mapper: Mapper
     
-    init(source: Observable<RelayedState>, mapper: @escaping Mapper) {
+    init(source: Observable<RelayedState>, retainer: ContextRetainer, mapper: @escaping Mapper) {
         self.source = source
         self.mapper = mapper
+        super.init(retainer: retainer)
     }
     
-    func relay(changes: Changes<Original>) {
+    func relay(changes: Changes<Original>, context: PharosContext) {
         guard let mappedChanges = changes.map(mapper) else {
             return
         }
-        relayGroup.relay(changes: mappedChanges)
+        relayGroup.relay(changes: mappedChanges, context: context)
     }
     
-    func relay(changes: Changes<Original>, skip: AnyStateRelay) {
-        guard let mappedChanges = changes.map(mapper) else {
-            return
-        }
-        relayGroup.relay(changes: mappedChanges, skip: skip)
+    override func retain(retainer: ContextRetainer) {
+        source?.retain(retainer: retainer)
     }
     
-    override func retain<Child>(relay: Child) where Mapped == Child.RelayedState, Child : StateRelay {
-        super.retain(relay: relay)
-        source?.retain(relay: self)
-    }
-    
-    override func retainWeakly<Child: StateRelay>(relay: Child, managedBy retainer: ObjectRetainer) where Mapped == Child.RelayedState {
-        super.retainWeakly(relay: relay, managedBy: retainer)
-        source?.retainWeakly(relay: self, managedBy: retainer)
+    override func discard(child: AnyObject) {
+        contextRetainer.discard(object: child)
+        source?.discard(child: child)
     }
     
     func isSameRelay(with anotherRelay: AnyStateRelay) -> Bool {

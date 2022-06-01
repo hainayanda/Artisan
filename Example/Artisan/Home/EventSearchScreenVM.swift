@@ -27,6 +27,7 @@ class EventSearchScreenVM: EventSearchScreenViewModel {
             )
         }
     }
+    
     var service: EventService
     var router: EventRouting
     
@@ -38,10 +39,10 @@ class EventSearchScreenVM: EventSearchScreenViewModel {
         self.service = service
         self.router = router
         $searchPhrase
-            .ignoreSameValue()
             .whenDidSet(thenDo: method(of: self, EventSearchScreenVM.search(for:)))
             .multipleSetDelayed(by: 1)
             .retained(by: self)
+            .fire()
         
     }
 }

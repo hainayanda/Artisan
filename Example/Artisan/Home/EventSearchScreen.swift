@@ -43,6 +43,8 @@ class EventSearchScreen: UIPlannedController, ViewBinding {
         .sizeToFit()
         .tintColor(.text)
         .barTintColor(.background)
+        .showsSearchResultsButton(true)
+        .delegate(self)
         .build()
     
     lazy var tableView: UITableView = builder(UITableView.self)
@@ -55,7 +57,7 @@ class EventSearchScreen: UIPlannedController, ViewBinding {
     @LayoutPlan
     var viewPlan: ViewPlan {
         tableView.drf
-            .edges.equal(with: .safeArea)
+            .edges.equal(with: .parent)
             .sectioned(using: $allResults) { [weak self] allResult in
                 TitledSection(title: "Search History", items: allResult.histories) { _, keyword in
                     Cell(from: KeywordCell.self) { cell, _ in
@@ -73,11 +75,7 @@ class EventSearchScreen: UIPlannedController, ViewBinding {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
-        if #available(iOS 11.0, *) {
-            tableView.contentInset = view.safeAreaInsets
-        } else {
-            tableView.contentInset = view.layoutMargins
-        }
+        tableView.keyboardDismissMode = .onDrag
         applyPlan()
     }
     
@@ -92,13 +90,19 @@ extension EventSearchScreen {
     func bindData(from dataBinding: DataBinding) {
         dataBinding.searchPhraseBindable
             .bind(with: searchBar.bindables.text)
+            .observe(on: .main)
             .retained(by: self)
-        dataBinding.eventResultsObservable.whenDidSet { [unowned self] results in
-            self.allResults = results.new
-        }
-//            .relayChanges(to: $allResults)
+        dataBinding.eventResultsObservable
+            .relayChanges(to: $allResults)
+            .observe(on: .main)
             .retained(by: self)
-            .notifyWithCurrentValue()
+            .fire()
+    }
+}
+
+extension EventSearchScreen: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
 }
 

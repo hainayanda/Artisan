@@ -29,10 +29,6 @@ class EventCell: UITablePlannedCell, ViewBinding {
     lazy var bannerBackground: UIView = builder(UIView.self)
         .layer.cornerRadius(.x4)
         .backgroundColor(.white)
-        .layer.shadowColor(UIColor.inactive.cgColor)
-        .layer.shadowOpacity(1)
-        .layer.shadowOffset(.init(width: 0, height: 2))
-        .layer.shadowRadius(4)
         .build()
     
     lazy var banner: UIImageView = builder(UIImageView.self)
@@ -67,17 +63,17 @@ class EventCell: UITablePlannedCell, ViewBinding {
         bannerBackground.drf
             .top.horizontal.equal(with: .parent).offsetted(using: margin)
             .width.equal(with: .height(of: .mySelf)).multiplied(by: bannerWidthToHeightMultiplier)
-        banner.drf
-            .top.horizontal.equal(with: .parent).offsetted(using: margin)
-            .width.equal(with: .height(of: .mySelf)).multiplied(by: bannerWidthToHeightMultiplier)
+            .insert {
+                banner.drf.edges.equal(with: .parent)
+            }
         title.drf
-            .top.equal(to: banner).offset(by: spacing)
+            .top.equal(to: bannerBackground.drf.bottom).offset(by: spacing)
             .horizontal.equal(with: .parent).offsetted(using: margin.horizontal)
         subTitle.drf
-            .top.equal(to: title).offset(by: spacing)
+            .top.equal(to: title.drf.bottom).offset(by: spacing)
             .horizontal.equal(with: .parent).offsetted(using: margin.horizontal)
         date.drf
-            .top.equal(to: subTitle).offset(by: spacing)
+            .top.equal(to: subTitle.drf.bottom).offset(by: spacing)
             .bottom.horizontal.equal(with: .parent).offsetted(using: margin)
     }
     
@@ -100,35 +96,40 @@ class EventCell: UITablePlannedCell, ViewBinding {
     }
     
     func didInit() {
+        backgroundColor = .background
         contentView.backgroundColor = .background
         contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor.inactive.withAlphaComponent(.semiOpaque).cgColor
+        applyPlan()
     }
     
     func bindData(from dataBinding: DataBinding) {
         dataBinding.bannerImageObservable
             .relayChanges(to: banner.bindables.image)
+            .observe(on: .main)
             .retained(by: self)
-            .notifyWithCurrentValue()
+            .fire()
         dataBinding.eventNameObservable
             .relayChanges(to: title.bindables.text)
+            .observe(on: .main)
             .retained(by: self)
-            .notifyWithCurrentValue()
+            .fire()
         dataBinding.eventDetailsObservable
             .relayChanges(to: subTitle.bindables.text)
+            .observe(on: .main)
             .retained(by: self)
-            .notifyWithCurrentValue()
+            .fire()
         dataBinding.eventDateObservable
             .relayChanges(to: date.bindables.text)
+            .observe(on: .main)
             .retained(by: self)
-            .notifyWithCurrentValue()
+            .fire()
     }
 }
 
 class EventCellVM: EventCellViewModel {
     typealias Subscriber = Void
     typealias DataBinding = EventCellDataBinding
-    
     
     @Subject var event: Event?
     var bannerImageObservable: Observable<UIImage?> {

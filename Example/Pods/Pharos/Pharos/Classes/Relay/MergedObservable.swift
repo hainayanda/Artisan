@@ -22,33 +22,35 @@ final class MergedObservable<Observed>: Observable<Observed>, StateRelay {
         return recent
     }
     
-    init(observables: [Observable<Observed>]) {
+    init(observables: [Observable<Observed>], retainer: ContextRetainer) {
         sources = observables.map { WeakObservableRetainer(wrapped: $0) }
-        super.init()
-    }
-    
-    func relay(changes: Changes<RelayedState>) {
-        let oldValue = _recentValue ?? changes.old
-        _recentValue = changes.new
-        relayGroup.relay(changes: Changes(old: oldValue, new: changes.new, source: changes.source))
-    }
-    
-    func relay(changes: Changes<RelayedState>, skip: AnyStateRelay) {
-        _recentValue = changes.new
-        relayGroup.relay(changes: changes, skip: skip)
-    }
-    
-    override func retain<Child>(relay: Child) where Observed == Child.RelayedState, Child : StateRelay {
-        super.retain(relay: relay)
-        for source in sources {
-            source.wrapped?.retain(relay: self)
+        super.init(retainer: retainer)
+        observables.forEach {
+            $0.relayGroup.addToGroup(WeakRelayRetainer<Observed>(wrapped: self))
         }
     }
     
-    override func retainWeakly<Child: StateRelay>(relay: Child, managedBy retainer: ObjectRetainer) where Observed == Child.RelayedState {
-        super.retainWeakly(relay: relay, managedBy: retainer)
+    func relay(changes: Changes<RelayedState>, context: PharosContext) {
+        context.safeRun(for: self) {
+            let oldValue = _recentValue ?? changes.old
+            _recentValue = changes.new
+            relayGroup.relay(
+                changes: Changes(old: oldValue, new: changes.new, source: changes.source),
+                context: context
+            )
+        }
+    }
+    
+    override func retain(retainer: ContextRetainer) {
         for source in sources {
-            source.wrapped?.retainWeakly(relay: self, managedBy: retainer)
+            source.wrapped?.retain(retainer: retainer)
+        }
+    }
+    
+    override func discard(child: AnyObject) {
+        contextRetainer.discard(object: child)
+        for source in sources {
+            source.wrapped?.discard(child: child)
         }
     }
     

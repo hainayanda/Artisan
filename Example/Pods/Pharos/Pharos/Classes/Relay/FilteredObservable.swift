@@ -25,33 +25,28 @@ final class FilteredObservable<Observed>: Observable<Observed>, StateRelay, Chil
     
     let filter: Filter
     
-    init(source: Observable<Observed>, filter: @escaping Filter) {
+    init(source: Observable<Observed>, retainer: ContextRetainer, filter: @escaping Filter) {
         self.source = source
         self.filter = filter
+        super.init(retainer: retainer)
     }
     
-    func relay(changes: Changes<RelayedState>) {
-        guard !filter(changes) else {
-            return
+    func relay(changes: Changes<RelayedState>, context: PharosContext) {
+        context.safeRun(for: self) {
+            guard !filter(changes) else {
+                return
+            }
+            relayGroup.relay(changes: changes, context: context)
         }
-        relayGroup.relay(changes: changes)
     }
     
-    func relay(changes: Changes<Observed>, skip: AnyStateRelay) {
-        guard !filter(changes) else {
-            return
-        }
-        relayGroup.relay(changes: changes, skip: skip)
+    override func retain(retainer: ContextRetainer) {
+        source?.retain(retainer: retainer)
     }
     
-    override func retain<Child>(relay: Child) where Observed == Child.RelayedState, Child : StateRelay {
-        super.retain(relay: relay)
-        source?.retain(relay: self)
-    }
-    
-    override func retainWeakly<Child: StateRelay>(relay: Child, managedBy retainer: ObjectRetainer) where Observed == Child.RelayedState {
-        super.retainWeakly(relay: relay, managedBy: retainer)
-        source?.retainWeakly(relay: self, managedBy: retainer)
+    override func discard(child: AnyObject) {
+        contextRetainer.discard(object: child)
+        source?.discard(child: child)
     }
     
     func isSameRelay(with anotherRelay: AnyStateRelay) -> Bool {
