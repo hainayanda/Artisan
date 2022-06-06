@@ -10,10 +10,9 @@ import Foundation
 import UIKit
 import Artisan
 import Pharos
+import Impose
 
-class EventSearchScreenVM: EventSearchScreenViewModel {
-    typealias Subscriber = EventSearchScreenSubscriber
-    typealias DataBinding = EventSearchScreenDataBinding
+class EventSearchScreenVM: EventSearchScreenViewModel, ObjectRetainer {
     
     var searchPhraseBindable: BindableObservable<String?> {
         $searchPhrase
@@ -22,21 +21,26 @@ class EventSearchScreenVM: EventSearchScreenViewModel {
     var eventResultsObservable: Observable<EventResults> {
         $history.combine(with: $results).mapped { (histories, events) in
             EventResults(
-                histories: histories ?? [],
-                results: events ?? []
+                histories: histories?.compactMap {
+                    let vm = KeywordCellVM(keyword: $0, delegate: self)
+                    return HistoryResult(distinctifier: $0, viewModel: vm)
+                } ?? [],
+                results: events?.compactMap {
+                    let vm = EventCellVM(event: $0)
+                    return EventResult(distinctifier: $0, viewModel: vm)
+                } ?? []
             )
         }
     }
     
-    var service: EventService
+    @Injected var service: EventService
     var router: EventRouting
     
     @Subject var searchPhrase: String?
     @Subject var results: [Event] = []
     @Subject var history: [String] = []
     
-    init(router: EventRouting, service: EventService) {
-        self.service = service
+    init(router: EventRouting) {
         self.router = router
         $searchPhrase
             .whenDidSet(thenDo: method(of: self, EventSearchScreenVM.search(for:)))
@@ -48,20 +52,13 @@ class EventSearchScreenVM: EventSearchScreenViewModel {
 }
 
 extension EventSearchScreenVM {
-    func didTap(_ keyword: String, at indexPath: IndexPath) {
-        searchPhrase = keyword
+    func didTap(_ history: HistoryResult, at indexPath: IndexPath) {
+        searchPhrase = history.distinctifier as? String
     }
     
-    func didTap(_ event: Event, at indexPath: IndexPath) {
-        router.routeToDetails(of: event)
-    }
-    
-    func apply(_ keywordCell: KeywordCell, with keyword: String) {
-        keywordCell.bind(with: KeywordCellVM(keyword: keyword, delegate: self))
-    }
-    
-    func apply(_ eventCell: EventCell, with event: Event) {
-        eventCell.bind(with: EventCellVM(event: event))
+    func didTap(_ event: EventResult, at indexPath: IndexPath) {
+        guard let tappedEvent = event.distinctifier as? Event else { return }
+        router.routeToDetails(of: tappedEvent)
     }
 }
 

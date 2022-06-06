@@ -27,8 +27,7 @@ class EventRouter: EventRouting {
         }
         let detailsScreen = EventDetailsScreen()
         let detailRouter = EventRouter(screen: detailsScreen)
-        let service = MockEventService()
-        let detailScreenVM = EventDetailScreenVM(event: event, router: detailRouter, service: service)
+        let detailScreenVM = EventDetailScreenVM(event: event, router: detailRouter)
         defer {
             detailsScreen.bind(with: detailScreenVM)
         }

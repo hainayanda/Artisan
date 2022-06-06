@@ -18,22 +18,30 @@ protocol EventSearchScreenDataBinding {
 }
 
 protocol EventSearchScreenSubscriber {
-    func apply(_ keywordCell: KeywordCell, with keyword: String)
-    func apply(_ eventCell: EventCell, with event: Event)
-    func didTap(_ keyword: String, at indexPath: IndexPath)
-    func didTap(_ event: Event, at indexPath: IndexPath)
+    func didTap(_ event: EventResult, at indexPath: IndexPath)
+    func didTap(_ history: HistoryResult, at indexPath: IndexPath)
+}
+
+struct HistoryResult: IntermediateModel {
+    let distinctifier: AnyHashable
+    let viewModel: KeywordCellViewModel
+}
+
+struct EventResult: IntermediateModel {
+    let distinctifier: AnyHashable
+    let viewModel: EventCellViewModel
 }
 
 struct EventResults: Hashable {
-    var histories: [String]
-    var results: [Event]
+    var histories: [HistoryResult]
+    var results: [EventResult]
 }
 
 typealias EventSearchScreenViewModel = ViewModel & EventSearchScreenSubscriber & EventSearchScreenDataBinding
 
-class EventSearchScreen: UIPlannedController, ViewBinding {
-    typealias Subscriber = EventSearchScreenSubscriber
-    typealias DataBinding = EventSearchScreenDataBinding
+class EventSearchScreen: UIPlannedController, ViewBindable {
+    
+    typealias Model = EventSearchScreenViewModel
     
     @Subject var allResults: EventResults = .init(histories: [], results: [])
     
@@ -43,7 +51,6 @@ class EventSearchScreen: UIPlannedController, ViewBinding {
         .sizeToFit()
         .tintColor(.text)
         .barTintColor(.background)
-        .showsSearchResultsButton(true)
         .delegate(self)
         .build()
     
@@ -58,16 +65,12 @@ class EventSearchScreen: UIPlannedController, ViewBinding {
     var viewPlan: ViewPlan {
         tableView.drf
             .edges.equal(with: .parent)
-            .sectioned(using: $allResults) { [weak self] allResult in
-                TitledSection(title: "Search History", items: allResult.histories) { _, keyword in
-                    Cell(from: KeywordCell.self) { cell, _ in
-                        self?.subscriber?.apply(cell, with: keyword)
-                    }
+            .sectioned(using: $allResults) { allResult in
+                TitledSection(title: "Search History", items: allResult.histories) { _, model in
+                    Cell(from: KeywordCell.self, bindWith: model.viewModel)
                 }
-                TitledSection(title: "Search Results", items: allResult.results) { _, event in
-                    Cell(from: EventCell.self) { cell, _ in
-                        self?.subscriber?.apply(cell, with: event)
-                    }
+                TitledSection(title: "Search Results", items: allResult.results) { _, model in
+                    Cell(from: EventCell.self, bindWith: model.viewModel)
                 }
             }
     }
@@ -84,20 +87,18 @@ class EventSearchScreen: UIPlannedController, ViewBinding {
         setupNavigation()
     }
     
-}
-
-extension EventSearchScreen {
-    func bindData(from dataBinding: DataBinding) {
-        dataBinding.searchPhraseBindable
+    func viewNeedBind(with model: Model) {
+        model.searchPhraseBindable
             .bind(with: searchBar.bindables.text)
             .observe(on: .main)
             .retained(by: self)
-        dataBinding.eventResultsObservable
+        model.eventResultsObservable
             .relayChanges(to: $allResults)
             .observe(on: .main)
             .retained(by: self)
             .fire()
     }
+    
 }
 
 extension EventSearchScreen: UISearchBarDelegate {
@@ -120,10 +121,10 @@ extension EventSearchScreen: UITableViewDelegate {
         switch indexPath.section {
         case 0:
             guard indexPath.item < allResults.histories.count else { return }
-            subscriber?.didTap(allResults.histories[indexPath.item], at: indexPath)
+            model?.didTap(allResults.histories[indexPath.item], at: indexPath)
         case 1:
             guard indexPath.item < allResults.results.count else { return }
-            subscriber?.didTap(allResults.results[indexPath.item], at: indexPath)
+            model?.didTap(allResults.results[indexPath.item], at: indexPath)
         default:
             return
         }

@@ -183,6 +183,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/DiffableDataSources/DiffableDataSources.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Draftsman/Draftsman.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Impose/Impose.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Pharos/Pharos.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -193,6 +194,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/DiffableDataSources/DiffableDataSources.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Draftsman/Draftsman.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/Impose/Impose.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Pharos/Pharos.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then

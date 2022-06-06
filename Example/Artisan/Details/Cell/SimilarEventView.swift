@@ -1,5 +1,5 @@
 //
-//  SimilarEventCell.swift
+//  SimilarEventView.swift
 //  Artisan_Example
 //
 //  Created by Nayanda Haberty on 24/12/20.
@@ -12,23 +12,27 @@ import Artisan
 import Draftsman
 import Pharos
 import Builder
+import Impose
 
-protocol SimilarEventCellDataBinding {
-    var eventsObservable: Observable<[Event]> { get }
+protocol SimilarEventViewDataBinding {
+    var eventsObservable: Observable<[SimilarEvent]> { get }
 }
 
-protocol SimilarEventCellSubscriber {
-    func didTap(_ event: Event, at indexPath: IndexPath)
-    func apply(_ eventCell: EventCollectionCell, with event: Event)
+protocol SimilarEventViewSubscriber {
+    func didTap(_ event: SimilarEvent, at indexPath: IndexPath)
 }
 
-typealias SimilarEventCellViewModel = ViewModel & SimilarEventCellDataBinding & SimilarEventCellSubscriber
+struct SimilarEvent: IntermediateModel {
+    var distinctifier: AnyHashable
+    var viewModel: EventCollectionCellViewModel
+}
 
-class SimilarEventCell: UITablePlannedCell, ViewBinding {
-    typealias DataBinding = SimilarEventCellDataBinding
-    typealias Subscriber = SimilarEventCellSubscriber
+typealias SimilarEventViewModel = ViewModel & SimilarEventViewDataBinding & SimilarEventViewSubscriber
+
+class SimilarEventView: UIPlannedView, ViewBindable {
+    typealias Model = SimilarEventViewModel
     
-    @Subject var events: [Event] = []
+    @Subject var events: [SimilarEvent] = []
     
     lazy var collectionLayout: UICollectionViewFlowLayout = builder(UICollectionViewFlowLayout())
         .scrollDirection(.horizontal)
@@ -44,19 +48,17 @@ class SimilarEventCell: UITablePlannedCell, ViewBinding {
         .build()
     
     @LayoutPlan
-    var contentViewPlan: ViewPlan {
+    var viewPlan: ViewPlan {
         collectionView.drf
             .edges.equal(with: .parent)
             .height.equal(to: .x48)
-            .cells(from: $events) { [weak self] _, event in
-                Cell(from: EventCollectionCell.self) { cell, _ in
-                    self?.subscriber?.apply(cell, with: event)
-                }
+            .cells(from: $events) { _, event in
+                Cell(from: EventCollectionCell.self, bindWith: event.viewModel)
             }
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         didInit()
     }
     
@@ -67,12 +69,11 @@ class SimilarEventCell: UITablePlannedCell, ViewBinding {
     
     func didInit() {
         backgroundColor = .background
-        contentView.backgroundColor = .background
         applyPlan()
     }
     
-    func bindData(from dataBinding: DataBinding) {
-        dataBinding.eventsObservable
+    func viewNeedBind(with model: Model) {
+        model.eventsObservable
             .relayChanges(to: $events)
             .observe(on: .main)
             .retained(by: self)
@@ -80,30 +81,37 @@ class SimilarEventCell: UITablePlannedCell, ViewBinding {
     }
 }
 
-extension SimilarEventCell: UICollectionViewDelegate {
+extension SimilarEventView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         guard indexPath.item < events.count else { return }
-        subscriber?.didTap(events[indexPath.item], at: indexPath)
+        model?.didTap(events[indexPath.item], at: indexPath)
     }
 }
 
-class SimilarEventCellVM: SimilarEventCellViewModel {
-    typealias DataBinding = SimilarEventCellDataBinding
-    typealias Subscriber = SimilarEventCellSubscriber
-    typealias TapAction = (SimilarEventCellVM, Event) -> Void
+class SimilarEventVM: SimilarEventViewModel, ObjectRetainer {
+    typealias TapAction = (SimilarEventVM, Event) -> Void
     
-    var service: EventService
+    @Injected var service: EventService
     
     @Subject var event: Event?
     @Subject var events: [Event] = []
-    var eventsObservable: Observable<[Event]> { $events }
+    var eventsObservable: Observable<[SimilarEvent]> {
+        $events.mapped { events in
+            events.compactMap {
+                SimilarEvent(
+                    distinctifier: $0,
+                    viewModel: EventCollectionCellVM(event: $0)
+                )
+            }
+        }
+        
+    }
     
     private var tapObserver: TapAction?
     
-    init(event: Event?, service: EventService) {
+    init(event: Event?) {
         self.event = event
-        self.service = service
         $event.whenDidSet { [unowned self] changes in
             guard let new = changes.new else { return }
             service.similarEvent(with: new) { [weak self] similars in
@@ -119,11 +127,8 @@ class SimilarEventCellVM: SimilarEventCellViewModel {
         return self
     }
     
-    func didTap(_ event: Event, at indexPath: IndexPath) {
-        tapObserver?(self, event)
-    }
-    
-    func apply(_ eventCell: EventCollectionCell, with event: Event) {
-        eventCell.bind(with: EventCollectionCellVM(event: event))
+    func didTap(_ event: SimilarEvent, at indexPath: IndexPath) {
+        guard let tappedEvent = event.distinctifier as? Event else { return }
+        tapObserver?(self, tappedEvent)
     }
 }

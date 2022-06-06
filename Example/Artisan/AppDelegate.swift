@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Impose
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,12 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        injectService()
         let window = UIWindow()
         let homeScreen = EventSearchScreen()
-        let homeViewModel = EventSearchScreenVM(
-            router: EventRouter(screen: homeScreen),
-            service: MockEventService()
-        )
+        let homeViewModel = EventSearchScreenVM(router: EventRouter(screen: homeScreen))
         let navigationVC = UINavigationController(rootViewController: homeScreen)
         window.rootViewController = navigationVC
         window.makeKeyAndVisible()
@@ -54,3 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 }
 
+extension AppDelegate {
+    func injectService() {
+        Imposer.shared.addSingleton(for: EventService.self, MockEventService())
+    }
+}

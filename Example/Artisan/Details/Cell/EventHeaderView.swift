@@ -1,30 +1,29 @@
 //
-//  EvenCell.swift
+//  EventHeaderCell.swift
 //  Artisan_Example
 //
-//  Created by Nayanda Haberty on 22/12/20.
+//  Created by Nayanda Haberty on 24/12/20.
 //  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
 import Foundation
 import Artisan
 import UIKit
-import Draftsman
-import Pharos
 import Builder
+import Pharos
+import Draftsman
 
-protocol EventCellDataBinding {
-    var event: Event? { get }
+protocol EventHeaderViewDataBinding {
     var bannerImageObservable: Observable<UIImage?> { get }
     var eventNameObservable: Observable<String?> { get }
     var eventDetailsObservable: Observable<String?> { get }
     var eventDateObservable: Observable<String?> { get }
 }
 
-typealias EventCellViewModel = ViewModel & EventCellDataBinding
+typealias EventHeaderViewModel = ViewModel & EventHeaderViewDataBinding
 
-class EventCell: UITablePlannedCell, ViewBindable {
-    typealias Model = EventCellViewModel
+class EventHeaderView: UIPlannedView, ViewBindable {
+    typealias Model = EventHeaderViewModel
     
     lazy var bannerBackground: UIView = builder(UIView.self)
         .layer.cornerRadius(.x4)
@@ -39,16 +38,16 @@ class EventCell: UITablePlannedCell, ViewBindable {
     
     lazy var title = builder(UILabel.self)
         .font(titleFont)
-        .numberOfLines(1)
+        .numberOfLines(0)
         .textAlignment(.left)
         .textColor(.secondary)
         .build()
 
     lazy var subTitle = builder(UILabel.self)
         .font(subTitleFont)
-        .numberOfLines(1)
+        .numberOfLines(0)
         .textAlignment(.left)
-        .textColor(.main)
+        .textColor(.secondary)
         .build()
 
     lazy var date = builder(UILabel.self)
@@ -59,7 +58,7 @@ class EventCell: UITablePlannedCell, ViewBindable {
         .build()
     
     @LayoutPlan
-    var contentViewPlan: ViewPlan {
+    var viewPlan: ViewPlan {
         bannerBackground.drf
             .top.horizontal.equal(with: .parent).offsetted(using: margin)
             .width.equal(with: .height(of: .mySelf)).multiplied(by: bannerWidthToHeightMultiplier)
@@ -85,8 +84,8 @@ class EventCell: UITablePlannedCell, ViewBindable {
     var subTitleFont: UIFont = .content
     var dateFont: UIFont = .content
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         didInit()
     }
     
@@ -97,9 +96,8 @@ class EventCell: UITablePlannedCell, ViewBindable {
     
     func didInit() {
         backgroundColor = .background
-        contentView.backgroundColor = .background
-        contentView.layer.borderWidth = 0.5
-        contentView.layer.borderColor = UIColor.inactive.withAlphaComponent(.semiOpaque).cgColor
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.inactive.withAlphaComponent(.semiOpaque).cgColor
         applyPlan()
     }
     
@@ -127,9 +125,8 @@ class EventCell: UITablePlannedCell, ViewBindable {
     }
 }
 
-struct EventCellVM: EventCellViewModel {
+struct EventHeaderVM: EventHeaderViewModel {
     @Subject var event: Event?
-    
     var bannerImageObservable: Observable<UIImage?> {
         $event.mapped { $0?.image }
     }

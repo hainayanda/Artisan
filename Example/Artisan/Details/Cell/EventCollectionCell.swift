@@ -20,9 +20,9 @@ protocol EventCollectionCellDataBinding {
 
 typealias EventCollectionCellViewModel = ViewModel & EventCollectionCellDataBinding
 
-class EventCollectionCell: UICollectionPlannedCell, ViewBinding {
-    typealias DataBinding = EventCollectionCellDataBinding
-    typealias Subscriber = Void
+class EventCollectionCell: UICollectionPlannedCell, ViewBindable {
+    
+    typealias Model = EventCollectionCellViewModel
     
     lazy var banner: UIImageView = builder(UIImageView.self)
         .layer.cornerRadius(.x4)
@@ -68,13 +68,13 @@ class EventCollectionCell: UICollectionPlannedCell, ViewBinding {
         applyPlan()
     }
     
-    func bindData(from dataBinding: DataBinding) {
-        dataBinding.bannerImageObservable
+    func viewNeedBind(with model: Model) {
+        model.bannerImageObservable
             .relayChanges(to: banner.bindables.image)
             .observe(on: .main)
             .retained(by: self)
             .fire()
-        dataBinding.eventNameObservable
+        model.eventNameObservable
             .relayChanges(to: title.bindables.text)
             .observe(on: .main)
             .retained(by: self)
@@ -82,10 +82,7 @@ class EventCollectionCell: UICollectionPlannedCell, ViewBinding {
     }
 }
 
-class EventCollectionCellVM: EventCollectionCellViewModel {
-    typealias DataBinding = EventCollectionCellDataBinding
-    typealias Subscriber = Void
-    
+struct EventCollectionCellVM: EventCollectionCellViewModel {
     @Subject var event: Event?
     
     var bannerImageObservable: Observable<UIImage?> {
@@ -93,9 +90,5 @@ class EventCollectionCellVM: EventCollectionCellViewModel {
     }
     var eventNameObservable: Observable<String?> {
         $event.mapped { $0?.name }
-    }
-    
-    init(event: Event?) {
-        self.event = event
     }
 }

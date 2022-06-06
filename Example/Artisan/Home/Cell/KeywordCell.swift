@@ -14,6 +14,7 @@ import Draftsman
 import Builder
 
 protocol KeywordCellDataBinding {
+    var keyword: String? { get }
     var keywordObservable: Observable<String?> { get }
 }
 
@@ -21,9 +22,10 @@ protocol KeywordCellSubscriber {
     func didTapClear(button: UIButton)
 }
 
-class KeywordCell: UITablePlannedCell, ViewBinding {
-    typealias DataBinding = KeywordCellDataBinding
-    typealias Subscriber = KeywordCellSubscriber
+typealias KeywordCellViewModel = ViewModel & KeywordCellDataBinding & KeywordCellSubscriber
+
+class KeywordCell: UITablePlannedCell, ViewBindable {
+    typealias Model = KeywordCellViewModel
     
     lazy var keywordLabel: UILabel = builder(UILabel.self)
         .font(.mediumContent)
@@ -35,7 +37,7 @@ class KeywordCell: UITablePlannedCell, ViewBinding {
     lazy var clearButton: UIButton = builder(UIButton.self)
         .setImage(#imageLiteral(resourceName: "delete"), for: .normal)
         .whenDidTapped { [weak self] button in
-            self?.subscriber?.didTapClear(button: button)
+            self?.model?.didTapClear(button: button)
         }
         .alpha(.semiOpaque)
         .build()
@@ -67,8 +69,8 @@ class KeywordCell: UITablePlannedCell, ViewBinding {
         applyPlan()
     }
     
-    func bindData(from dataBinding: DataBinding) {
-        dataBinding.keywordObservable
+    func viewNeedBind(with model: Model) {
+        model.keywordObservable
             .relayChanges(to: keywordLabel.bindables.text)
             .observe(on: .main)
             .retained(by: self)
@@ -76,15 +78,11 @@ class KeywordCell: UITablePlannedCell, ViewBinding {
     }
 }
 
-typealias KeywordCellViewModel = ViewModel & KeywordCellDataBinding & KeywordCellSubscriber
-
 protocol KeywordCellVMDelegate: AnyObject {
     func keywordCellDidTapClear(_ viewModel: KeywordCellVM)
 }
 
-class KeywordCellVM: KeywordCellViewModel {
-    typealias Subscriber = KeywordCellSubscriber
-    typealias DataBinding = KeywordCellDataBinding
+struct KeywordCellVM: KeywordCellViewModel {
     
     @Subject var keyword: String?
     var keywordObservable: Observable<String?> { $keyword }

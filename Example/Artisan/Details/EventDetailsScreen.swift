@@ -14,45 +14,60 @@ import Builder
 import Pharos
 
 protocol EventDetailsScreenDataBinding {
-    var eventObservable: Observable<Event?> { get }
+    var eventObservable: Observable<EventDetailModel?> { get }
 }
 
-protocol EventDetailsScreenSubscriber {
-    func apply(_ headerCell: EventHeaderCell, with event: Event)
-    func apply(_ similarCell: SimilarEventCell, with event: Event)
+typealias EventDetailsScreenViewModel = ViewModel & EventDetailsScreenDataBinding
+
+struct EventDetailModel: IntermediateModel {
+    var distinctifier: AnyHashable
+    var headerViewModel: EventHeaderViewModel
+    var similarViewModel: SimilarEventViewModel
 }
 
-typealias EventDetailsScreenViewModel = ViewModel & EventDetailsScreenDataBinding & EventDetailsScreenSubscriber
-
-class EventDetailsScreen: UIPlannedController, ViewBinding {
-    typealias DataBinding = EventDetailsScreenDataBinding
-    typealias Subscriber = EventDetailsScreenSubscriber
+class EventDetailsScreen: UIPlannedController, ViewBindable {
+    typealias Model = EventDetailsScreenViewModel
     
-    @Subject var event: Event?
+    @Subject var event: EventDetailModel?
     
-    lazy var tableView: UITableView = builder(UITableView.self)
+    lazy var scrolledStack: ScrollableStack = builder(ScrollableStack(axis: .vertical, alignment: .fill))
         .backgroundColor(.clear)
-        .separatorStyle(.none)
-        .allowsSelection(false)
-        .delegate(self)
         .build()
     
     @LayoutPlan
     var viewPlan: ViewPlan {
-        tableView.drf
-            .edges.equal(with: .parent)
-            .sectioned(using: $event.compactMapped { $0 }) { [weak self] event in
-                Section(items: [event]) { _, _ in
-                    Cell(from: EventHeaderCell.self) { cell, _ in
-                        self?.subscriber?.apply(cell, with: event)
-                    }
-                }
-                TitledSection(title: "Similar Event", items: [event]) { _, _ in
-                    Cell(from: SimilarEventCell.self) { cell, _ in
-                        self?.subscriber?.apply(cell, with: event)
-                    }
+        scrolledStack.drf
+            .edges.equal(with: .safeArea)
+            .insertStacked {
+                if let event = event {
+                    EventHeaderView().binding(with: event.headerViewModel)
+                    EventTitleView(title: "Similar Event")
+                    SimilarEventView().binding(with: event.similarViewModel)
                 }
             }
+    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        didInit()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        didInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        didInit()
+    }
+    
+    func didInit() {
+        $event.whenDidSet { [unowned self] changes in
+            self.applyPlan()
+        }.observe(on: .main)
+            .asynchronously()
+            .retained(by: self)
     }
     
     override func viewDidLoad() {
@@ -62,20 +77,11 @@ class EventDetailsScreen: UIPlannedController, ViewBinding {
         applyPlan()
     }
     
-    func bindData(from dataBinding: DataBinding) {
-        dataBinding.eventObservable
+    func viewNeedBind(with model: Model) {
+        model.eventObservable
             .relayChanges(to: $event)
             .observe(on: .main)
             .retained(by: self)
             .fire()
-    }
-}
-
-extension EventDetailsScreen: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        view.tintColor = .background
-        let header = view as? UITableViewHeaderFooterView
-        header?.textLabel?.textColor = .secondary
     }
 }
