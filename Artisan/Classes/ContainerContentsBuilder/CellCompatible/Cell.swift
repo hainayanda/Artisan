@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public class Cell<CellType: ContentCellCompatible>: Hashable where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType {
-    public typealias Applicator = (CellType, IndexPath) -> Void
+    public typealias Applicator = (CellType, IndexPath) throws -> Void
     
     let type: CellType.Type
     var identifier: String
@@ -47,7 +47,7 @@ public class Cell<CellType: ContentCellCompatible>: Hashable where CellType.Cont
         guard let cell = container.dequeueReusable(identifier: identifier, at: indexPath) else {
             return nil
         }
-        applicator(cell, indexPath)
+        try? applicator(cell, indexPath)
         return cell
     }
 }
@@ -64,9 +64,9 @@ extension Cell where CellType == UITableViewCell {
             }
         }
     
-    public convenience init<TableCell: UITableViewCell & ViewBinding, TableModel: ViewModel>(
-        from cellType: TableCell.Type, bindWith viewModel: TableModel
-    ) where TableCell.DataBinding == TableModel.DataBinding, TableCell.Subscriber == TableModel.Subscriber {
+    public convenience init<TableCell: UITableViewCell & ViewBindable>(
+        from cellType: TableCell.Type, bindWith viewModel: TableCell.Model
+    ) {
         self.init(cellType, identifier: TableCell.artisanReuseIdentifier) { cell, indexPath in
             guard let tableCell = cell as? TableCell else { return }
             tableCell.bind(with: viewModel)
@@ -87,9 +87,9 @@ extension Cell where CellType == UICollectionViewCell {
             }
         }
     
-    public convenience init<CollectionCell: UICollectionViewCell & ViewBinding, CollectionModel: ViewModel>(
-        from cellType: CollectionCell.Type, bindWith viewModel: CollectionModel
-    ) where CollectionCell.DataBinding == CollectionModel.DataBinding, CollectionCell.Subscriber == CollectionModel.Subscriber {
+    public convenience init<CollectionCell: UICollectionViewCell & ViewBindable>(
+        from cellType: CollectionCell.Type, bindWith viewModel: CollectionCell.Model
+    ) {
         self.init(cellType, identifier: CollectionCell.artisanReuseIdentifier) { cell, indexPath in
             guard let collectionCell = cell as? CollectionCell else { return }
             collectionCell.bind(with: viewModel)

@@ -30,9 +30,19 @@ public protocol ContentCellCompatible where Self: UIView {
 
 // MARK: Extension
 
+fileprivate var cellBuilderKey: String = "cellBuilderKey"
 fileprivate var registeredCellIdentifiersAssociatedKey: String = "registeredCellIdentifiersAssociatedKey"
 
 extension ContainerCellCompatible {
+    var cellBuilder: AnyCellBuilder? {
+        get {
+            objc_getAssociatedObject(self, &cellBuilderKey) as? AnyCellBuilder
+        }
+        set {
+            objc_setAssociatedObject(self, &cellBuilderKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+        
+    }
     
     var registeredCellIdentifiers: [String: Cell.Type] {
         get {

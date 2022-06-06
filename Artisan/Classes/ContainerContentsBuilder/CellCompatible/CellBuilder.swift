@@ -17,7 +17,11 @@ enum CellBuildingState {
     case free
 }
 
-class CellBuilder<Item: Hashable, CellType: ContentCellCompatible>: ObjectRetainer where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType {
+protocol AnyCellBuilder: ObjectRetainer {
+    func applyPendingIfNeeded()
+}
+
+class CellBuilder<Item: Hashable, CellType: ContentCellCompatible>: AnyCellBuilder where CellType.Container: ContainerCellCompatible, CellType.Container.Cell == CellType {
     typealias DataBinding = CellType.Container.DataBinding
     typealias CellItem = Cell<CellType>
     
@@ -36,6 +40,7 @@ class CellBuilder<Item: Hashable, CellType: ContentCellCompatible>: ObjectRetain
     init(for container: CellType.Container) {
         self.dataSource = Self.createDataSource(for: container)
         container.dataSource = dataSource
+        container.cellBuilder = self
         $state = dispatcher
         $pendingSnapshot = dispatcher
     }

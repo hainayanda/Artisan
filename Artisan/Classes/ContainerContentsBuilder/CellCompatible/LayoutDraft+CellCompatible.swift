@@ -22,7 +22,6 @@ public protocol TableDraft: ViewDraft {
     func sections<Item: Hashable>(from sections: [Item], @TableSectionPlan _ provider: @escaping TableSectionProvider<Item>) -> Self
     func sectioned<Item: Hashable>(using observableSection: Observable<Item>, @TableSectionPlan _ provider: @escaping TableSingleSectionProvider<Item>) -> Self
     func sectioned<Item: Hashable>(using section: Item, @TableSectionPlan _ provider: @escaping TableSingleSectionProvider<Item>) -> Self
-    
 }
 
 extension LayoutDraft: TableDraft where View: UITableView {
