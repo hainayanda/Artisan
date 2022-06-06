@@ -16,6 +16,12 @@ public class ScrollableStack: UIScrollView, Planned {
     
     lazy var stackView: UIStackView = UIStackView(axis: axis, distribution: .equalSpacing, alignment: alignment)
     
+    public override var subviews: [UIView] {
+        var allSubviews = super.subviews
+        allSubviews.append(contentsOf: stackView.subviews)
+        return allSubviews
+    }
+    
     @LayoutPlan
     public var viewPlan: ViewPlan {
         if axis == .vertical {
