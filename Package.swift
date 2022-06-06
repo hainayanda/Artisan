@@ -18,7 +18,7 @@ let package = Package(
         .package(url: "https://github.com/Quick/Quick.git", from: "5.0.1"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "10.0.0"),
         .package(url: "https://github.com/hainayanda/Draftsman.git", from: "3.0.3"),
-        .package(url: "https://github.com/hainayanda/Pharos.git", from: "2.3.0"),
+        .package(url: "https://github.com/hainayanda/Pharos.git", from: "2.3.1"),
         .package(url: "https://github.com/hainayanda/Builder.git", from: "1.0.3"),
         .package(url: "https://github.com/ra1028/DiffableDataSources.git", from: "0.5.0")
     ],
