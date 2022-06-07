@@ -13,11 +13,15 @@ import Draftsman
 import Builder
 import Pharos
 
+// MARK: ViewModel Protocol
+
 protocol EventDetailsScreenDataBinding {
     var eventObservable: Observable<EventDetailModel?> { get }
 }
 
 typealias EventDetailsScreenViewModel = ViewModel & EventDetailsScreenDataBinding
+
+// MARK: Intermediate Model
 
 struct EventDetailModel: IntermediateModel {
     var distinctifier: AnyHashable
@@ -25,12 +29,14 @@ struct EventDetailModel: IntermediateModel {
     var similarViewModel: SimilarEventViewModel
 }
 
+// MARK: Screen
+
 class EventDetailsScreen: UIPlannedController, ViewBindable {
     typealias Model = EventDetailsScreenViewModel
     
     @Subject var event: EventDetailModel?
     
-    lazy var scrolledStack: ScrollableStack = builder(ScrollableStack(axis: .vertical, alignment: .fill))
+    lazy var scrolledStack: ScrollableStackView = builder(ScrollableStackView(axis: .vertical, alignment: .fill))
         .backgroundColor(.clear)
         .build()
     
@@ -47,34 +53,20 @@ class EventDetailsScreen: UIPlannedController, ViewBindable {
             }
     }
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        didInit()
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        didInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        didInit()
-    }
-    
-    func didInit() {
-        $event.whenDidSet { [unowned self] changes in
-            self.applyPlan()
-        }.observe(on: .main)
-            .asynchronously()
-            .retained(by: self)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .background
         navigationController?.navigationBar.tintColor = .main
         applyPlan()
+    }
+    
+    func viewWillBind(with newModel: Model, oldModel: Model?) {
+        $event
+            .whenDidSet { [unowned self] changes in
+                self.applyPlan()
+            }.observe(on: .main)
+            .asynchronously()
+            .retained(by: self)
     }
     
     func viewNeedBind(with model: Model) {

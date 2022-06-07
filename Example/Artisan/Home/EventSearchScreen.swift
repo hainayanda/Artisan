@@ -12,6 +12,8 @@ import Draftsman
 import Builder
 import Pharos
 
+// MARK: ViewModel Protocol
+
 protocol EventSearchScreenDataBinding {
     var searchPhraseBindable: BindableObservable<String?> { get }
     var eventResultsObservable: Observable<EventResults> { get }
@@ -21,6 +23,10 @@ protocol EventSearchScreenSubscriber {
     func didTap(_ event: EventResult, at indexPath: IndexPath)
     func didTap(_ history: HistoryResult, at indexPath: IndexPath)
 }
+
+typealias EventSearchScreenViewModel = ViewModel & EventSearchScreenSubscriber & EventSearchScreenDataBinding
+
+// MARK: Intermediate Model
 
 struct HistoryResult: IntermediateModel {
     let distinctifier: AnyHashable
@@ -37,7 +43,7 @@ struct EventResults: Hashable {
     var results: [EventResult]
 }
 
-typealias EventSearchScreenViewModel = ViewModel & EventSearchScreenSubscriber & EventSearchScreenDataBinding
+// MARK: Screen
 
 class EventSearchScreen: UIPlannedController, ViewBindable {
     
@@ -101,11 +107,7 @@ class EventSearchScreen: UIPlannedController, ViewBindable {
     
 }
 
-extension EventSearchScreen: UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.endEditing(true)
-    }
-}
+// MARK: Extension
 
 extension EventSearchScreen {
     
@@ -114,6 +116,16 @@ extension EventSearchScreen {
         navigationItem.titleView = searchBar
     }
 }
+
+// MARK: UISearchBarDelegate
+
+extension EventSearchScreen: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
+    }
+}
+
+// MARK: UITableViewDelegate
 
 extension EventSearchScreen: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -13,6 +13,8 @@ import Pharos
 import Draftsman
 import Builder
 
+// MARK: ViewModel Protocol
+
 protocol KeywordCellDataBinding {
     var keyword: String? { get }
     var keywordObservable: Observable<String?> { get }
@@ -23,6 +25,8 @@ protocol KeywordCellSubscriber {
 }
 
 typealias KeywordCellViewModel = ViewModel & KeywordCellDataBinding & KeywordCellSubscriber
+
+// MARK: View
 
 class KeywordCell: UITablePlannedCell, ViewBindable {
     typealias Model = KeywordCellViewModel
@@ -75,26 +79,5 @@ class KeywordCell: UITablePlannedCell, ViewBindable {
             .observe(on: .main)
             .retained(by: self)
             .fire()
-    }
-}
-
-protocol KeywordCellVMDelegate: AnyObject {
-    func keywordCellDidTapClear(_ viewModel: KeywordCellVM)
-}
-
-struct KeywordCellVM: KeywordCellViewModel {
-    
-    @Subject var keyword: String?
-    var keywordObservable: Observable<String?> { $keyword }
-    
-    weak var delegate: KeywordCellVMDelegate?
-    
-    init(keyword: String?, delegate: KeywordCellVMDelegate?) {
-        self.keyword = keyword
-        self.delegate = delegate
-    }
-    
-    func didTapClear(button: UIButton) {
-        delegate?.keywordCellDidTapClear(self)
     }
 }

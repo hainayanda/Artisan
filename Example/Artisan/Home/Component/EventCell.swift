@@ -13,6 +13,8 @@ import Draftsman
 import Pharos
 import Builder
 
+// MARK: ViewModel Protocol
+
 protocol EventCellDataBinding {
     var event: Event? { get }
     var bannerImageObservable: Observable<UIImage?> { get }
@@ -22,6 +24,8 @@ protocol EventCellDataBinding {
 }
 
 typealias EventCellViewModel = ViewModel & EventCellDataBinding
+
+// MARK: View
 
 class EventCell: UITablePlannedCell, ViewBindable {
     typealias Model = EventCellViewModel
@@ -124,29 +128,5 @@ class EventCell: UITablePlannedCell, ViewBindable {
             .observe(on: .main)
             .retained(by: self)
             .fire()
-    }
-}
-
-struct EventCellVM: EventCellViewModel {
-    @Subject var event: Event?
-    
-    var bannerImageObservable: Observable<UIImage?> {
-        $event.mapped { $0?.image }
-    }
-    var eventNameObservable: Observable<String?> {
-        $event.mapped { $0?.name }
-    }
-    var eventDetailsObservable: Observable<String?> {
-        $event.mapped { $0?.details }
-    }
-    var eventDateObservable: Observable<String?> {
-        $event.mapped { event in
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd MMM yyyy"
-            guard let date = event?.date else {
-                return nil
-            }
-            return dateFormatter.string(from: date)
-        }
     }
 }

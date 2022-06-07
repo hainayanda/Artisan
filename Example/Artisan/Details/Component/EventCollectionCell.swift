@@ -13,12 +13,16 @@ import Draftsman
 import Pharos
 import Builder
 
+// MARK: ViewModel Protocol
+
 protocol EventCollectionCellDataBinding {
     var bannerImageObservable: Observable<UIImage?> { get }
     var eventNameObservable: Observable<String?> { get }
 }
 
 typealias EventCollectionCellViewModel = ViewModel & EventCollectionCellDataBinding
+
+// MARK: View
 
 class EventCollectionCell: UICollectionPlannedCell, ViewBindable {
     
@@ -79,16 +83,5 @@ class EventCollectionCell: UICollectionPlannedCell, ViewBindable {
             .observe(on: .main)
             .retained(by: self)
             .fire()
-    }
-}
-
-struct EventCollectionCellVM: EventCollectionCellViewModel {
-    @Subject var event: Event?
-    
-    var bannerImageObservable: Observable<UIImage?> {
-        $event.mapped { $0?.image }
-    }
-    var eventNameObservable: Observable<String?> {
-        $event.mapped { $0?.name }
     }
 }

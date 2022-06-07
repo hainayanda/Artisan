@@ -12,6 +12,8 @@ import Artisan
 import Pharos
 import Impose
 
+// MARK: ViewModel
+
 class EventSearchScreenVM: EventSearchScreenViewModel, ObjectRetainer {
     
     var searchPhraseBindable: BindableObservable<String?> {
@@ -51,6 +53,8 @@ class EventSearchScreenVM: EventSearchScreenViewModel, ObjectRetainer {
     }
 }
 
+// MARK: Subscriber
+
 extension EventSearchScreenVM {
     func didTap(_ history: HistoryResult, at indexPath: IndexPath) {
         searchPhrase = history.distinctifier as? String
@@ -62,13 +66,7 @@ extension EventSearchScreenVM {
     }
 }
 
-extension EventSearchScreenVM: KeywordCellVMDelegate {
-    func keywordCellDidTapClear(_ viewModel: KeywordCellVM) {
-        var currentHistory = history
-        currentHistory.removeAll { $0 == viewModel.keyword }
-        history = currentHistory
-    }
-}
+// MARK: Extensions
 
 extension EventSearchScreenVM {
     
@@ -100,9 +98,12 @@ extension EventSearchScreenVM {
     }
 }
 
-struct Event: Hashable {
-    var image: UIImage
-    var name: String
-    var details: String
-    var date: Date
+// MARK: KeywordCellVMDelegate
+
+extension EventSearchScreenVM: KeywordCellVMDelegate {
+    func keywordCellDidTapClear(_ viewModel: KeywordCellVM) {
+        var currentHistory = history
+        currentHistory.removeAll { $0 == viewModel.keyword }
+        history = currentHistory
+    }
 }

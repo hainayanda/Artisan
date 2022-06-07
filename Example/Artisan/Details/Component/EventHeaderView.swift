@@ -13,6 +13,8 @@ import Builder
 import Pharos
 import Draftsman
 
+// MARK: ViewModel Protocol
+
 protocol EventHeaderViewDataBinding {
     var bannerImageObservable: Observable<UIImage?> { get }
     var eventNameObservable: Observable<String?> { get }
@@ -21,6 +23,8 @@ protocol EventHeaderViewDataBinding {
 }
 
 typealias EventHeaderViewModel = ViewModel & EventHeaderViewDataBinding
+
+// MARK: View
 
 class EventHeaderView: UIPlannedView, ViewBindable {
     typealias Model = EventHeaderViewModel
@@ -77,6 +81,7 @@ class EventHeaderView: UIPlannedView, ViewBindable {
     }
     
     // MARK: Dimensions
+    
     var bannerWidthToHeightMultiplier: CGFloat = 2
     var margin: UIEdgeInsets = .init(insets: .x8)
     var spacing: CGFloat = .x3
@@ -122,28 +127,5 @@ class EventHeaderView: UIPlannedView, ViewBindable {
             .observe(on: .main)
             .retained(by: self)
             .fire()
-    }
-}
-
-struct EventHeaderVM: EventHeaderViewModel {
-    @Subject var event: Event?
-    var bannerImageObservable: Observable<UIImage?> {
-        $event.mapped { $0?.image }
-    }
-    var eventNameObservable: Observable<String?> {
-        $event.mapped { $0?.name }
-    }
-    var eventDetailsObservable: Observable<String?> {
-        $event.mapped { $0?.details }
-    }
-    var eventDateObservable: Observable<String?> {
-        $event.mapped { event in
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd MMM yyyy"
-            guard let date = event?.date else {
-                return nil
-            }
-            return dateFormatter.string(from: date)
-        }
     }
 }
