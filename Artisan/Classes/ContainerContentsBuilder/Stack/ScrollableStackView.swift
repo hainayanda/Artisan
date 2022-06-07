@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Draftsman
 
-public class ScrollableStack: UIScrollView, Planned {
+public class ScrollableStackView: UIScrollView, Planned {
     let alignment: UIStackView.Alignment
     let axis: NSLayoutConstraint.Axis
     
@@ -50,7 +50,7 @@ public class ScrollableStack: UIScrollView, Planned {
     }
 }
 
-extension ScrollableStack: StackCompatible {
+extension ScrollableStackView: StackCompatible {
     public var arrangedSubviews: [UIView] {
         stackView.arrangedSubviews
     }
