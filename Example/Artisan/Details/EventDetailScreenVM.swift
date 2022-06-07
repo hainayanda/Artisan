@@ -10,38 +10,28 @@ import Foundation
 import UIKit
 import Artisan
 import Pharos
+import Impose
 
-class EventDetailScreenVM: ViewMediator<EventDetailsScreen> {
-    var router: Router = ExampleRouter()
+class EventDetailScreenVM: EventDetailsScreenViewModel {
     
-    @Observable var event: Event?
-    
-    override func bonding(with view: EventDetailsScreen) {
-        $event.whenDidSet(invoke: self, method: EventDetailScreenVM.change(event:))
-    }
-}
-
-extension EventDetailScreenVM {
-    
-    func didTapSimilar(event: Event) {
-        guard let view = self.bondedView else { return }
-        router.routeToDetails(of: event, from: view)
-    }
-    
-    func change(event: Changes<Event?>) {
-        bondedView?.title = event.new?.name
-        bondedView?.tableView.reloadWith{
-            TableSection(identifier: "header") {
-                EventCellVM<EventHeaderCell>(event: event.new)
-                    .with(identifier: "header")
-            }
-            TableTitledSection(title: "Similar Event", identifier: "similar") {
-                SimilarEventCellVM(event: event.new)
-                    .with(identifier: "similar")
-                    .whenDidTapped { [weak self] _, event in
-                        self?.didTapSimilar(event: event)
-                    }
-            }
+    @Subject var event: Event?
+    var eventObservable: Observable<EventDetailModel?> {
+        $event.mapped {
+            guard let event = $0 else { return nil }
+            return EventDetailModel(
+                distinctifier: event,
+                headerViewModel: EventHeaderVM(event: $0),
+                similarViewModel: SimilarEventVM(event: $0).whenDidTapped { [weak self] _, event in
+                    self?.router.routeToDetails(of: event)
+                }
+            )
         }
+    }
+    
+    var router: EventRouting
+    
+    init(event: Event, router: EventRouting) {
+        self.event = event
+        self.router = router
     }
 }

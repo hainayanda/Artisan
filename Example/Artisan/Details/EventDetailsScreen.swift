@@ -10,24 +10,47 @@ import Foundation
 import UIKit
 import Artisan
 import Draftsman
+import Builder
+import Pharos
 
-class EventDetailsScreen: UIViewController, Planned {
-    lazy var tableView: UITableView = builder {
-        $0.animationSet =  .init(insertAnimation: .right, reloadAnimation: .fade, deleteAnimation: .right)
-        $0.backgroundColor = .clear
-        $0.separatorStyle = .none
-        $0.allowsSelection = false
-        $0.delegate = self
-        if #available(iOS 11.0, *) {
-            $0.contentInset = view.safeAreaInsets
-        } else {
-            $0.contentInset = view.layoutMargins
-        }
-    }
+// MARK: ViewModel Protocol
+
+protocol EventDetailsScreenDataBinding {
+    var eventObservable: Observable<EventDetailModel?> { get }
+}
+
+typealias EventDetailsScreenViewModel = ViewModel & EventDetailsScreenDataBinding
+
+// MARK: Intermediate Model
+
+struct EventDetailModel: IntermediateModel {
+    var distinctifier: AnyHashable
+    var headerViewModel: EventHeaderViewModel
+    var similarViewModel: SimilarEventViewModel
+}
+
+// MARK: Screen
+
+class EventDetailsScreen: UIPlannedController, ViewBindable {
+    typealias Model = EventDetailsScreenViewModel
+    
+    @Subject var event: EventDetailModel?
+    
+    lazy var scrolledStack: ScrollableStackView = builder(ScrollableStackView(axis: .vertical, alignment: .fill))
+        .backgroundColor(.clear)
+        .build()
     
     @LayoutPlan
     var viewPlan: ViewPlan {
-        tableView.plan.edges(.equal, to: .safeArea)
+        scrolledStack.drf
+            .edges.equal(with: .safeArea)
+            .insertStacked {
+                if let event = event {
+                    EventHeaderView().binding(with: event.headerViewModel)
+                    EventTitleView(title: "Similar Event")
+                    SimilarEventView().binding(with: event.similarViewModel)
+                }
+            }
     }
     
     override func viewDidLoad() {
@@ -36,13 +59,21 @@ class EventDetailsScreen: UIViewController, Planned {
         navigationController?.navigationBar.tintColor = .main
         applyPlan()
     }
-}
-
-extension EventDetailsScreen: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        view.tintColor = .background
-        let header = view as? UITableViewHeaderFooterView
-        header?.textLabel?.textColor = .secondary
+    func viewWillBind(with newModel: Model, oldModel: Model?) {
+        $event
+            .whenDidSet { [unowned self] changes in
+                self.applyPlan()
+            }.observe(on: .main)
+            .asynchronously()
+            .retained(by: self)
+    }
+    
+    func viewNeedBind(with model: Model) {
+        model.eventObservable
+            .relayChanges(to: $event)
+            .observe(on: .main)
+            .retained(by: self)
+            .fire()
     }
 }

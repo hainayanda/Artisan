@@ -7,92 +7,87 @@
 
 import Foundation
 
-@propertyWrapper
-public final class Observable<Wrapped>: StateObservable {
-    public typealias Getter = () -> Wrapped
-    typealias OptionalGetter = () -> Wrapped?
-    public typealias Setter = (Wrapped) -> Void
-    var getter: OptionalGetter?
-    var setter: Setter?
-    lazy public internal(set) var relay: BondableRelay<Wrapped> = {
-        let relay = BondableRelay<Wrapped>(currentValue: _wrappedValue)
-        relay.relayBackConsumer { [weak self] changes in
-            guard let self = self else { return }
-            self.setAndInformToRelay(with: changes)
+open class Observable<State>: ChangeObservable {
+    let contextRetainer: ContextRetainer
+    lazy var relayGroup: RelayRetainerGroup<State> = RelayRetainerGroup()
+    var recentState: State? { nil }
+    
+    public init(retainer: ContextRetainer) {
+        self.contextRetainer = retainer
+    }
+    
+    open func whenDidSet(thenDo work: @escaping (Changes<State>) -> Void) -> Observed<State> {
+        let observed = Observed(source: self, retainer: contextRetainer.added(with: self)) { changes, _ in
+            work(changes)
         }
-        return relay
-    }()
-    var _wrappedValue: Wrapped
-    public var wrappedValue: Wrapped {
-        get {
-            getter?() ?? _wrappedValue
+        relayGroup.addToGroup(WeakRelayRetainer<State>(wrapped: observed))
+        return observed
+    }
+    
+    public func relayChanges(to relay: BindableObservable<State>) -> Observed<State> {
+        let observed = Observed(source: self, retainer: contextRetainer.added(with: self)) { [weak relay] changes, context in
+            guard let relay = relay else { return }
+            relay.relay(changes: changes, context: context)
         }
-        set {
-            setAndInformToRelay(with: Changes(old: _wrappedValue, new: newValue, source: self))
+        relayGroup.addToGroup(WeakRelayRetainer<State>(wrapped: observed))
+        return observed
+    }
+    
+    // MARK: Mappable
+    
+    open func compactMapped<Mapped>(_ mapper: @escaping (State) throws -> Mapped?) -> Observable<Mapped> {
+        let observed = MappedObservable(source: self, retainer: contextRetainer.added(with: self), mapper: mapper)
+        relayGroup.addToGroup(WeakRelayRetainer<State>(wrapped: observed))
+        return observed
+        
+    }
+    
+    // MARK: Filterable
+    
+    open func ignore(when shouldIgnore: @escaping (Changes<State>) -> Bool) -> Observable<State> {
+        let observed = FilteredObservable(source: self, retainer: contextRetainer.added(with: self), filter: shouldIgnore)
+        relayGroup.addToGroup(WeakRelayRetainer<State>(wrapped: observed))
+        return observed
+    }
+    
+    // MARK: Combinable
+    
+    open func combine<State1>(with relay: Observable<State1>) -> Observable<(State?, State1?)> {
+        BiCastObservable(source1: self, source2: relay, retainer: contextRetainer)
+    }
+    
+    open func combine<State1, State2>(
+        with relay1: Observable<State1>, _ relay2: Observable<State2>
+    ) -> Observable<(State?, State1?, State2?)> {
+        TriCastObservable(source1: self, source2: relay1, source3: relay2, retainer: contextRetainer)
+    }
+    
+    open func combine<State1, State2, State3>(
+        with relay1: Observable<State1>, _ relay2: Observable<State2>, _ relay3: Observable<State3>
+    ) -> Observable<(State?, State1?, State2?, State3?)> {
+        QuadCastObservable(source1: self, source2: relay1, source3: relay2, source4: relay3, retainer: contextRetainer)
+    }
+    
+    // MARK: Mergable
+    
+    open func merge(with relays: Observable<State>...) -> Observable<State> {
+        var merged = relays
+        merged.insert(self, at: 0)
+        var retainer = contextRetainer
+        for relay in merged {
+            retainer = retainer.added(with: relay)
         }
+        return MergedObservable(observables: merged, retainer: retainer)
     }
     
-    public init(wrappedValue: Wrapped) {
-        self._wrappedValue = wrappedValue
+    // MARK: Retain
+    
+    func retain(retainer: ContextRetainer) {
+        retainer.retained.remove(self)
+        self.contextRetainer.add(retainer: retainer)
     }
     
-    public init(get getter: @escaping Getter, set setter: @escaping Setter) {
-        self._wrappedValue = getter()
-        mutator(get: getter, set: setter)
-    }
-    
-    public init<Object: AnyObject>(
-        of object: Object,
-        get getter: @escaping (Object) -> Getter,
-        set setter: @escaping (Object) -> Setter) {
-        self._wrappedValue = getter(object)()
-        mutator(of: object, get: getter, set: setter)
-    }
-    
-    public var projectedValue: BondableRelay<Wrapped> {
-        relay
-    }
-    
-    public func mutator(get getter: @escaping Getter, set setter: @escaping Setter) {
-        self.getter = getter
-        self.setter = setter
-    }
-    
-    public func mutator<Object: AnyObject>(
-        of object: Object,
-        get getter: @escaping (Object) -> Getter,
-        set setter: @escaping (Object) -> Setter) {
-        self.getter = { [weak self, weak object] in
-            guard let object = object else {
-                return self?._wrappedValue
-            }
-            return getter(object)()
-        }
-        self.setter = { [weak object] value in
-            guard let object = object else { return }
-            setter(object)(value)
-        }
-    }
-    
-    public func invokeRelayWithCurrent() {
-        informDidSetToRelay(with: .init(old: _wrappedValue, new: _wrappedValue, source: self))
-    }
-    
-    public func removeBond() {
-        relay.bondingRelay = nil
-    }
-    
-    public func removeAllRelay() {
-        relay.removeAllNextRelays()
-    }
-    
-    func setAndInformToRelay(with changes: Changes<Wrapped>) {
-        setter?(changes.new)
-        _wrappedValue = changes.new
-        informDidSetToRelay(with: changes)
-    }
-    
-    func informDidSetToRelay(with changes: Changes<Wrapped>) {
-        relay.relay(changes: changes)
+    func discard(child: AnyObject) {
+        contextRetainer.discard(object: child)
     }
 }

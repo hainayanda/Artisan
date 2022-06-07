@@ -1,8 +1,8 @@
 # Pharos
 
-Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper`. It could help a lot when designing Apps using reactive programming
+Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper`. It could help a lot when designing Apps using reactive programming. Under the hood, it utilize [Chary](https://github.com/hainayanda/Chary) as DispatchQueue utilities
 
-[![codebeat badge](https://codebeat.co/badges/e4784f82-ff10-45cf-92e2-93497bb6b1a4)](https://codebeat.co/projects/github-com-hainayanda-pharos-main)
+[![codebeat badge](https://codebeat.co/badges/0c30bd1d-542d-4d72-bfd3-c6ab9e88db46)](https://codebeat.co/projects/github-com-hainayanda-pharos-main)
 ![build](https://github.com/hainayanda/Pharos/workflows/build/badge.svg)
 ![test](https://github.com/hainayanda/Pharos/workflows/test/badge.svg)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen)](https://swift.org/package-manager/)
@@ -14,17 +14,17 @@ Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-# Installation
-
 ## Requirements
 
-- Swift 5.0 or higher (or 5.3 when using Swift Package Manager)
-- iOS 9.3 or higher (or 10 when using Swift Package Manager)
+- Swift 5.0 or higher (or 5.5 when using Swift Package Manager)
+- iOS 12.0 or higher
 
 ### Only Swift Package Manager
 
-- macOS 10.10 or higher
-- tvOS 10 or higher
+- macOS 12.0 or higher
+- tvOS 12.0 or higher
+
+## Installation
 
 ### Cocoapods
 
@@ -38,8 +38,8 @@ pod 'Pharos'
 ### Swift Package Manager from XCode
 
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
-- Add **https://github.com/hainayanda/Pharos.git** as Swift Package URL
-- Set rules at **version**, with **Up to Next Major** option and put **1.2.3** as its version
+- Add **<https://github.com/hainayanda/Pharos.git>** as Swift Package URL
+- Set rules at **version**, with **Up to Next Major** option and put **2.3.1** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -48,7 +48,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hainayanda/Pharos.git", .upToNextMajor(from: "1.2.3"))
+    .package(url: "https://github.com/hainayanda/Pharos.git", .upToNextMajor(from: "2.3.1"))
 ]
 ```
 
@@ -71,164 +71,97 @@ Pharos is available under the MIT license. See the LICENSE file for more info.
 
 ***
 
-# Basic Usage
+## Basic Usage
 
-Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper`. It using a builder pattern and was designed so it could be read just like the English language.
-
-## Basic
-
-Basically, all you need is a property that you want to observe and add `@Observable` propertyWrapper at it:
+All you need is a property that you want to observe and add `@Subject` propertyWrapper at it:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
 }
 ```
 
-to observe any changes that happen in the text, use its `projectedValue` to get its main relay. and pass the closure:
+to observe any changes that happen in the text, use its `projectedValue` to get its `Observable`. and pass the closure subscriber:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
         $text.whenDidSet { changes in
             print(changes.new)
             print(changes.old)
-        }
+        }.retain()
     }
 }
 ```
 
-every time any set happens in text, it will call the closure with its changes which including old value and new value.
-You could ignore any set that not changing the value as long the value is `Equatable`
+every time any set happens in text, it will call the closure with its changes which include old value and new value.
+You could ignore any set that does not changing the value as long the value is `Equatable`
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
-        $text.whenDidUniqueSet { changes in
-            print(changes.new)
-            print(changes.old)
-        }
+        $text.ignoreSameValue()
+            .whenDidSet { changes in
+                print(changes.new)
+                print(changes.old)
+            }.retain()
     }
 }
 ```
 
-if you want the observer called method instead, just do something like this:
+if you want the observer to run using the current value, just fire it:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
-    
-    func observeText() {
-        $text.whenDidSet(invoke: self, method: MyClass.textDidChange)
-    }
-    
-    func textDidChange(_ changes: Changes<String?>) {
-        print(changes.new)
-        print(changes.old)
-    }
-}
-```
-
-it will store self as a weak reference for the method call.
-
-if you want the observer to run using the current value, just invoke it:
-
-```swift
-class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
         $text.whenDidSet { changes in
             print(changes.new)
             print(changes.old)
-        }.invokeRelay()
+        }.retain()
+        .fire()
     }
 }
 ```
 
-## Multiple observers
-
-By design, the Observable will have one main relay which only consists of one observer.
-So if you set observer closure multiple times on Main Relay, it will only replace it but not add a new one:
+you can always check the current value by accessing the observable property:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String = "my text"
     
-    func observeText() {
-        $text.whenDidSet { changes in
-            print("first closure")
-        }.whenDidSet { changes in
-            print("will replace first closure")
-        }
+    func printCurrentText() {
+        print(text)
     }
 }
 ```
 
-In the example above, the first closure will be replaced by the second closure since both are assigned in Main Relay. But any relay could have multiple child relays which will be notified by the previous relay as described by the diagram below:
+## Control Subscriber Retaining
 
-![alt text](https://github.com/hainayanda/Pharos/blob/main/ObservableRelay.png)
-
-And remember, a single relay will always just have one did set listener:
-
-![alt text](https://github.com/hainayanda/Pharos/blob/main/DidSet.png)
-
-To use the next relay, you could just do something like this:
+By default, if you observe Observable and end it with `retain()`. The closure will be retained by the Observable itself. It will automatically be removed by `ARC` if the Observable is removed by `ARC`.
+If you want to handle the retaining manually, you could always use `Retainer` to retain the observer:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
-    
-    func observeTextLinearly() {
-        $text.whenDidSet { changes in
-            print("notified by Observable")
-        }.nextRelay().whenDidSet { changes in
-            print("notified by Main Relay")
-        }.nextRelay().whenDidSet { changes in
-            print("notified by Previous Relay")
-        }
-    }
-    
-    func addRelayToMainRelay() {
-        $text.nextRelay().whenDidSet {
-            print("notified by Main Relay")
-        }
-        $text.nextRelay().whenDidSet {
-            print("notified by Main Relay Too")
-        }.nextRelay().whenDidSet { changes in
-            print("notified by Previous Relay")
-        }
-    }
-}
-```
-
-In the example above, all closure will be run if any set happens. The only difference between all the relays is just the one who notified it.
-
-## Using Retainer
-
-You could use `Retainer` to make sure the relay created will be discarded by `ARC` when `Retainer` is discarded so the closure in the relay and all of its next relays will not run if it's not used anymore:
-
-```swift
-class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     var retainer: Retainer = .init()
     
     func observeText() {
-        $text.nextRelay()
-            .referenceManaged(by: retainer)
-            .whenDidSet { changes in
-                print(changes.new)
-                print(changes.old)
-            }
+        $text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }
+        .retained(by: retainer)
     }
     
     func discardManually() {
-        retainer.discardAll()
+        retainer.discardAllRetained()
     }
     
     func discardByCreateNewRetainer() {
@@ -238,153 +171,184 @@ class MyClass {
 }
 ```
 
-There are many ways to discard the relay managed by `Retainer`:
-- call `discardAll()` from relay's retainer
-- replace the retainer with a new one, which will trigger `ARC` to remove the retainer from memory thus will discard all of its managed relays by default.
-- doing nothing, which if the object that has retainer is discarded by `ARC`, it will automatically discard the `Retainer` thus will discard all of its managed relays by default.
+There are many ways to discard the subscriber managed by `Retainer`:
 
-## Custom getter and setter
+- call `discardAllRetained()` from subscriber's retainer
+- replace the retainer with a new one, which will trigger `ARC` to remove the retainer from memory thus will discard all of its managed subscribers by default.
+- doing nothing, which if the object that has retainer is discarded by `ARC`, it will automatically discard the `Retainer` thus will discard all of its managed subscribers by default.
 
-You can create Observable using custom getter and setter which will relay value if there's some value set to those observable.
-
-```swift
-class MyClass {
-    var button: UIButton = .init()
-    @Observable var title: String?
-    
-    func observeText() {
-        _title.mutator {
-            button.title(for: .normal)
-        } set {
-            button.setTitle($0, for: .normal)
-        }
-        $title.whenDidSet { changes in
-            print(changes.new)
-            print(changes.old)
-        }.invokeRelay()
-    }
-}
-```
-
-In the example above, every time title is set, it will call the set closure and then relay it to its relays.
-
-## Bondable Relays
-
-You can observe changes in supported `UIView` property by accessing it with `bondableRelays`:
+If you don't want to bother creating a Retainer, you can make your object implement `ObjectRetainer` and so it will act as a `Retainer`:
 
 ```swift
-class MyClass {
-    var textField: UITextField = .init()
-    @Observable var text: String?
-    
-    func observeText() {
-        $text.bonding(with: textField.bondableRelays.text)
-            .whenDidSet { changes in
-                print(changes.new)
-                print(changes.old)
-            }
-    }
-}
-```
-
-At the example above, every time `text` is set, it will automatically set the `textField.text`, and when  `textField.text` is set it will automatically set the `text`. On both occasions, it will always notify the `whenDidSet` closure.
-
-The mechanism can be described by 
-
-![alt text](https://github.com/hainayanda/Pharos/blob/main/BondingRelay.png)
-
-If you want to bond and match both values right away, use `bondAndApply` or `bondAndMap`. the difference between both is that apply will set the `Observable` value to `Object property` and map will set the `Object property` to `Observable`
-
-```swift
-class MyClass {
-    var textField: UITextField = .init()
-    @Observable var text: String?
-    
-    func applyToField() {
-        $text.bondAndApply(to: textField.bondableRelays.text)
-            .whenDidSet { changes in
-                print(changes.new)
-                print(changes.old)
-            }
-    }
-    
-    func mapFromField() {
-        $text.bondAndMap(from: textField.bondableRelays.text)
-            .whenDidSet { changes in
-                print(changes.new)
-                print(changes.old)
-            }
-    }
-}
-```
-
-Actually what `textField.relays.text` do is creating `AssociativeTwoWayRelay` of given object keypath. `AssociativeTwoWayRelay` is open, so you could also creating one of your own. You can always treat `AssociativeTwoWayRelay` as observable:
-
-```swift
-class MyClass {
-    var relay: AssociativeTwoWayRelay<String?>
-
-    init(textField: UITextField) {
-        self.relay = textField.bondableRelays.text
-    }
-    
-    func observeRelay() {
-        relay.whenDidSet { changes in
-            print(changes.new)
-            print(changes.old)
-        }
-    }
-}
-```
-
-Some of the relays are just `ValueRelay` which cannot be bond since it's not observable, but you can always use it as the next relay or next value relay:
-
-```swift
-class MyClass {
-    var button: UIButton = .init()
-    @Observable var buttonState: UIControl.State
-    
-    func relayStateToButton() {
-        $buttonState.relayValue(to: button.relays.state)
-    }
-}
-```
-
-If you just want to observe the value without storing the relay, retain it with the source of the relay, so it will always be called until the source is removed by `ARC`. You could always use `Retainer` if you want:
-
-```swift
-class MyClass {
-    var button: UIButton = .init()
-    
-    func observeRelay() {
-        button.relays.state
-            .retainToSource()
-            .whenDidSet { changes in
-                print(changes.new)
-                print(changes.old)
-            }
-    }
-}
-```
-
-## Ignoring Set
-
-You can ignore set to relay by passing a closure that returning `Bool` value which indicated that value should be ignored:
-
-```swift
-class MyClass {
-    @Observable var text: String?
-    
+class MyClass: ObjectRetainer {
+    @Subject var text: String?
+   
     func observeText() {
         $text.whenDidSet { changes in
             print(changes.new)
             print(changes.old)
-        }.ignore { $0.new?.isEmpty ?? true }
+        }
+        .retained(by: self)
+    }
+   
+}
+```
+
+You can always control how long you want to retain by using various retain methods:
+
+```swift
+class MyClass {
+
+    @Subject var text: String?
+    
+    var retainer: Retainer = .init()
+    
+    func observeTextOnce() {
+        $text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }
+        .retainUntilNextState()
+    }
+    
+    func observeTextTenTimes() {
+        $text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }
+        .retainUntil(nextEventCount: 10)
+    }
+    
+    func observeTextForOneMinutes() {
+        $text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }
+        .retain(for: 60)
+    }
+    
+    func observeTextUntilFoundMatches() {
+        $text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }
+        .retainUntil {
+            $0.new == "found!"
+        }
+    }
+    
+}
+```
+
+## Bindable
+
+You can observe changes in supported `UIView` property by accessing its observables in `bindables`:
+
+```swift
+class MyClass {
+    var textField: UITextField = .init()
+    
+    func observeText() {
+        textField.bindables.text.whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }.retain()
     }
 }
 ```
 
-At the example above, whenDidSet closure will not run when the new value is empty or null
+you can always bind two subjects to notify each other as long its type is `BindableObservable`:
+
+```swift
+class MyClass {
+    var textField: UITextField = .init()
+    @Subject var text: String?
+    
+    func observeText() {
+        $text.bind(with: textField.bindables.text)
+            .retain()
+    }
+}
+```
+
+At the example above, every time `text` is set, it will automatically set the `textField.text`, and when `textField.text` is set it will automatically set the `text`.
+To observe only changes from binding, you can use `onlyFromBinding()` before call `whenDidSet(thenDo:)` or use `onlyFromSet()` before call `whenDidSet(thenDo:)` for the opposite:
+
+```swift
+class MyClass {
+    var textField: UITextField = .init()
+    @Subject var text: String?
+    
+    func observeText() {
+        $text.bind(with: textField.bindables.text)
+            .retain()
+    }
+
+    func observeFromTextField() {
+        // option 1
+        $text.onlyFromBinding().whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }.retain()
+        // option 2
+        $text.whenBindingDidChange { changes in
+            print(changes.new)
+            print(changes.old)
+        }.retain()
+    }
+
+    func observeFromPropertySet() {
+        // option 1
+        $text.onlyFromSet().whenDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }.retain()
+        // option 2
+        $text.whenPropertyDidSet { changes in
+            print(changes.new)
+            print(changes.old)
+        }.retain()
+    }
+}
+```
+
+## Filtering Subscription
+
+You can ignore set to observable by passing a closure that returning `Bool` value which indicated that value should be ignored:
+
+```swift
+class MyClass {
+    @Subject var text: String
+    
+    func observeText() {
+        $text.ignore { $0.new.isEmpty }
+            .whenDidSet { changes in
+                print(changes.new)
+                print(changes.old)
+            }.retain()
+    }
+}
+```
+
+At the example above, `whenDidSet` closure will not run when the new value is empty
+
+The opposite of ignore is `onlyInclude`
+
+```swift
+class MyClass {
+    @Subject var text: String
+    
+    func observeText() {
+        $text.onlyInclude { $0.new.count > 5 }
+            .whenDidSet { changes in
+                print(changes.new)
+                print(changes.old)
+            }.retain()
+    }
+}
+```
+
+At the example above, whenDidSet closure will only run when the new value is bigger than 5
 
 ## Delaying Multiple Set
 
@@ -392,150 +356,184 @@ Sometimes you just want to delay some observing because if the value is coming t
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
-        $text.whenDidUniqueSet { changes in
+        $text.whenDidSet { changes in
             print(changes.new)
             print(changes.old)
         }.multipleSetDelayed(by: 1)
+        .retain()
     }
 }
 ```
 
 ## Add DispatchQueue
 
-You could add `DispatchQueue` to make sure your observable is run on the right thread. If DispatchQueue is not provided, it will use the thread from the notifier:
+You could add `DispatchQueue` to make sure your observable is run on the right thread. If `DispatchQueue` is not provided, it will use the thread from the notifier:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
-        $text.whenDidUniqueSet { changes in
+        $text.whenDidSet { changes in
             print(changes.new)
             print(changes.old)
         }.observe(on: .main)
+        .retain()
     }
 }
 ```
 
-You could make sure the closure will run synchronously if the current thread is the same as passed `DispatchQueue`:
+It will always run the subscriber in the same `DispatchQueue` given. If it is already in the same `DispatchQueue`, it will run synchronously. Otherwise, it will run asynchronously.
+
+You could always make sure the closure will always run asynchronously if needed:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
-        $text.whenDidUniqueSet { changes in
+        $text.whenDidSet { changes in
             print(changes.new)
             print(changes.old)
         }.observe(on: .main)
-        .syncWhenInSameThread()
+        .asynchronously()
+        .retain()
     }
 }
 ```
 
 ## Mapping Value
 
-You could change the value from your `Observable` to another by using mapping. Mapping will add a new Relay under the previous one:
+You could map the value from your `Subject` to another type by using mapping. Mapping will create a new Observable with mapped type:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
+    @Subject var text: String
     
     func observeText() {
-        $text.map { $0?.count ?? 0 }
+        $text.mapped { $0.count }
             .whenDidSet { changes in
-                print("notified by Main Relay")
-                print("changes now is Int with value \(changes.new)")
-            }
+                print("text character count is \(changes.new)")
+            }.retain()
     }
 }
 ```
 
-If your value is `Array`, you can use `compactMap` to map the original `Array` to target `Array`:
+You could always map and ignore errors or nil during mapping. Did set closure will always be called when mapping is successful:
 
 ```swift
 class MyClass {
-    @Observable var array: [String] = []
+    @Subject var text: String?
     
     func observeText() {
-        $array.compactMap { $0.count }
+        $text.compactMap { $0?.count }
             .whenDidSet { changes in
-                print("notified by Main Relay")
-                print("changes now is [Int]")
-            }
+                // this will not run if text is nil
+                print("text character count is \(changes.new)")
+            }.retain()
     }
 }
+```
+
+## Observable Block
+
+You can always create `Observable` from code block by using `ObservableBlock`:
+
+```swift
+let myObservableFromBlock = ObservableBlock { accept in
+    runSomethingAsync { result in
+        accept(result)
+    }
+}
+
+myObservableFromBlock.whenDidSet { changes in
+    print(changes)
+}.retain()
 ```
 
 ## Relay value to another Observable
 
-You can relay value from any Relay to another Relay as long as the type is the same. Use `relayValue(to:)` or `relayUniqueValue(to:)` if the value is `Equatable`. It will return a new Relay under the target Relay:
+You can relay value from any Observable to another Observable as long as the type is the same and the other observable is `BindableObservable`:
 
 ```swift
 class MyClass {
-    @Observable var text: String?
-    @Observable var count: Int = 0
-    @Observable var empty: Bool = true
+    @Subject var text: String?
+    @Subject var count: Int = 0
+    @Subject var empty: Bool = true
     
     func observeText() {
-        $text.map { $0?.count ?? 0 }
-            .relayValue(to: $count)
-            .map { $0 == 0 }
-            .relayUniqueValue(to: $empty)
+        $text.compactMap { $0?.count }
+            .relayChanges(to: $count)
+            .retain()
     }
 }
 ```
 
-You can always relay value to Any NSObject Bearer Relays by accessing `bearerRelays`. Its using `dynamicMemberLookup`, so all of the object writable properties will available there:
+You can always relay value to Any NSObject Bearer Observables by accessing `relayables`. Its using `dynamicMemberLookup`, so all of the object writable properties will be available there:
 
 ```swift
 class MyClass {
     var label: UILabel = UILabel()
-    @Observable var text: String?
+    @Subject var text: String?
     
     func observeText() {
-        $text.relayValue(to: label.bearerRelays.text)
+        $text.relayChanges(to: label.relayables.text)
+            .retain()
     }
 }
 ```
 
-All relay will weak referenced and will stop relaying to other Observable if that relay is dereferenced by `ARC`
+## Merge Observable
 
-## Merging Relay
-
-You can merge up to 4 relays as one and observe if any of those relays is set:
+You can merge as many observables as long their type subject type is the same:
 
 ```swift
 class MyClass {
-    @Observable var userName: String = ""
-    @Observable var fullName: String = ""
-    @Observable var password: String = ""
-    @Observable var user: User = User()
+    @Subject var subject1: String = ""
+    @Subject var subject2: String = ""
+    @Subject var subject3: String = ""
+    @Subject var subject4: String = ""
     
     func observeText() {
-        mergeRelays($userName, $fullName, $password)
+        $subject1.merge(with: $subject2, $subject3, $subject4)
             .whenDidSet { changes in
-                print("userName: \(changes.new.0)")
-                print("fullName: \(changes.new.1)")
-                print("password: \(changes.new.2)")
-            }.map { 
+                // this will run if any of merged observable is set
+                print(changes.new)
+            }.retain()
+    }
+}
+```
+
+## Combine Observable
+
+You can combine up to 4 observables as one and observe if any of those observables is set:
+
+```swift
+class MyClass {
+    @Subject var userName: String = ""
+    @Subject var fullName: String = ""
+    @Subject var password: String = ""
+    @Subject var user: User = User()
+    
+    func observeText() {
+        $userName.combine(with: $fullName, $password)
+            .map { 
                 User(
                     userName: $0.new.0, 
                     fullName: $0.new.1, 
                     password: $0.new.2
                 )
-            }.relayValue(to: $user)
+            }.relayChanges(to: $user)
+            .retain()
     }
 }
 ```
 
-Keep in mind that merged relays will strongly referenced in a new relay. It would be wise to store the merged relays locally or using `Retainer`
-
 ***
 
-# Contribute
+## Contribute
 
-You know how just clone and do pull request
+You know-how. Just clone and do pull request

@@ -12,22 +12,28 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		716D67B6E515B153412416D0 /* Pods_Artisan_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EFEDA3E99CC66FC0A60A05 /* Pods_Artisan_Example.framework */; };
-		BB0D09332591B41C00C209E1 /* CommonSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09322591B41C00C209E1 /* CommonSpec.swift */; };
-		BB0D093C2591BB4F00C209E1 /* CellMediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */; };
-		BB0D09422591BBB800C209E1 /* CellContainerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */; };
-		BB0D094A2591BC5700C209E1 /* CellContainerMediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */; };
-		BB0D09502591BCAD00C209E1 /* MediatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */; };
 		BB0D09872591C45300C209E1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09862591C45300C209E1 /* Constants.swift */; };
 		BB0D098D2591C4DA00C209E1 /* EventSearchScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */; };
 		BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D099A2591DDB800C209E1 /* EventCell.swift */; };
-		BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09A02591E99700C209E1 /* MockEventService.swift */; };
-		BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */; };
+		BB0D09A12591E99700C209E1 /* EventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0D09A02591E99700C209E1 /* EventService.swift */; };
+		BB4B5ECF259450C8005DC1CD /* SimilarEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4B5ECE259450C8005DC1CD /* SimilarEventView.swift */; };
+		BB639CA3284C702D00317869 /* EventTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB639CA2284C702D00317869 /* EventTitleView.swift */; };
+		BBB3A42C284DB76000701E91 /* EventHeaderVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A42B284DB76000701E91 /* EventHeaderVM.swift */; };
+		BBB3A42E284DB7BE00701E91 /* SimilarEventVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A42D284DB7BE00701E91 /* SimilarEventVM.swift */; };
+		BBB3A430284DB83C00701E91 /* EventCollectionCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A42F284DB83C00701E91 /* EventCollectionCellVM.swift */; };
+		BBB3A435284DB8C700701E91 /* EventCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A434284DB8C700701E91 /* EventCellVM.swift */; };
+		BBB3A437284DB8D200701E91 /* KeywordCellVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A436284DB8D200701E91 /* KeywordCellVM.swift */; };
+		BBB3A43B284DBA0600701E91 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A43A284DBA0600701E91 /* Event.swift */; };
+		BBB3A441284DC5D300701E91 /* ArrayBuilderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A43F284DC5BD00701E91 /* ArrayBuilderSpec.swift */; };
+		BBB3A447284DC90D00701E91 /* ViewBindableSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A445284DC8E200701E91 /* ViewBindableSpec.swift */; };
+		BBB3A44A284DD5AB00701E91 /* ViewModelSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A448284DD56700701E91 /* ViewModelSpec.swift */; };
+		BBB3A44D284DD5CD00701E91 /* MockMVVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB3A44C284DD5CD00701E91 /* MockMVVM.swift */; };
+		BBE6352A284500EF00BA7BE7 /* EventRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE63529284500EF00BA7BE7 /* EventRouter.swift */; };
 		BBE69CD9259B0DD500F2BEE3 /* EventCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */; };
-		BBE69CDD259B686A00F2BEE3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE69CDC259B686A00F2BEE3 /* Router.swift */; };
 		BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C2425936AE2002AF568 /* KeywordCell.swift */; };
 		BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */; };
 		BBF98C452593C5EA002AF568 /* EventDetailScreenVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C442593C5EA002AF568 /* EventDetailScreenVM.swift */; };
-		BBF98C4A2593C68B002AF568 /* EventHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C492593C68B002AF568 /* EventHeaderCell.swift */; };
+		BBF98C4A2593C68B002AF568 /* EventHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98C492593C68B002AF568 /* EventHeaderView.swift */; };
 		C2F68948D69197EA6D212290 /* Pods_Artisan_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2769C24CE93AE61A51D7ED87 /* Pods_Artisan_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,23 +62,29 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		707361EB6E824177FA9C301F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		879BE10A59B15D19AC963F2E /* Pods-Artisan_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		BB0D09322591B41C00C209E1 /* CommonSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonSpec.swift; sourceTree = "<group>"; };
-		BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellMediatorSpec.swift; sourceTree = "<group>"; };
-		BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellContainerSpec.swift; sourceTree = "<group>"; };
-		BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellContainerMediatorSpec.swift; sourceTree = "<group>"; };
-		BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediatorSpec.swift; sourceTree = "<group>"; };
 		BB0D09862591C45300C209E1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchScreenVM.swift; sourceTree = "<group>"; };
 		BB0D099A2591DDB800C209E1 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
-		BB0D09A02591E99700C209E1 /* MockEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventService.swift; sourceTree = "<group>"; };
-		BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarEventCell.swift; sourceTree = "<group>"; };
+		BB0D09A02591E99700C209E1 /* EventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventService.swift; sourceTree = "<group>"; };
+		BB4B5ECE259450C8005DC1CD /* SimilarEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarEventView.swift; sourceTree = "<group>"; };
+		BB639CA2284C702D00317869 /* EventTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTitleView.swift; sourceTree = "<group>"; };
+		BBB3A42B284DB76000701E91 /* EventHeaderVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderVM.swift; sourceTree = "<group>"; };
+		BBB3A42D284DB7BE00701E91 /* SimilarEventVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarEventVM.swift; sourceTree = "<group>"; };
+		BBB3A42F284DB83C00701E91 /* EventCollectionCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCellVM.swift; sourceTree = "<group>"; };
+		BBB3A434284DB8C700701E91 /* EventCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellVM.swift; sourceTree = "<group>"; };
+		BBB3A436284DB8D200701E91 /* KeywordCellVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordCellVM.swift; sourceTree = "<group>"; };
+		BBB3A43A284DBA0600701E91 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		BBB3A43F284DC5BD00701E91 /* ArrayBuilderSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayBuilderSpec.swift; sourceTree = "<group>"; };
+		BBB3A445284DC8E200701E91 /* ViewBindableSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBindableSpec.swift; sourceTree = "<group>"; };
+		BBB3A448284DD56700701E91 /* ViewModelSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelSpec.swift; sourceTree = "<group>"; };
+		BBB3A44C284DD5CD00701E91 /* MockMVVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMVVM.swift; sourceTree = "<group>"; };
+		BBE63529284500EF00BA7BE7 /* EventRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRouter.swift; sourceTree = "<group>"; };
 		BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCell.swift; sourceTree = "<group>"; };
-		BBE69CDC259B686A00F2BEE3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Artisan_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		BBF98C2425936AE2002AF568 /* KeywordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordCell.swift; sourceTree = "<group>"; };
 		BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailsScreen.swift; sourceTree = "<group>"; };
 		BBF98C442593C5EA002AF568 /* EventDetailScreenVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailScreenVM.swift; sourceTree = "<group>"; };
-		BBF98C492593C68B002AF568 /* EventHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderCell.swift; sourceTree = "<group>"; };
+		BBF98C492593C68B002AF568 /* EventHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderView.swift; sourceTree = "<group>"; };
 		D5F58F2417560DDDF0AD0E24 /* Pods-Artisan_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Example.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example.release.xcconfig"; sourceTree = "<group>"; };
 		D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.release.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DC8A44295F25844F8072B11E /* Pods-Artisan_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Artisan_Tests.debug.xcconfig"; path = "Target Support Files/Pods-Artisan_Tests/Pods-Artisan_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +134,9 @@
 		607FACD21AFB9204008FA782 /* Example for Artisan */ = {
 			isa = PBXGroup;
 			children = (
+				BBB3A43E284DBA4C00701E91 /* Common */,
+				BBB3A439284DB9FD00701E91 /* Model */,
+				BBB3A438284DB9F600701E91 /* Service */,
 				BBF98C3E2593C3E8002AF568 /* Details */,
 				BB0D09852591C43100C209E1 /* Utilities */,
 				BB0D09792591BFD600C209E1 /* Home */,
@@ -145,10 +160,11 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				BBB3A44B284DD5B900701E91 /* Mock */,
+				BBB3A443284DC8A800701E91 /* Binding */,
+				BBB3A442284DC89100701E91 /* Utils */,
 				BBED3C0025911F81004DF5F1 /* Artisan_Tests-Bridging-Header.h */,
-				BB0D093A2591BB2600C209E1 /* Mediator */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
-				BB0D092A2591B39300C209E1 /* Utilities */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -180,29 +196,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BB0D092A2591B39300C209E1 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				BB0D09322591B41C00C209E1 /* CommonSpec.swift */,
-			);
-			name = Utilities;
-			sourceTree = "<group>";
-		};
-		BB0D093A2591BB2600C209E1 /* Mediator */ = {
-			isa = PBXGroup;
-			children = (
-				BB0D093B2591BB4F00C209E1 /* CellMediatorSpec.swift */,
-				BB0D09412591BBB800C209E1 /* CellContainerSpec.swift */,
-				BB0D09492591BC5700C209E1 /* CellContainerMediatorSpec.swift */,
-				BB0D094F2591BCAD00C209E1 /* MediatorSpec.swift */,
-			);
-			name = Mediator;
-			sourceTree = "<group>";
-		};
 		BB0D09792591BFD600C209E1 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				BBF98C432593C5CE002AF568 /* Cell */,
+				BBF98C432593C5CE002AF568 /* Component */,
 				607FACD71AFB9204008FA782 /* EventSearchScreen.swift */,
 				BB0D098C2591C4DA00C209E1 /* EventSearchScreenVM.swift */,
 			);
@@ -213,39 +210,108 @@
 			isa = PBXGroup;
 			children = (
 				BB0D09862591C45300C209E1 /* Constants.swift */,
-				BB0D09A02591E99700C209E1 /* MockEventService.swift */,
-				BBE69CDC259B686A00F2BEE3 /* Router.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		BBB3A42A284DB74700701E91 /* VM */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3A42B284DB76000701E91 /* EventHeaderVM.swift */,
+				BBB3A42D284DB7BE00701E91 /* SimilarEventVM.swift */,
+				BBB3A42F284DB83C00701E91 /* EventCollectionCellVM.swift */,
+			);
+			path = VM;
+			sourceTree = "<group>";
+		};
+		BBB3A433284DB8BB00701E91 /* VM */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3A434284DB8C700701E91 /* EventCellVM.swift */,
+				BBB3A436284DB8D200701E91 /* KeywordCellVM.swift */,
+			);
+			path = VM;
+			sourceTree = "<group>";
+		};
+		BBB3A438284DB9F600701E91 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				BB0D09A02591E99700C209E1 /* EventService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		BBB3A439284DB9FD00701E91 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3A43A284DBA0600701E91 /* Event.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BBB3A43E284DBA4C00701E91 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				BBE63529284500EF00BA7BE7 /* EventRouter.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		BBB3A442284DC89100701E91 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3A43F284DC5BD00701E91 /* ArrayBuilderSpec.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		BBB3A443284DC8A800701E91 /* Binding */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3A445284DC8E200701E91 /* ViewBindableSpec.swift */,
+				BBB3A448284DD56700701E91 /* ViewModelSpec.swift */,
+			);
+			name = Binding;
+			sourceTree = "<group>";
+		};
+		BBB3A44B284DD5B900701E91 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				BBB3A44C284DD5CD00701E91 /* MockMVVM.swift */,
+			);
+			name = Mock;
 			sourceTree = "<group>";
 		};
 		BBF98C3E2593C3E8002AF568 /* Details */ = {
 			isa = PBXGroup;
 			children = (
-				BBF98C482593C676002AF568 /* Cell */,
+				BBF98C482593C676002AF568 /* Component */,
 				BBF98C3F2593C414002AF568 /* EventDetailsScreen.swift */,
 				BBF98C442593C5EA002AF568 /* EventDetailScreenVM.swift */,
 			);
 			path = Details;
 			sourceTree = "<group>";
 		};
-		BBF98C432593C5CE002AF568 /* Cell */ = {
+		BBF98C432593C5CE002AF568 /* Component */ = {
 			isa = PBXGroup;
 			children = (
+				BBB3A433284DB8BB00701E91 /* VM */,
 				BB0D099A2591DDB800C209E1 /* EventCell.swift */,
 				BBF98C2425936AE2002AF568 /* KeywordCell.swift */,
 			);
-			path = Cell;
+			path = Component;
 			sourceTree = "<group>";
 		};
-		BBF98C482593C676002AF568 /* Cell */ = {
+		BBF98C482593C676002AF568 /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				BBF98C492593C68B002AF568 /* EventHeaderCell.swift */,
-				BB4B5ECE259450C8005DC1CD /* SimilarEventCell.swift */,
+				BBB3A42A284DB74700701E91 /* VM */,
+				BBF98C492593C68B002AF568 /* EventHeaderView.swift */,
+				BB4B5ECE259450C8005DC1CD /* SimilarEventView.swift */,
 				BBE69CD8259B0DD500F2BEE3 /* EventCollectionCell.swift */,
+				BB639CA2284C702D00317869 /* EventTitleView.swift */,
 			);
-			path = Cell;
+			path = Component;
 			sourceTree = "<group>";
 		};
 		D6154310B51A7BC8D1290CE7 /* Pods */ = {
@@ -313,10 +379,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 384SJ33M83;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = 384SJ33M83;
 						LastSwiftMigration = 1230;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -396,16 +464,24 @@
 				"${PODS_ROOT}/Target Support Files/Pods-Artisan_Example/Pods-Artisan_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Artisan/Artisan.framework",
 				"${BUILT_PRODUCTS_DIR}/Builder/Builder.framework",
+				"${BUILT_PRODUCTS_DIR}/Chary/Chary.framework",
 				"${BUILT_PRODUCTS_DIR}/Clavier/Clavier.framework",
+				"${BUILT_PRODUCTS_DIR}/DiffableDataSources/DiffableDataSources.framework",
+				"${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Draftsman/Draftsman.framework",
+				"${BUILT_PRODUCTS_DIR}/Impose/Impose.framework",
 				"${BUILT_PRODUCTS_DIR}/Pharos/Pharos.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Artisan.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Builder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Chary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Clavier.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DiffableDataSources.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DifferenceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Draftsman.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Impose.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pharos.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -464,19 +540,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB3A42C284DB76000701E91 /* EventHeaderVM.swift in Sources */,
+				BBB3A437284DB8D200701E91 /* KeywordCellVM.swift in Sources */,
 				607FACD81AFB9204008FA782 /* EventSearchScreen.swift in Sources */,
-				BBF98C4A2593C68B002AF568 /* EventHeaderCell.swift in Sources */,
+				BBF98C4A2593C68B002AF568 /* EventHeaderView.swift in Sources */,
+				BBB3A43B284DBA0600701E91 /* Event.swift in Sources */,
+				BB639CA3284C702D00317869 /* EventTitleView.swift in Sources */,
 				BBF98C2525936AE2002AF568 /* KeywordCell.swift in Sources */,
-				BB4B5ECF259450C8005DC1CD /* SimilarEventCell.swift in Sources */,
+				BBB3A42E284DB7BE00701E91 /* SimilarEventVM.swift in Sources */,
+				BB4B5ECF259450C8005DC1CD /* SimilarEventView.swift in Sources */,
+				BBB3A435284DB8C700701E91 /* EventCellVM.swift in Sources */,
 				BB0D09872591C45300C209E1 /* Constants.swift in Sources */,
 				BBF98C452593C5EA002AF568 /* EventDetailScreenVM.swift in Sources */,
 				BBE69CD9259B0DD500F2BEE3 /* EventCollectionCell.swift in Sources */,
 				BBF98C402593C414002AF568 /* EventDetailsScreen.swift in Sources */,
-				BB0D09A12591E99700C209E1 /* MockEventService.swift in Sources */,
+				BB0D09A12591E99700C209E1 /* EventService.swift in Sources */,
+				BBB3A430284DB83C00701E91 /* EventCollectionCellVM.swift in Sources */,
+				BBE6352A284500EF00BA7BE7 /* EventRouter.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				BB0D099B2591DDB800C209E1 /* EventCell.swift in Sources */,
 				BB0D098D2591C4DA00C209E1 /* EventSearchScreenVM.swift in Sources */,
-				BBE69CDD259B686A00F2BEE3 /* Router.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,11 +567,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB0D093C2591BB4F00C209E1 /* CellMediatorSpec.swift in Sources */,
-				BB0D09422591BBB800C209E1 /* CellContainerSpec.swift in Sources */,
-				BB0D094A2591BC5700C209E1 /* CellContainerMediatorSpec.swift in Sources */,
-				BB0D09502591BCAD00C209E1 /* MediatorSpec.swift in Sources */,
-				BB0D09332591B41C00C209E1 /* CommonSpec.swift in Sources */,
+				BBB3A447284DC90D00701E91 /* ViewBindableSpec.swift in Sources */,
+				BBB3A44A284DD5AB00701E91 /* ViewModelSpec.swift in Sources */,
+				BBB3A44D284DD5CD00701E91 /* MockMVVM.swift in Sources */,
+				BBB3A441284DC5D300701E91 /* ArrayBuilderSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,11 +641,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -605,10 +688,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -618,8 +702,9 @@
 			baseConfigurationReference = 879BE10A59B15D19AC963F2E /* Pods-Artisan_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 384SJ33M83;
 				INFOPLIST_FILE = Artisan/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -634,8 +719,9 @@
 			baseConfigurationReference = D5F58F2417560DDDF0AD0E24 /* Pods-Artisan_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 384SJ33M83;
 				INFOPLIST_FILE = Artisan/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -650,6 +736,7 @@
 			baseConfigurationReference = DC8A44295F25844F8072B11E /* Pods-Artisan_Tests.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 384SJ33M83;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -675,6 +762,7 @@
 			baseConfigurationReference = D850CDF6D53932569C4B20C3 /* Pods-Artisan_Tests.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 384SJ33M83;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",

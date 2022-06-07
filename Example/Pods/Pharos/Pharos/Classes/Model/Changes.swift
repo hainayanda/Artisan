@@ -8,20 +8,29 @@
 import Foundation
 
 public struct Changes<Value> {
-    public let old: Value
+    public let old: Value?
     public let new: Value
-    public let source: Any
+    public let source: AnyObject
     
-    init(old: Value, new: Value, source: Any) {
+    init(old: Value?, new: Value, source: AnyObject) {
         self.old = old
         self.new = new
         self.source = source
     }
     
-    func map<NewValue>(_ mapper: (Value) -> NewValue) -> Changes<NewValue> {
-        .init(
-            old: mapper(old),
-            new:  mapper(new),
+    func map<NewValue>(_ mapper: (Value) throws -> NewValue?) -> Changes<NewValue>? {
+        guard let mappedNew: NewValue = try? mapper(new) else {
+            return nil
+        }
+        let mappedOld: NewValue?
+        if let old = old {
+            mappedOld = try? mapper(old)
+        } else {
+            mappedOld = nil
+        }
+        return .init(
+            old: mappedOld,
+            new: mappedNew,
             source: source
         )
     }
@@ -35,6 +44,6 @@ extension Changes: Equatable where Value: Equatable {
         !isNotChanging
     }
     public static func == (lhs: Changes<Value>, rhs: Changes<Value>) -> Bool {
-        lhs.new == rhs.new && lhs.old == rhs.old
+        lhs.new == rhs.new && lhs.old == rhs.old && lhs.source === rhs.source
     }
 }

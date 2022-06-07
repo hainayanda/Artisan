@@ -10,45 +10,63 @@ import Foundation
 import UIKit
 import Artisan
 import Pharos
+import Impose
 
-class EventSearchScreenVM: ViewMediator<EventSearchScreen> {
+// MARK: ViewModel
+
+class EventSearchScreenVM: EventSearchScreenViewModel, ObjectRetainer {
     
-    var service: EventService = MockEventService()
-    var router: Router = ExampleRouter()
-    
-    @Observable var searchPhrase: String?
-    @Observable var results: [Event] = []
-    @Observable var history: [String] = []
-    
-    override func bonding(with view: EventSearchScreen) {
-        $searchPhrase.bonding(with: view.searchBar.bondableRelays.text)
-            .whenDidSet(invoke: self, method: EventSearchScreenVM.search(for:))
-            .multipleSetDelayed(by: .fast)
-        $results.observe(on: .main)
-            .whenDidSet(invoke: self, method: EventSearchScreenVM.didGet(results:))
-        $history.observe(on: .main)
-            .whenDidSet(invoke: self, method: EventSearchScreenVM.didHistory(updated:))
+    var searchPhraseBindable: BindableObservable<String?> {
+        $searchPhrase
     }
-}
-
-extension EventSearchScreenVM: EventSearchScreenObserver {
-    func didTap(_ tableView: UITableView, cell: UITableViewCell, at indexPath: IndexPath) {
-        guard let view = self.bondedView, let mediator = cell.getMediator() else { return }
-        if let keywordMediator = mediator as? KeywordCellVM {
-            searchPhrase = keywordMediator.keyword
-        } else if let eventMediator = mediator as? EventCellVM {
-            router.routeToDetails(of: eventMediator.event, from: view)
+    
+    var eventResultsObservable: Observable<EventResults> {
+        $history.combine(with: $results).mapped { (histories, events) in
+            EventResults(
+                histories: histories?.compactMap {
+                    let vm = KeywordCellVM(keyword: $0, delegate: self)
+                    return HistoryResult(distinctifier: $0, viewModel: vm)
+                } ?? [],
+                results: events?.compactMap {
+                    let vm = EventCellVM(event: $0)
+                    return EventResult(distinctifier: $0, viewModel: vm)
+                } ?? []
+            )
         }
     }
-}
-
-extension EventSearchScreenVM: KeywordCellMediatorDelegate {
-    func keywordCellDidTapClear(_ mediator: KeywordCellVM) {
-        var currentHistory = history
-        currentHistory.removeAll { $0 == mediator.keyword }
-        history = currentHistory
+    
+    @Injected var service: EventService
+    var router: EventRouting
+    
+    @Subject var searchPhrase: String?
+    @Subject var results: [Event] = []
+    @Subject var history: [String] = []
+    
+    init(router: EventRouting) {
+        self.router = router
+        $searchPhrase
+            .whenDidSet(thenDo: method(of: self, EventSearchScreenVM.search(for:)))
+            .multipleSetDelayed(by: 1)
+            .retained(by: self)
+            .fire()
+        
     }
 }
+
+// MARK: Subscriber
+
+extension EventSearchScreenVM {
+    func didTap(_ history: HistoryResult, at indexPath: IndexPath) {
+        searchPhrase = history.distinctifier as? String
+    }
+    
+    func didTap(_ event: EventResult, at indexPath: IndexPath) {
+        guard let tappedEvent = event.distinctifier as? Event else { return }
+        router.routeToDetails(of: tappedEvent)
+    }
+}
+
+// MARK: Extensions
 
 extension EventSearchScreenVM {
     
@@ -78,37 +96,14 @@ extension EventSearchScreenVM {
         }
         history = currentHistory
     }
-    
-    func didGet(results: Changes<[Event]>) {
-        reloadTable(with: history, and: results.new)
-    }
-    
-    func didHistory(updated: Changes<[String]>) {
-        reloadTable(with: updated.new, and: results)
-    }
-    
-    func reloadTable(with histories: [String], and events: [Event]) {
-        bondedView?.tableView.reloadWith {
-            TableTitledSection(title: "Search History", identifier: "history") {
-                ItemToTableMediator(items: histories, to: KeywordCellVM.self) { mediator, history in
-                    mediator.distinctIdentifier = history
-                    mediator.keyword = history
-                    mediator.delegate = self
-                }
-            }
-            TableTitledSection(title: "Search Results", identifier: "results") {
-                ItemToTableMediator(items: events, to: EventCellVM.self) { mediator, event in
-                    mediator.distinctIdentifier = event.name
-                    mediator.event = event
-                }
-            }
-        }
-    }
 }
 
-struct Event {
-    var image: UIImage
-    var name: String
-    var details: String
-    var date: Date
+// MARK: KeywordCellVMDelegate
+
+extension EventSearchScreenVM: KeywordCellVMDelegate {
+    func keywordCellDidTapClear(_ viewModel: KeywordCellVM) {
+        var currentHistory = history
+        currentHistory.removeAll { $0 == viewModel.keyword }
+        history = currentHistory
+    }
 }
