@@ -16,6 +16,14 @@ import Impose
 
 class EventSearchScreenVM: EventSearchScreenViewModel, ObjectRetainer {
     
+    @Injected var service: EventService
+    
+    var router: EventRouting
+    
+    @Subject var searchPhrase: String?
+    @Subject var results: [Event] = []
+    @Subject var history: [String] = []
+    
     var searchPhraseBindable: BindableObservable<String?> {
         $searchPhrase
     }
@@ -34,13 +42,6 @@ class EventSearchScreenVM: EventSearchScreenViewModel, ObjectRetainer {
             )
         }
     }
-    
-    @Injected var service: EventService
-    var router: EventRouting
-    
-    @Subject var searchPhrase: String?
-    @Subject var results: [Event] = []
-    @Subject var history: [String] = []
     
     init(router: EventRouting) {
         self.router = router
@@ -71,7 +72,6 @@ extension EventSearchScreenVM {
 extension EventSearchScreenVM {
     
     func search(for changes: Changes<String?>) {
-        print(changes.new?.isEmpty ?? true ? "--empty--" : changes.new ?? "")
         addToHistory(changes)
         service.searchEvent(withSearchPhrase: changes.new ?? "") { [weak self] events in
             self?.results = events

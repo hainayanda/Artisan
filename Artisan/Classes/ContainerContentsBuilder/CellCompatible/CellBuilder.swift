@@ -97,7 +97,8 @@ extension CellBuilder {
         self.init(for: container)
         observableSectionItems
             .ignoreSameValue()
-            .whenDidSet { [unowned self] changes in
+            .whenDidSet { [weak self] changes in
+                guard let self = self else { return }
                 self.applyIfFree(for: changes.new.toSnapShot(using: sectionProvider))
             }.observe(on: .global(qos: .background))
             .retained(by: self)
@@ -145,7 +146,8 @@ extension CellBuilder {
         self.init(for: container)
         observableItems
             .ignoreSameValue()
-            .whenDidSet { [unowned self] changes in
+            .whenDidSet { [weak self] changes in
+                guard let self = self else { return }
                 var snapshot =  DiffableDataSourceSnapshot<Section<CellType>, CellItem>()
                 let section = Section(items: changes.new, provider: cellProvider)
                 snapshot.appendSections([section])
