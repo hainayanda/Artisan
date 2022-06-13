@@ -132,6 +132,8 @@ class SearchScreen: UIPlannedController, ViewBindable {
         navigationItem.titleView = searchBar
     }
     
+    // MARK: This is where View Model bind with View
+    
     func viewNeedBind(with model: Model) {
         model.searchPhraseBindable
             .bind(with: searchBar.bindables.text)
