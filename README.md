@@ -20,9 +20,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-- Swift 5.3 or higher (Swift 5.1 for version 3.1.1 or lower)
+- Swift 5.3 or higher
 - iOS 10.0 or higher
-- XCode 12.5 or higher (XCode 11 for version 3.1.1 or lower)
+- XCode 12.5 or higher
 
 
 ## Installation
@@ -33,23 +33,12 @@ Artisan is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Artisan', '~> 4.0.2'
-pod 'Draftsman', '~> 2.0.2'
-pod 'Pharos', '~> 1.2.3'
-pod 'Builder', '~> 1.0.1'
-```
-
-or for Swift 5.1 and XCode 11
-
-```ruby
-pod 'Artisan', '~> 3.1.1'
-pod 'Draftsman', '~> 1.1.1'
-pod 'Pharos', '~> 1.2.2'
+pod 'Artisan', '~> 5.0.0'
 ```
 
 ### Swift Package Manager from XCode
 
-- Set rules at **version**, with **Up to Next Major** option and put **4.0.2** or **3.1.1** for Swift 5.1 and XCode 11 as its version
+- Set rules at **version**, with **Up to Next Major** option and put **5.0.0** as its version
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/hainayanda/Artisan.git** as Swift Package URL
 - Click next and wait
@@ -60,15 +49,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hainayanda/Artisan.git", .upToNextMajor(from: "4.0.2"))
-]
-```
-
-or for Swift 5.1 and XCode 11
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/hainayanda/Draftsman.git", .upToNextMajor(from: "3.1.1"))
+    .package(url: "https://github.com/hainayanda/Artisan.git", .upToNextMajor(from: "5.0.0"))
 ]
 ```
 
@@ -95,93 +76,171 @@ Read [wiki](https://github.com/hainayanda/Artisan/wiki) for more detailed inform
 
 ### Basic Usage
 
-Creating an MVVM Pattern using Artisan is easy. All you need to do is extend `ViewMediator`, `TableCellMediator` or `CollectionCellMediator` and implement `bonding` method.
-For example, If you want to create a custom `UITableViewCell`:
+Creating an MVVM Pattern using Artisan is easy. Binding is supported by [Pharos](https://github.com/hainayanda/Pharos) and View building is supported by [Draftsman](https://github.com/hainayanda/Draftsman), Artisan is the one that make both can work with each other perfectly.
+ Like if you want to create simple Search Screen:
 
 ```swift
-import Artisan
 import UIKit
+import Artisan
 import Draftsman
-import Pharos
 import Builder
+import Pharos
 
-class MyCell: TableFragmentCell {
-    lazy var title = builder(UILabel.self)
-        .font(.boldSystemFont(ofSize: 16))
-        .numberOfLines(1)
-        .textAlignment(.left)
-        .textColor(.secondary)
+class SearchScreen: UIPlannedController, ViewBindable {
+    
+    typealias Model = SearchScreenViewModel
+    
+    @Subject var allResults: [Result] = []
+    
+    // MARK: View
+    lazy var searchBar: UISearchBar = builder(UISearchBar.self)
+        .placeholder("Search here!")
+        .sizeToFit()
+        .tintColor(.text)
+        .barTintColor(.background)
+        .delegate(self)
         .build()
-    lazy var subTitle = builder(UILabel.self)
-        .font(.systemFont(ofSize: 12))
-        .numberOfLines(1)
-        .textAlignment(.left)
-        .textColor(.main)
+    
+    lazy var tableView: UITableView = builder(UITableView.self)
+        .backgroundColor(.clear)
+        .separatorStyle(.none)
+        .allowsSelection(true)
+        .delegate(self)
         .build()
-        
-    // MARK: Dimensions
-    var margin: UIEdgeInsets = .init(insets: 16)
-    var spacing: CGFloat = 6
     
     @LayoutPlan
     var viewPlan: ViewPlan {
-        title.plan
-            .at(.fullTop, .equalTo(margin), to: .parent)
-        subTitle.plan
-            .at(.bottomOf(title), .equalTo(spacing))
-            .at(.fullBottom, .equalTo(margin), to: .parent)
+        tableView.drf
+            .edges.equal(with: .parent)
+            .cells(from: $allResults) { _, result in
+                Cell(from: ResultCell.self) { cell, _ in
+                    cell.apply(result)
+                }
+            }
     }
-}
-
-class MyCellVM: TableCellMediator<MyCell> {
-    @Observable var model: MyModel
     
-    init(model: MyModel) {
-        self.model = model
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .background
+        tableView.keyboardDismissMode = .onDrag
+        applyPlan()
     }
-
-    override func bonding(with view: MyCell) {
-        $event.map { $0.title }.relayValue(to: view.title.relays.text))
-        $event.map { $0.description }.relayValue(to: view.subTitle.relays.text))
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.tintColor = .main
+        navigationItem.titleView = searchBar
     }
+    
+    func viewNeedBind(with model: Model) {
+        model.searchPhraseBindable
+            .bind(with: searchBar.bindables.text)
+            .observe(on: .main)
+            .retained(by: self)
+        model.resultsObservable
+            .relayChanges(to: $allResults)
+            .observe(on: .main)
+            .retained(by: self)
+            .fire()
+    }
+    
+    // more code for UITableViewDelegate and UISearchbarDelegate below
+    ...
+    ...
+    ...
+    
 }
 ```
 
-then add it to `UITableView`
+with ViewModel protocol like this:
 
 ```swift
-import Artisan
+protocol SearchScreenDataBinding {
+    var searchPhraseBindable: BindableObservable<String?> { get }
+    var resultsObservable: Observable<[Result]> { get }
+}
+
+protocol SearchScreenSubscriber {
+    func didTap(_ event: Result, at indexPath: IndexPath)
+}
+
+typealias SearchScreenViewModel = ViewModel & SearchScreenSubscriber & SearchScreenDataBinding
+```
+
+It will create a View using `Draftsman` and bind `Model` to `View` using `Pharos`. As you can see from the code above, it will bind `searchBar.bindables.text` with `searchPhraseBindable` from `Model` relay changes from `resultsObservable` to `allResults`.
+This then will make sure that every changes coming from `searchBar` will be relayed to the `Model` and then every results changes from `Model` will be relayed back to the `View`. The results then will be observed by `UITableView` built-in datasource (provided by Artisan and powered by [DiffableDataSource](https://github.com/ra1028/DiffableDataSources)) for then used to update a cells in the `UITableView`.
+
+You can create your ViewModel like this:
+
+```swift
 import UIKit
-import Draftsman
+import Artisan
 import Pharos
+import Impose
 
-class MyViewController: UIViewController {
-    var tableView: UITableView!
-    var searchBar: UISearchBar!
-  
-    @Observable var searchPhrase: String?
-    @Observable var models: [MyModel] = []
+// MARK: ViewModel
 
-    override viewDidLoad() {
-        super.viewDidLoad()
-        $searchPhrase.bonding(with: searchBar.bondableRelays.text)
+class SearchScreenVM: SearchScreenViewModel, ObjectRetainer {
+    
+    @Injected var service: EventService
+    
+    let router: SearchRouting
+    
+    @Subject var searchPhrase: String?
+    @Subject var results: [Result] = []
+    
+    // MARK: Data Binding
+    
+    var searchPhraseBindable: BindableObservable<String?> { $searchPhrase }
+    
+    var resultsObservable: Observable<[Result]> { $results }
+    
+    init(router: SearchRouting) {
+        self.router = router
+        $searchPhrase
+            .whenDidSet(thenDo: method(of: self, SearchScreenVM.search(for:)))
             .multipleSetDelayed(by: 1)
-            .whenDidSet(invoke: self, method: MyViewController.getData(from:))
-        $models.compactMap { model -> AnyTableCellMediator in
-              MyCellVM(model: model) 
-          }.observe(on: .main)
-          .relayValue(to: tableView.relays.cells)
+            .retained(by: self)
+            .fire()
+        
     }
+}
 
-    func getData(from changes: Changes<String?>) {
-        doGetDataFromAPI(for: changes.new) { [weak self] data in
-            self?.models = data
+// MARK: Subscriber
+
+extension EventSearchScreenVM {
+    func didTap(_ history: HistoryResult, at indexPath: IndexPath) {
+        searchPhrase = history.distinctifier as? String
+    }
+    
+    func didTap(_ event: EventResult, at indexPath: IndexPath) {
+        guard let tappedEvent = event.distinctifier as? Event else { return }
+        router.routeToDetails(of: tappedEvent)
+    }
+}
+
+// MARK: Extensions
+
+extension EventSearchScreenVM {
+    
+    func search(for changes: Changes<String?>) {
+        service.doSearch(withSearchPhrase: changes.new ?? "") { [weak self] results in
+            self?.results = results
         }
     }
 }
 ```
 
-It will automatically run getData when the user type in searchBar, with a minimum interval between method calls, is 1 second and will update table cells with new data on Main Thread every time you get data from API
+Then binding the `View` and `Model` will be as easy like this:
+
+```swift
+let searchScreen = SearchScreen()
+let searchRouter = SearchRouter(screen: searchScreen)
+let searchScreenVM = SearchScreenVM(router: searchRouter)
+searchScreen.bind(with: searchScreenVM)
+```
+
+Don't forget that everytime `BindableView` is bind with new `ViewModel`, all of its old retained Pharos relay will be released.
 
 You can clone and check the [Example folder](https://github.com/hainayanda/Artisan/tree/main/Example) or for more wiki, go to [here](https://github.com/hainayanda/Artisan/wiki)
 
