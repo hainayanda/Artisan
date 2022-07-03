@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="256" height="256" src="Pharos.png"/>
+</p>
+
 # Pharos
 
 Pharos is an Observer pattern framework for Swift that utilizes `propertyWrapper`. It could help a lot when designing Apps using reactive programming. Under the hood, it utilize [Chary](https://github.com/hainayanda/Chary) as DispatchQueue utilities
@@ -39,7 +43,7 @@ pod 'Pharos'
 
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
 - Add **<https://github.com/hainayanda/Pharos.git>** as Swift Package URL
-- Set rules at **version**, with **Up to Next Major** option and put **2.3.1** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **2.3.5** as its version
 - Click next and wait
 
 ### Swift Package Manager from Package.swift
@@ -48,7 +52,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hainayanda/Pharos.git", .upToNextMajor(from: "2.3.1"))
+    .package(url: "https://github.com/hainayanda/Pharos.git", .upToNextMajor(from: "2.3.5"))
 ]
 ```
 
@@ -238,6 +242,24 @@ class MyClass {
     }
     
 }
+```
+
+## UIControl
+
+You can observe event in `UIControl` as long as in iOS by call `whenDetectEvent`, or by using `whenDidTriggered(by:)` if you want to observe specific event or for more specific `whenDidTapped` for touchUpInside event:
+
+```swift
+myButton.whenDetectEvent { changes in
+  print("new event: \(changes.new) form old event: \(changes.old)")
+}.retain()
+
+myButton.whenDidTriggered(by: .touchDown) { _ in
+  print("someone touch down on this button")
+}.retain()
+
+myButton.whenDidTapped { _ in
+  print("someone touch up on this button")
+}.retain()
 ```
 
 ## Bindable
