@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Artisan'
-  s.version          = '5.0.0'
+  s.version          = '5.1.0'
   s.summary          = 'Artisan is a DSL, MVVM and Data Binding framework for Swift'
 
 # This description is used to generate tags and improve search results.
@@ -40,7 +40,6 @@ Pod::Spec.new do |s|
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Draftsman', '~> 3.0.6'
   s.dependency 'Pharos', '~> 2.3.5'
-  s.dependency 'Builder', '~> 1.0.4'
   s.dependency 'DiffableDataSources', '~> 0.5.0'
   s.swift_version = '5.5'
 end
