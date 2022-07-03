@@ -57,23 +57,19 @@ class EventDetailsScreen: UIPlannedController, ViewBindable {
         super.viewDidLoad()
         view.backgroundColor = .background
         navigationController?.navigationBar.tintColor = .main
-        applyPlan()
+        eventBind()
     }
     
-    func viewWillBind(with newModel: Model, oldModel: Model?) {
-        $event
-            .whenDidSet { [unowned self] changes in
-                self.applyPlan()
-            }.observe(on: .main)
+    func eventBind() {
+        $event.bindToPlan(of: self)
             .asynchronously()
             .retained(by: self)
+            .fire()
     }
     
-    func viewNeedBind(with model: Model) {
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables {
         model.eventObservable
             .relayChanges(to: $event)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
     }
 }

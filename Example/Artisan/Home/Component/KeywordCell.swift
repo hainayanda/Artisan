@@ -73,11 +73,11 @@ class KeywordCell: UITablePlannedCell, ViewBindable {
         applyPlan()
     }
     
-    func viewNeedBind(with model: Model) {
+    @Subject var keyword: String?
+    
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables {
         model.keywordObservable
             .relayChanges(to: keywordLabel.bindables.text)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
     }
 }

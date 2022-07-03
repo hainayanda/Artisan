@@ -93,16 +93,16 @@ class EventSearchScreen: UIPlannedController, ViewBindable {
         setupNavigation()
     }
     
-    func viewNeedBind(with model: Model) {
+    @BindBuilder
+    func autoBinding(with model: Model) -> BindRetainables {
         model.searchPhraseBindable
             .bind(with: searchBar.bindables.text)
-            .observe(on: .main)
-            .retained(by: self)
+    }
+    
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables {
         model.eventResultsObservable
             .relayChanges(to: $allResults)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
     }
     
 }
