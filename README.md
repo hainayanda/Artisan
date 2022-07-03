@@ -33,12 +33,12 @@ Artisan is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'Artisan', '~> 5.0.0'
+pod 'Artisan', '~> 5.1.0'
 ```
 
 ### Swift Package Manager from XCode
 
-- Set rules at **version**, with **Up to Next Major** option and put **5.0.0** as its version
+- Set rules at **version**, with **Up to Next Major** option and put **5.1.0** as its version
 - Add it using XCode menu **File > Swift Package > Add Package Dependency**
 - Add **https://github.com/hainayanda/Artisan.git** as Swift Package URL
 - Click next and wait
@@ -49,7 +49,7 @@ Add as your target dependency in **Package.swift**
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/hainayanda/Artisan.git", .upToNextMajor(from: "5.0.0"))
+    .package(url: "https://github.com/hainayanda/Artisan.git", .upToNextMajor(from: "5.1.0"))
 ]
 ```
 
@@ -134,16 +134,16 @@ class SearchScreen: UIPlannedController, ViewBindable {
     
     // MARK: This is where View Model bind with View
     
-    func viewNeedBind(with model: Model) {
+    @BindBuilder
+    func autoBinding(with model: Model) -> BindRetainables {
         model.searchPhraseBindable
             .bind(with: searchBar.bindables.text)
-            .observe(on: .main)
-            .retained(by: self)
+    }
+    
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables {
         model.resultsObservable
             .relayChanges(to: $allResults)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
     }
     
     // more code for UITableViewDelegate and UISearchbarDelegate below
