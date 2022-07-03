@@ -9,6 +9,7 @@ import Foundation
 #if canImport(UIKit)
 import UIKit
 import Builder
+import Pharos
 
 public extension Maker where Object: UIView {
     func sizeToFit() -> Self {
@@ -19,7 +20,10 @@ public extension Maker where Object: UIView {
 
 public extension Maker where Object: UIControl {
     func whenDidTriggered(by event: UIControl.Event, do action: @escaping (UIControl) -> Void) -> Self {
-        underlyingObject.whenDidTriggered(by: event, do: action)
+        underlyingObject.whenDidTriggered(by: event) { changes in
+            guard let control = changes.source as? UIControl else { return }
+            action(control)
+        }.retain()
         return self
     }
     
@@ -27,8 +31,10 @@ public extension Maker where Object: UIControl {
         by event: UIControl.Event,
         invoke object: Object,
         method: @escaping (Object) -> (UIControl) -> Void) -> Self {
-            underlyingObject.whenDidTriggered(by: event, invoke: object, method: method)
-            return self
+            whenDidTriggered(by: event) { [weak object] control in
+                guard let object = object else { return }
+                method(object)(control)
+            }
         }
     
     func whenValueChanged(do action: @escaping (UIControl) -> Void) -> Self {
@@ -71,20 +77,25 @@ public extension Maker where Object: UIButton {
         underlyingObject.setPreferredSymbolConfiguration(configuration, forImageIn: state)
         return self
     }
-
+    
     func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) -> Self {
         underlyingObject.setAttributedTitle(title, for: state)
         return self
     }
     
     func whenDidTapped(do action: @escaping (UIButton) -> Void) -> Self {
-        underlyingObject.whenDidTapped(do: action)
+        underlyingObject.whenDidTapped { changes in
+            guard let control = changes.source as? UIButton else { return }
+            action(control)
+        }.retain()
         return self
     }
     
     func whenDidTapped<SomeObject: AnyObject>(invoke object: SomeObject, method: @escaping (SomeObject) -> (UIButton) -> Void) -> Self {
-        underlyingObject.whenDidTapped(invoke: object, method: method)
-        return self
+        whenDidTapped { [weak object] button in
+            guard let object = object else { return }
+            method(object)(button)
+        }
     }
 }
 #endif
