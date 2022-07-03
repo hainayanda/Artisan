@@ -10,11 +10,36 @@ import Foundation
 import UIKit
 import Pharos
 
-public protocol ViewBindable: ObjectRetainer {
-    associatedtype Model
+public enum ViewBindDispatchMode {
+    case onMain
+    case onMainAsynchronously
+    case manual
+    
+    @discardableResult
+    func retain<View: ViewBindable>(_ retainable: BindRetainable, with view: View) -> Invokable {
+        switch self {
+        case .onMain:
+            return retainable.observe(on: .main)
+                .whileBind(with: view)
+        case .onMainAsynchronously:
+            return retainable.observe(on: .main)
+                .asynchronously()
+                .whileBind(with: view)
+        case .manual:
+            return retainable.whileBind(with: view)
+        }
+    }
+}
 
+public protocol ViewBindable {
+    associatedtype Model
+    var autoBindMode: ViewBindDispatchMode { get }
     var model: Model? { get }
     func viewWillBind(with newModel: Model, oldModel: Model?)
+    @BindBuilder
+    func autoBinding(with model: Model) -> BindRetainables
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables
     func viewNeedBind(with model: Model)
     func viewDidBind(with newModel: Model, oldModel: Model?)
 }
@@ -26,39 +51,58 @@ public enum ArtisanError: Error {
 }
 
 extension ViewBindable {
+    public var autoBindMode: ViewBindDispatchMode { .onMain }
     public func viewWillBind(with newModel: Model, oldModel: Model?) { }
     public func viewDidBind(with newModel: Model, oldModel: Model?) { }
+    public func autoBinding(with model: Model) -> BindRetainables { [] }
+    public func autoFireBinding(with model: Model) -> BindRetainables { [] }
+    public func viewNeedBind(with model: Model) { }
 }
 
 extension ViewBindable {
     
-    public internal(set) var model: Model? {
+    public var model: Model? {
         get {
             objc_getAssociatedObject(self, &bindableModelAssociatedKey) as? Model
         }
-        set {
-            objc_setAssociatedObject(self, &bindableModelAssociatedKey, newValue, .OBJC_ASSOCIATION_RETAIN)
-        }
     }
-
+    
+    func removeModel() {
+        objc_setAssociatedObject(self, &bindableModelAssociatedKey, nil, .OBJC_ASSOCIATION_RETAIN)
+    }
+    
+    func assignModel(with model: Model) {
+        objc_setAssociatedObject(self, &bindableModelAssociatedKey, model, .OBJC_ASSOCIATION_RETAIN)
+    }
+    
     public func bind(with model: Model) {
         let viewModel = model as? ViewModel
         let oldModel = self.model
         unbind()
         viewWillBind(with: model, oldModel: oldModel)
         viewModel?.willBind()
-        self.model = model
-        viewNeedBind(with: model)
+        doBind(with: model)
         viewModel?.didBind()
         viewDidBind(with: model, oldModel: oldModel)
     }
-
+    
+    func doBind(with model: Model) {
+        assignModel(with: model)
+        viewNeedBind(with: model)
+        autoBinding(with: model).forEach {
+            autoBindMode.retain($0, with: self)
+        }
+        autoFireBinding(with: model).forEach {
+            autoBindMode.retain($0, with: self).fire()
+        }
+    }
+    
     public func unbind() {
         guard let model = model else { return }
         let viewModel = model as? ViewModel
         viewModel?.willUnbind()
-        discardAllRetained()
-        self.model = nil
+        bindingRetainer.discardAll()
+        removeModel()
         viewModel?.didUnbind()
     }
     

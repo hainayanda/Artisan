@@ -78,12 +78,10 @@ class SimilarEventView: UIPlannedView, ViewBindable {
         applyPlan()
     }
     
-    func viewNeedBind(with model: Model) {
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables {
         model.eventsObservable
             .relayChanges(to: $events)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
     }
 }
 

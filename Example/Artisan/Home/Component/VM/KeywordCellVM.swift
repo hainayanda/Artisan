@@ -8,6 +8,7 @@
 
 import Foundation
 import Pharos
+import UIKit
 
 // MARK: Delegate Protocol
 

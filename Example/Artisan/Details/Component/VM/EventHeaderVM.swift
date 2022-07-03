@@ -8,6 +8,7 @@
 
 import Foundation
 import Pharos
+import UIKit
 
 struct EventHeaderVM: EventHeaderViewModel {
     @Subject var event: Event?

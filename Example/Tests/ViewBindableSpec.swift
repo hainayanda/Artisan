@@ -9,7 +9,7 @@
 import Foundation
 import Quick
 import Nimble
-import Artisan
+@testable import Artisan
 
 class ViewBindableSpec: QuickSpec {
     
@@ -46,7 +46,7 @@ class ViewBindableSpec: QuickSpec {
             view.bind(with: "some")
             var retained: Retained? = Retained()
             weak var weakRetained: Retained? = retained
-            view.retain(retained!)
+            view.bindingRetainer.retain(retained!)
             retained = nil
             expect(weakRetained).toNot(beNil())
             view.bind(with: "some new")

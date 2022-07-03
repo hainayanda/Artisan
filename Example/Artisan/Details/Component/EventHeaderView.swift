@@ -106,26 +106,15 @@ class EventHeaderView: UIPlannedView, ViewBindable {
         applyPlan()
     }
     
-    func viewNeedBind(with model: Model) {
+    @BindBuilder
+    func autoFireBinding(with model: Model) -> BindRetainables {
         model.bannerImageObservable
             .relayChanges(to: banner.bindables.image)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
         model.eventNameObservable
             .relayChanges(to: title.bindables.text)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
         model.eventDetailsObservable
             .relayChanges(to: subTitle.bindables.text)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
         model.eventDateObservable
             .relayChanges(to: date.bindables.text)
-            .observe(on: .main)
-            .retained(by: self)
-            .fire()
     }
 }

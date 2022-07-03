@@ -8,6 +8,7 @@
 
 import Foundation
 import Pharos
+import UIKit
 
 struct EventCellVM: EventCellViewModel {
     @Subject var event: Event?

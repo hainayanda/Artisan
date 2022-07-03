@@ -21,10 +21,10 @@
   "source_files": "Artisan/Classes/**/*",
   "dependencies": {
     "Draftsman": [
-      "~> 3.0.4"
+      "~> 3.0.6"
     ],
     "Pharos": [
-      "~> 2.3.1"
+      "~> 2.3.5"
     ],
     "Builder": [
       "~> 1.0.4"
